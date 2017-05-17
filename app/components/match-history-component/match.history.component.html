@@ -1,0 +1,22 @@
+<md-toolbar>
+    <h1>Match History</h1>
+</md-toolbar>
+<div layout-padding>
+    <md-autocomplete md-search-text="model.searchMatch" md-items="match in model.playerRecentMatches | filter:model.searchMatch"
+        md-item-text="match.leader" md-min-length="3" placeholder="filter">
+        <md-item-template>
+            <span md-highlight-text="model.searchMatch" md-highlight-flags="^i">{{match.leader}}</span>
+        </md-item-template>
+        <md-not-found>
+            No matches for "{{model.searchMatch}}" were found.
+        </md-not-found>
+    </md-autocomplete>
+</div>
+<md-content>
+    <md-list>
+        <md-list-item ng-repeat="match in model.playerRecentMatches | filter:model.searchMatch">
+            <md-button ng-click="model.selectMatch(match)" ng-class="{'selected': match === model.selected}">
+                <img ng-src="{{match.mapMediaUrl}}" alt="{{match.map}}" class="avatar" /> {{match.leader}} on {{match.map}}
+        </md-list-item>
+    </md-list>
+</md-content>

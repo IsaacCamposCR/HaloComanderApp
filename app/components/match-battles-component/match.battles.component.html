@@ -1,0 +1,59 @@
+<p ng-if="!model.battles.length">No battles happened during this match.</p>
+<md-content>
+
+    <md-card ng-repeat="i in model.getNumber(model.battles.length) track by $index">
+        <md-card-content>
+            <div layout="row">
+                <div id="Player 1 Panel" style="display: inline-block" flex="50">
+                    <h3>Player 1</h3>
+                </div>
+                <div id="Player 1 Panel" style="display: inline-block" flex="50">
+                    <h3>Player 2</h3>
+                </div>
+            </div>
+            <div layout="row">
+                <div id="Player 1 Panel" style="display: inline-block" flex="50">
+                    <p>Army size is {{model.analizedArmiesPlayer1[$index].length}} units.</p>
+                    <div style="display: inline-block" ng-repeat="unit in model.analizedArmiesPlayer1[$index]">
+                        <img ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                        />
+                    </div>
+                </div>
+                <div id="Player 2 Panel" style="display: inline-block" flex="50">
+                    <p>Army size is {{model.analizedArmiesPlayer2[$index].length}} units.</p>
+                    <div style="display: inline-block" ng-repeat="unit in model.analizedArmiesPlayer2[$index]">
+                        <img ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                        />
+                    </div>
+                </div>
+            </div>
+            <md-divider ng-if="!$last"></md-divider>
+            <div layout="row">
+                <div id="Player 1 Reinforcements" style="display: inline-block" flex="50">
+                    <p>Reinforcements size is {{model.reinforcementsPlayer1[$index].length}} units.</p>
+                    <div style="display: inline-block" ng-repeat="unit in model.reinforcementsPlayer1[$index]">
+                        <img ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                        />
+                    </div>
+                </div>
+                <div id="Player 2 Reinforcements" style="display: inline-block" flex="50">
+                    <p>Reinforcements size is {{model.reinforcementsPlayer2[$index].length}} units.</p>
+                    <div style="display: inline-block" ng-repeat="unit in model.reinforcementsPlayer2[$index]">
+                        <img ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                        />
+                    </div>
+                </div>
+            </div>
+            <md-divider ng-if="!$last"></md-divider>
+            <div>
+                <h3>Battle Type: {{model.battles[$index].size}} </h3>
+                <p>{{model.battles[$index].deaths.length}} units/buildings killed from {{model.secondsToTime(model.battles[$index].start)}}
+                    to {{model.secondsToTime(model.battles[$index].finish)}}.</p>
+                <div style="display: inline-block" ng-repeat="unit in model.battles[$index].deaths">
+                    <img ng-src="{{unit.mediaUrl}}" alt="{{unit.VictimObjectTypeId}}" width="75" height="75" style="-webkit-filter: sepia(100%);"
+                    />
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+</md-content>

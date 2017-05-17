@@ -1,0 +1,39 @@
+<div layout="row">
+
+    <div layout="vertical">
+        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" md-whiteframe="4">
+            <div>
+                <match-history-component selected="model.selected" />
+            </div>
+        </md-sidenav>
+    </div>
+    <div layout="column" flex>
+        <div>
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools">
+                    <md-button hide-gt-sm class="md-icon-button" ng-click="model.toggleSideNav()">
+                        <md-icon md-svg-icon="./lib/svg/menu.svg"></md-icon>
+                    </md-button>
+                    <h1>Match Details</h1>
+                </div>
+            </md-toolbar>
+        </div>
+
+        <md-content flex id="content">
+
+            <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
+                <md-tab label="Statistics">
+                    <div>
+                        <match-statistics-component selected="model.selected" />
+                    </div>
+                </md-tab>
+                <md-tab label="Battles">
+                    <div>
+                        <match-battles-component />
+                    </div>
+                </md-tab>
+            </md-tabs>
+
+        </md-content>
+    </div>
+</div>

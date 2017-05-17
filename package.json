@@ -1,0 +1,17 @@
+{
+  "name": "halo-commander-app",
+  "version": "0.0.1",
+  "description": "Halo commander app for detailed statistics on recorded matches.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Isaac Campos Avila",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-material-icons": "^0.7.1",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2"
+  }
+}
