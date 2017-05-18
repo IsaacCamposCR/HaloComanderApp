@@ -1,13 +1,13 @@
 <div layout="row">
 
     <div layout="vertical">
-        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" md-whiteframe="4">
+        <md-sidenav class="md-sidenav-left" style="" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" md-whiteframe="4">
             <div>
                 <match-history-component selected="model.selected" />
             </div>
         </md-sidenav>
     </div>
-    <div layout="column" flex>
+    <div layout="column" flex id="wrapper">
         <div>
             <md-toolbar class="md-hue-2">
                 <div class="md-toolbar-tools">
@@ -15,6 +15,23 @@
                         <md-icon md-svg-icon="./lib/svg/menu.svg"></md-icon>
                     </md-button>
                     <h1>Match Details</h1>
+                    <md-fab-speed-dial md-direction="down" class="md-scale md-fab-top-right">
+                        <md-fab-trigger>
+                            <md-button class="md-fab">
+                                <ng-md-icon icon="build"></ng-md-icon>
+                            </md-button>
+                        </md-fab-trigger>
+                        <md-fab-actions>
+                            <md-button class="md-fab md-raised md-mini">
+                                <ng-md-icon icon="face"></ng-md-icon>
+                                <md-tooltip md-direction="left">Contact</md-tooltip>
+                            </md-button>
+                            <md-button class="md-fab md-raised md-mini" ng-click="model.clearNotes($event)">
+                                <ng-md-icon icon="clear_all"></ng-md-icon>
+                                <md-tooltip md-direction="left">Clear all notes</md-tooltip>
+                            </md-button>
+                        </md-fab-actions>
+                    </md-fab-speed-dial>
                 </div>
             </md-toolbar>
         </div>
@@ -29,7 +46,7 @@
                 </md-tab>
                 <md-tab label="Battles">
                     <div>
-                        <match-battles-component />
+                        <match-battles-component match="model.selected.matchId" />
                     </div>
                 </md-tab>
             </md-tabs>

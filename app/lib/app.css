@@ -32,6 +32,13 @@ md-sidenav md-list {
     padding: 0px 0px 8px 0px;
 }
 
+ng-md-icon {
+    fill: currentColor;
+    vertical-align: middle;
+    display: inline-block;
+    line-height: 1;
+}
+
 #content {
     padding-left: 40px;
     padding-right: 40px;
@@ -65,3 +72,25 @@ md-sidenav md-list {
     background-position: center center;
 }
 
+.scrollable-nav-content {
+    position: absolute;
+    top: 250px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    overflow: auto;
+}
+
+.scrollable-bottom-sheet {
+    position: fixed;
+}
+
+span.name {
+    font-weight: bold;
+    font-size: 1.1em;
+    padding-left: 5px;
+}
+
+.date-row {
+    margin: 16px 0px;
+}

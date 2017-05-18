@@ -1,0 +1,47 @@
+<md-dialog>
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <ng-md-icon icon="face"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div layout="column" layout-padding>
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Avatar</label>
+                        <md-select ng-model="user.avatar" name="avatar">
+                            <md-option ng-repeat="avatar in avatars" ng-value="avatar">
+                                Hello {{avatar}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>First Name</label>
+                        <input ng-model="user.firstName" name="firstName">
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Last Name</label>
+                        <input ng-model="user.lastName" name="lastName">
+                    </md-input-container>
+                </div>
+                <md-input-container class="md-block" flex>
+                    <label>Biography</label>
+                    <textarea ng-model="user.bio" rows="5" name="bio"></textarea>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="answer('not useful')">
+                Not Useful
+            </md-button>
+            <md-button ng-click="answer('useful')">
+                Useful
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

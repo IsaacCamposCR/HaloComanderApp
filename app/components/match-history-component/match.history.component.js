@@ -6,13 +6,13 @@
     module.component("matchHistoryComponent", {
         templateUrl: "/components/match-history-component/match.history.component.html",
         controllerAs: "model",
-        controller: ["$resource", "$mdSidenav", matchHistoryController],
+        controller: ["$resource", "$mdSidenav", "$mdMedia", "$mdDialog", matchHistoryController],
         bindings: {
             selected: "="
         }
     });
 
-    function matchHistoryController($resource, $mdSidenav) {
+    function matchHistoryController($resource, $mdSidenav, $mdMedia, $mdDialog) {
         var model = this;
 
         model.searchMatch = "";
@@ -52,7 +52,6 @@
             });
 
         model.$onInit = function () {
-            getLeaders();
         };
 
         //---------------GAME LEADERS----------------------//
@@ -67,7 +66,7 @@
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
                             localStorage.setItem("gameLeaders", JSON.stringify(model.leaders));
-                            console.log("stored", model.leaders);
+                            console.log("stored");
                         } else {
                             console.log("No storage found...");
                         }
@@ -76,7 +75,7 @@
             }
             else {
                 model.leaders = JSON.parse(localStorage.getItem("gameLeaders"));
-                console.log("Stored leaders found", model.leaders);
+                console.log("Stored leaders found");
                 getMaps();
             }
         };
@@ -127,7 +126,7 @@
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
                             localStorage.setItem("gameMaps", JSON.stringify(model.maps));
-                            console.log("stored", model.maps);
+                            console.log("stored");
                         } else {
                             console.log("No storage found...");
                         }
@@ -136,7 +135,7 @@
             }
             else {
                 model.maps = JSON.parse(localStorage.getItem("gameMaps"));
-                console.log("Stored maps found", model.maps);
+                console.log("Stored maps found");
                 getPlayerMatchHistory();
             }
         };
@@ -165,7 +164,7 @@
 
         // Searches the game maps array for a specific map to get the map's metadata.
         function searchGameMap(id) {
-            for (var i = 1; i < model.maps.length; i++) {
+            for (var i = 0; i < model.maps.length; i++) {
                 if (model.maps[i].id.toLowerCase() === id.toLowerCase()) {
                     return model.maps[i];
                 }
@@ -175,7 +174,7 @@
         //---------------PLAYER MATCH HISTORY----------------------//
         var getPlayerMatchHistory = function () {
             model.playerRecentMatches = [];
-            var playerMatchHistory = resourcePlayerMatchHistory.query({ player: "ll blaky ll" })
+            var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag })
                 .$promise.then(function (matchHistory) {
                     var results = matchHistory["Results"];
                     results.forEach(function (match) {
@@ -204,6 +203,8 @@
             };
         };
 
+
+        // Selects a match from the Side Nav and closes it.
         model.selectMatch = function (match) {
             model.selected = match;
 
@@ -213,5 +214,31 @@
             }
             model.tabIndex = 0;
         };
+
+        model.changeGamertag = function () {
+            getLeaders();
+        };
+
+        /*
+        model.addUser = function (ev) {
+            var useFullScreen = ($mdMedia("sm") || $mdMedia("xs"));
+
+            $mdDialog.show({
+                controller: DialogController,
+                templateUrl: "/components/dialog-component/dialog.component.html",
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                fullscreen: useFullScreen
+            })
+                .then(function (answer) {
+                    console.log("status");
+                    model.status = 'You said the information was "' + answer + '".';
+                }, function () {
+                    console.log("status cancel");
+                    model.status = 'You cancelled the dialog.';
+                });
+        };
+        */
     }
 }());

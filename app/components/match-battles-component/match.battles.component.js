@@ -6,12 +6,13 @@
     module.component("matchBattlesComponent", {
         templateUrl: "/components/match-battles-component/match.battles.component.html",
         controllerAs: "model",
-        controller: ["$resource", matchBattlesController],
+        controller: ["$resource", "$mdToast", "$mdBottomSheet", matchBattlesController],
         bindings: {
+            match: "<"
         }
     });
 
-    function matchBattlesController($resource) {
+    function matchBattlesController($resource, $mdToast, $mdBottomSheet) {
         var model = this;
 
         var resourceGameObjects = $resource("https://www.haloapi.com/metadata/hw2/game-objects",
@@ -39,7 +40,32 @@
             });
 
         model.$onInit = function () {
-            getGameObjects();
+            model.small = true;
+            model.medium = true;
+            model.large = true;
+            if (model.match != undefined) {
+                getGameObjects();
+            }
+        };
+
+        model.$onChanges = function (changes) {
+            if (changes.match && model.match) {
+                armiesPlayer1 = [];
+                reinforcementsPlayer1 = [];
+                armiesPlayer2 = [];
+                reinforcementsPlayer2 = [];
+                newArmyPlayer1 = [];
+                newArmyPlayer2 = [];
+                newReinforcementsPlayer1 = [];
+                newReinforcementsPlayer2 = [];
+                model.battles = [];
+                model.analizedArmiesPlayer1 = [];
+                model.analizedArmiesPlayer2 = [];
+                model.reinforcementsPlayer1 = [];
+                model.reinforcementsPlayer2 = [];
+                battleCount = -1;
+                getGameObjects();
+            }
         };
 
         model.getNumber = function (num) {
@@ -67,7 +93,7 @@
                                         if (typeof (Storage) !== "undefined") {
                                             // Code for localStorage/sessionStorage.
                                             localStorage.setItem("gameObjects", JSON.stringify(model.gameObjects));
-                                            console.log("stored", model.gameObjects);
+                                            console.log("stored");
                                         } else {
                                             console.log("No storage found...");
                                         }
@@ -79,7 +105,7 @@
             }
             else {
                 model.gameObjects = JSON.parse(localStorage.getItem("gameObjects"));
-                console.log("Stored objects found", model.gameObjects);
+                console.log("Stored objects found");
                 getMatchEvents();
             }
         };
@@ -114,10 +140,11 @@
 
         // Searches the game object array for a specific unit to get the unit's metadata.
         function searchGameObject(id) {
+
             if (id.includes("cov_bldg_heavy")) {
                 id = id.replace("heavy", "light");
             }
-            if (id.includes("suicideGrunt_02")) {
+            if (id.includes("suicideGrunt")) {
                 id = "cov_inf_generic_suicidegrunt";
             }
             if (id.includes("for_air_sentinel_01")) {
@@ -137,8 +164,7 @@
             model.trainEvents = [];
             model.deathEvents = [];
 
-            //var matchEvents = resourceMatchEvents.query({ match: "bae071db-ce77-4750-9136-ad6f68da28eb" })
-            var matchEvents = resourceMatchEvents.query({ match: "fcc43f33-c68b-4103-b44a-604244879dec" })
+            var matchEvents = resourceMatchEvents.query({ match: model.match })
                 .$promise.then(function (events) {
                     events = events["GameEvents"];
                     events.forEach(function (event) {
@@ -255,6 +281,7 @@
             var battle = nextBattle();
 
             model.trainEvents.forEach(function (unitTrained) {
+
                 // Determines if an unit existed before the battle started.
                 if (unitTrained["TimeSinceStartMilliseconds"] <= battle["start"]) {
                     //newArmy.push(unitTrained);
@@ -298,8 +325,8 @@
         // Adds the game object data to the unit and splits the armies into players.
         var classifyArmy = function (unit) {
             var gameObject = searchGameObject(unit.SquadId);
-            unit.mediaUrl = gameObject.mediaUrl;
-            unit.name = gameObject.name;
+            unit.mediaUrl = (gameObject) ? gameObject.mediaUrl : "";
+            unit.name = (gameObject) ? gameObject.name : "unknown";
             if (unit["PlayerIndex"] === 1) {
                 newArmyPlayer1.push(unit);
             }
@@ -311,8 +338,8 @@
         // Adds the game object data to the unit and splits the reinforcements into players.
         var classifyReinforcement = function (unit) {
             var gameObject = searchGameObject(unit.SquadId);
-            unit.mediaUrl = gameObject.mediaUrl;
-            unit.name = gameObject.name;
+            unit.mediaUrl = (gameObject) ? gameObject.mediaUrl : "";
+            unit.name = (gameObject) ? gameObject.name : "unknown";
             if (unit["PlayerIndex"] === 1) {
                 newReinforcementsPlayer1.push(unit);
             }
@@ -364,7 +391,6 @@
             for (var i = 0; i < model.battles.length; i++) {
                 var battleIndex = i;
                 (model.battles[battleIndex])["deaths"].forEach(function (kill) {
-
                     for (var i = 0; i < model.analizedArmiesPlayer1[battleIndex].length; i++) {
                         var unit = (model.analizedArmiesPlayer1[battleIndex])[i];
                         if (unit["InstanceId"] === kill["VictimInstanceId"]) {
@@ -421,6 +447,61 @@
                     }
                 }
             });
+        };
+
+        // Removes a battle from the arrays, this allows the user to clean up undesired battles.
+        model.removeBattle = function (battle) {
+            var foundIndex = model.battles.indexOf(battle);
+            model.battles.splice(foundIndex, 1);
+            model.analizedArmiesPlayer1.splice(foundIndex, 1);
+            model.analizedArmiesPlayer2.splice(foundIndex, 1);
+            model.reinforcementsPlayer1.splice(foundIndex, 1);
+            model.reinforcementsPlayer2.splice(foundIndex, 1);
+            openToast("Battle was removed");
+        };
+
+        // Shows a brief toast message when a battle is removed.
+        var openToast = function (message) {
+            $mdToast.show($mdToast.simple()
+                .textContent(message)
+                .position("top right")
+                .hideDelay(3000));
+        };
+
+        // Shows only the battles filtered.
+        model.showBattle = function (index) {
+            var size = model.battles[index].size;
+            if ((model.battles[index].size === "Small") && (model.small)) {
+                return true;
+            }
+            if ((model.battles[index].size === "Medium") && (model.medium)) {
+                return true;
+            }
+            if ((model.battles[index].size === "Large") && (model.large)) {
+                return true;
+            }
+            return false;
+        };
+
+        // An unit from the battle can be clicked to reveal detailed information for that specific unit.
+        // This creates a Bottom Sheet component from Angular Material to display the information.
+        model.selectUnit = function ($event, unit) {
+
+            $mdBottomSheet.show({
+                parent: angular.element(document.getElementById("wrapper")),
+                templateUrl: "/components/unit-panel-component/unit.panel.component.html",
+                controller: UnitPanelController,
+                locals: {
+                    Item: {
+                        "unit": unit
+                    }
+                },
+                controllerAs: "model",
+                bindToController: true,
+                targetEvent: $event
+            }).then((clickedItem) => {
+                clickedItem && console.log(clickedItem.SquadId + "clicked!");
+            })
         };
     }
 }());
