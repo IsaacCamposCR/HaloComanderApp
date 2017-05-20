@@ -16,12 +16,14 @@
         var model = this;
 
         model.searchMatch = "";
+        model.start = 0;
 
         var resourcePlayerMatchHistory = $resource("https://www.haloapi.com/stats/hw2/players/:player/matches",
             {
                 player: "@player",
                 matchType: "matchmaking",
-                count: "10"
+                count: "10",
+                start: "@start"
             },
             {
                 query: {
@@ -174,7 +176,7 @@
         //---------------PLAYER MATCH HISTORY----------------------//
         var getPlayerMatchHistory = function () {
             model.playerRecentMatches = [];
-            var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag })
+            var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, start: model.start })
                 .$promise.then(function (matchHistory) {
                     var results = matchHistory["Results"];
                     results.forEach(function (match) {
@@ -187,6 +189,8 @@
                 var matchId = item["MatchId"];
                 var result = item["PlayerMatchOutcome"];
                 var time = item["PlayerMatchDuration"];
+                var matchStartDate = item["MatchStartDate"];
+                var date = matchStartDate["ISO8601Date"];
 
                 var gameMap = searchGameMap(item["MapId"]);
                 var gameLeader = searchGameLeader(item["LeaderId"]);
@@ -197,12 +201,29 @@
                     mapMediaUrl: gameMap["mediaUrl"],
                     leader: gameLeader["name"],
                     leaderMediaUrl: gameLeader["mediaUrl"],
-                    result: result,
-                    time: time
+                    result: result === 1 ? "VICTORY" : "DEFEAT",
+                    time: time,
+                    date: date
                 });
             };
         };
 
+        // Requests a new set of matches starting at the next 10 games.
+        model.backward = function () {
+            model.start += 10;
+            model.changeGamertag();
+        };
+
+        // Requests the previous set of matches from 10 games ago.
+        model.forward = function () {
+            if (model.start < 10) {
+                model.start = 0;
+            }
+            else {
+                model.start -= 10;
+            }
+            model.changeGamertag();
+        };
 
         // Selects a match from the Side Nav and closes it.
         model.selectMatch = function (match) {
@@ -216,6 +237,7 @@
         };
 
         model.changeGamertag = function () {
+            model.match = null;
             getLeaders();
         };
 

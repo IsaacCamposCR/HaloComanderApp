@@ -1,7 +1,24 @@
 <md-bottom-sheet class="scrollable-bottom-sheet">
     <md-subheader>
-        Contact <span class="name">{{Item.unit.name}}</span>
+        <p class="name">{{Item.unit.name}}</p>
+
+        <img ng-src="{{Item.unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" />
+
+        <p>
+            <ng-md-icon icon="layers"></ng-md-icon> {{Item.unit.SupplyCost}}
+            <ng-md-icon icon="flash_on"></ng-md-icon> {{Item.unit.EnergyCost}}
+            <ng-md-icon icon="group"></ng-md-icon> {{Item.unit.PopulationCost}}
+        </p>
+
     </md-subheader>
 
-    <md-button ng-click="submitContact(unit)"> BOTON</md-button>
+    <md-content>
+        <p><span class="name" ng-show="Item.unit.Killers">UNIT KILLED BY</span></p>
+        <div ng-repeat="participant in Item.unit.Killers" style="display:inline-block">
+            <img ng-src="{{participant.mediaUrl}}" alt="{{participant.name}}" width="75" height="75" />
+            <!--<p class="name">{{participant.name}}</p>-->
+        </div>
+    </md-content>
+
+    <md-button ng-click="submitContact(unit)">CLOSE</md-button>
 </md-bottom-sheet>

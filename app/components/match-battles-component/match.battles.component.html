@@ -22,15 +22,28 @@
             <md-card-content>
                 <h2>Battle #{{$index+1}}</h2>
                 <div layout="row">
-                    <div id="Player 1 Panel" style="display: inline-block" flex="50">
+                    <div id="Player 1 Panel" layout="row" flex="50">
                         <h3>Player 1</h3>
+                        <span ng-if="(model.battles[$index].winner === 1)">
+                            Hello 1
+                        </span>
                     </div>
-                    <div id="Player 1 Panel" style="display: inline-block" flex="50">
+                    <div id="Player 2 Panel" style="display: inline-block" flex="50">
                         <h3>Player 2</h3>
+                        <span ng-if="(model.battles[$index].winner === 2)">
+                            Hello 2
+                        </span>
                     </div>
                 </div>
                 <div layout="row">
                     <div id="Player 1 Panel" style="display: inline-block" flex="50">
+                        <ng-md-icon icon="layers"></ng-md-icon> {{model.battles[$index].SupplyCost1}}
+                        <ng-md-icon icon="flash_on"></ng-md-icon> {{model.battles[$index].EnergyCost1}}
+                        <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].PopulationCost1}}
+                        <br/>
+                        <ng-md-icon icon="layers" style="color:red"></ng-md-icon> {{model.battles[$index].SupplyLost1}}
+                        <ng-md-icon icon="flash_on" style="color:red"></ng-md-icon> {{model.battles[$index].EnergyLost1}}
+                        <ng-md-icon icon="group" style="color:red"></ng-md-icon> {{model.battles[$index].PopulationLost1}}
                         <p>Army size is {{model.analizedArmiesPlayer1[$index].length}} units.</p>
                         <div style="display: inline-block" ng-repeat="unit in model.analizedArmiesPlayer1[$index]">
                             <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
@@ -38,6 +51,13 @@
                         </div>
                     </div>
                     <div id="Player 2 Panel" style="display: inline-block" flex="50">
+                        <ng-md-icon icon="layers"></ng-md-icon> {{model.battles[$index].SupplyCost2}}
+                        <ng-md-icon icon="flash_on"></ng-md-icon> {{model.battles[$index].EnergyCost2}}
+                        <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].PopulationCost2}}
+                        <br/>
+                        <ng-md-icon icon="layers" style="color:red"></ng-md-icon> {{model.battles[$index].SupplyLost2}}
+                        <ng-md-icon icon="flash_on" style="color:red"></ng-md-icon> {{model.battles[$index].EnergyLost2}}
+                        <ng-md-icon icon="group" style="color:red"></ng-md-icon> {{model.battles[$index].PopulationLost2}}
                         <p>Army size is {{model.analizedArmiesPlayer2[$index].length}} units.</p>
                         <div style="display: inline-block" ng-repeat="unit in model.analizedArmiesPlayer2[$index]">
                             <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
@@ -48,6 +68,14 @@
                 <md-divider ng-if="!$last"></md-divider>
                 <div layout="row">
                     <div id="Player 1 Reinforcements" style="display: inline-block" flex="50">
+                        <br/>
+                        <ng-md-icon icon="layers"></ng-md-icon> {{model.battles[$index].RSupplyCost1}}
+                        <ng-md-icon icon="flash_on"></ng-md-icon> {{model.battles[$index].REnergyCost1}}
+                        <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].RPopulationCost1}}
+                        <br/>
+                        <ng-md-icon icon="layers" style="color:red"></ng-md-icon> {{model.battles[$index].RSupplyLost1}}
+                        <ng-md-icon icon="flash_on" style="color:red"></ng-md-icon> {{model.battles[$index].REnergyLost1}}
+                        <ng-md-icon icon="group" style="color:red"></ng-md-icon> {{model.battles[$index].RPopulationLost1}}
                         <p>Reinforcements size is {{model.reinforcementsPlayer1[$index].length}} units.</p>
                         <div style="display: inline-block" ng-repeat="unit in model.reinforcementsPlayer1[$index]">
                             <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
@@ -55,6 +83,14 @@
                         </div>
                     </div>
                     <div id="Player 2 Reinforcements" style="display: inline-block" flex="50">
+                        <br/>
+                        <ng-md-icon icon="layers"></ng-md-icon> {{model.battles[$index].RSupplyCost2}}
+                        <ng-md-icon icon="flash_on"></ng-md-icon> {{model.battles[$index].REnergyCost2}}
+                        <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].RPopulationCost2}}
+                        <br/>
+                        <ng-md-icon icon="layers" style="color:red"></ng-md-icon> {{model.battles[$index].RSupplyLost2}}
+                        <ng-md-icon icon="flash_on" style="color:red"></ng-md-icon> {{model.battles[$index].REnergyLost2}}
+                        <ng-md-icon icon="group" style="color:red"></ng-md-icon> {{model.battles[$index].RPopulationLost2}}
                         <p>Reinforcements size is {{model.reinforcementsPlayer2[$index].length}} units.</p>
                         <div style="display: inline-block" ng-repeat="unit in model.reinforcementsPlayer2[$index]">
                             <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"

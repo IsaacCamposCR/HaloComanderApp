@@ -130,10 +130,15 @@
                 var media = viewImage ? viewImage["Media"] : null;
                 var mediaUrl = media ? media["MediaUrl"] : null;
 
+                console.log(hw2Object["StandardSupplyCost"], hw2Object["StandardEnergyCost"], hw2Object["StandardPopulationCost"]);
+
                 model.gameObjects.push({
                     name: name,
                     id: id,
-                    mediaUrl: mediaUrl
+                    mediaUrl: mediaUrl,
+                    supplyCost: hw2Object["StandardSupplyCost"],
+                    energyCost: hw2Object["StandardEnergyCost"],
+                    populationCost: hw2Object["StandardPopulationCost"]
                 });
             });
         };
@@ -383,6 +388,7 @@
             model.reinforcementsPlayer2 = JSON.parse(JSON.stringify(reinforcementsPlayer2));
 
             tagUnitsKilled();
+            getTotalArmyCost();
         };
 
         // Tags the units from the armies as killed but does not remove them from the arrays.
@@ -394,7 +400,7 @@
                     for (var i = 0; i < model.analizedArmiesPlayer1[battleIndex].length; i++) {
                         var unit = (model.analizedArmiesPlayer1[battleIndex])[i];
                         if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                            unit.killed = true;
+                            tagUnit(unit, kill);
                             i = model.analizedArmiesPlayer1[battleIndex].length + 1;
                         }
                     }
@@ -402,7 +408,7 @@
                     for (var i = 0; i < model.reinforcementsPlayer1[battleIndex].length; i++) {
                         var unit = (model.reinforcementsPlayer1[battleIndex])[i];
                         if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                            unit.killed = true;
+                            tagUnit(unit, kill);
                             i = model.reinforcementsPlayer1[battleIndex].length + 1;
                         }
                     }
@@ -410,7 +416,7 @@
                     for (var i = 0; i < model.analizedArmiesPlayer2[battleIndex].length; i++) {
                         var unit = (model.analizedArmiesPlayer2[battleIndex])[i];
                         if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                            unit.killed = true;
+                            tagUnit(unit, kill);
                             i = model.analizedArmiesPlayer2[battleIndex].length + 1;
                         }
                     }
@@ -418,7 +424,7 @@
                     for (var i = 0; i < model.reinforcementsPlayer2[battleIndex].length; i++) {
                         var unit = (model.reinforcementsPlayer2[battleIndex])[i];
                         if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                            unit.killed = true;
+                            tagUnit(unit, kill);
                             i = model.reinforcementsPlayer2[battleIndex].length + 1;
                         }
                     }
@@ -426,10 +432,36 @@
             }
         };
 
+        var tagUnit = function (unit, kill) {
+            unit.killed = true;
+            unit.Killers = [];
+            kill.Killers = [];
+            var Participants = kill["Participants"];
+
+            Object.keys(Participants).map((e) => {
+                var participant = (Participants[e])["ObjectParticipants"];
+                Object.keys(participant).map((a) => {
+                    var gameObject = searchGameObject(a);
+                    unit.Killers.push({
+                        mediaUrl: (gameObject) ? gameObject.mediaUrl : "",
+                        name: (gameObject) ? gameObject.name : "unknown"
+                    });
+                    kill.Killers.push({
+                        mediaUrl: (gameObject) ? gameObject.mediaUrl : "",
+                        name: (gameObject) ? gameObject.name : "unknown"
+                    });
+                });
+            });
+        };
+
         // Takes a specific battle to remove units from the temporary armies before adding them to each player.
         var killUnits = function (battleIndex) {
 
             (model.battles[battleIndex])["deaths"].forEach(function (kill) {
+                var gameObject = searchGameObject(kill["VictimObjectTypeId"]);
+                kill.SupplyCost = gameObject.supplyCost;
+                kill.EnergyCost = gameObject.energyCost;
+                kill.PopulationCost = gameObject.populationCost;
 
                 for (var i = 0; i < model.player1TemporaryArmy.length; i++) {
                     var unit = model.player1TemporaryArmy[i];
@@ -447,6 +479,88 @@
                     }
                 }
             });
+        };
+
+        var getTotalArmyCost = function () {
+            for (var i = 0; i < model.battles.length; i++) {
+                var battle = model.battles[i];
+                battle.SupplyLost1 = 0;
+                battle.RSupplyLost1 = 0;
+                battle.EnergyLost1 = 0;
+                battle.REnergyLost1 = 0;
+
+                battle.PopulationCost1 = 0;
+                battle.RPopulationCost1 = 0;
+                battle.PopulationLost1 = 0;
+                battle.RPopulationLost1 = 0;
+
+                battle.SupplyLost2 = 0;
+                battle.RSupplyLost2 = 0;
+                battle.EnergyLost2 = 0;
+                battle.REnergyLost2 = 0;
+                
+                battle.PopulationCost2 = 0;
+                battle.RPopulationCost2 = 0;
+                battle.PopulationLost2 = 0;
+                battle.RPopulationLost2 = 0;
+
+                model.analizedArmiesPlayer1[i].forEach(function (unit) {
+                    battle.SupplyCost1 = ((battle.SupplyCost1) ? battle.SupplyCost1 : 0) + Number(unit.SupplyCost);
+                    battle.EnergyCost1 = ((battle.EnergyCost1) ? battle.EnergyCost1 : 0) + Number(unit.EnergyCost);
+                    battle.PopulationCost1 = ((battle.PopulationCost1) ? battle.PopulationCost1 : 0) + Number(unit.PopulationCost);
+                    if (unit.killed) {
+                        battle.SupplyLost1 = ((battle.SupplyLost1) ? battle.SupplyLost1 : 0) + Number(unit.SupplyCost);
+                        battle.EnergyLost1 = ((battle.EnergyLost1) ? battle.EnergyLost1 : 0) + Number(unit.EnergyCost);
+                        battle.PopulationLost1 = ((battle.PopulationLost1) ? battle.PopulationLost1 : 0) + Number(unit.PopulationCost);
+                    }
+                });
+                model.analizedArmiesPlayer2[i].forEach(function (unit) {
+                    battle.SupplyCost2 = ((battle.SupplyCost2) ? battle.SupplyCost2 : 0) + Number(unit.SupplyCost);
+                    battle.EnergyCost2 = ((battle.EnergyCost2) ? battle.EnergyCost2 : 0) + Number(unit.EnergyCost);
+                    battle.PopulationCost2 = ((battle.PopulationCost2) ? battle.PopulationCost2 : 0) + Number(unit.PopulationCost);
+                    if (unit.killed) {
+                        battle.SupplyLost2 = ((battle.SupplyLost2) ? battle.SupplyLost2 : 0) + Number(unit.SupplyCost);
+                        battle.EnergyLost2 = ((battle.EnergyLost2) ? battle.EnergyLost2 : 0) + Number(unit.EnergyCost);
+                        battle.PopulationLost2 = ((battle.PopulationLost2) ? battle.PopulationLost2 : 0) + Number(unit.PopulationCost);
+                    }
+                });
+                model.reinforcementsPlayer1[i].forEach(function (unit) {
+                    battle.RSupplyCost1 = ((battle.RSupplyCost1) ? battle.RSupplyCost1 : 0) + Number(unit.SupplyCost);
+                    battle.REnergyCost1 = ((battle.REnergyCost1) ? battle.REnergyCost1 : 0) + Number(unit.EnergyCost);
+                    battle.RPopulationCost1 = ((battle.RPopulationCost1) ? battle.RPopulationCost1 : 0) + Number(unit.PopulationCost);
+                    if (unit.killed) {
+                        battle.RSupplyLost1 = ((battle.RSupplyLost1) ? battle.RSupplyLost1 : 0) + Number(unit.SupplyCost);
+                        battle.REnergyLost1 = ((battle.REnergyLost1) ? battle.REnergyLost1 : 0) + Number(unit.EnergyCost);
+                        battle.RPopulationLost1 = ((battle.RPopulationLost1) ? battle.RPopulationLost1 : 0) + Number(unit.PopulationCost);
+                    }
+                });
+                model.reinforcementsPlayer2[i].forEach(function (unit) {
+                    battle.RSupplyCost2 = ((battle.RSupplyCost2) ? battle.RSupplyCost2 : 0) + Number(unit.SupplyCost);
+                    battle.REnergyCost2 = ((battle.REnergyCost2) ? battle.REnergyCost2 : 0) + Number(unit.EnergyCost);
+                    battle.RPopulationCost2 = ((battle.RPopulationCost2) ? battle.RPopulationCost2 : 0) + Number(unit.PopulationCost);
+                    if (unit.killed) {
+                        battle.RSupplyLost2 = ((battle.RSupplyLost2) ? battle.RSupplyLost2 : 0) + Number(unit.SupplyCost);
+                        battle.REnergyLost2 = ((battle.REnergyLost2) ? battle.REnergyLost2 : 0) + Number(unit.EnergyCost);
+                        battle.RPopulationLost2 = ((battle.RPopulationLost2) ? battle.RPopulationLost2 : 0) + Number(unit.PopulationCost);
+                    }
+                });
+
+                if (
+                    (Number(battle.RPopulationCost1 - battle.RPopulationLost1) + Number(battle.PopulationCost1 - battle.PopulationLost1))
+                    >
+                    (Number(battle.RPopulationCost2 - battle.RPopulationLost2) + Number(battle.PopulationCost2 - battle.PopulationLost2))
+                ) {
+                    battle.winner = 1;
+                }
+
+                if (
+                    ((battle.RPopulationCost1 - battle.RPopulationLost1) + (battle.PopulationCost1 - battle.PopulationLost1))
+                    <
+                    ((battle.RPopulationCost2 - battle.RPopulationLost2) + (battle.PopulationCost2 - battle.PopulationLost2))
+                ) {
+                    battle.winner = 2;
+                }
+            }
         };
 
         // Removes a battle from the arrays, this allows the user to clean up undesired battles.

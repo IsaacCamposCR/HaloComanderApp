@@ -94,3 +94,10 @@ span.name {
 .date-row {
     margin: 16px 0px;
 }
+
+.list-details {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
