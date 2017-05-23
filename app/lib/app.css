@@ -101,3 +101,9 @@ span.name {
     margin-top: 0;
     margin-bottom: 0;
 }
+
+.unit-icon {
+    transform: scale(1.5,1.5);
+    padding: 0;
+    margin: 0;
+}

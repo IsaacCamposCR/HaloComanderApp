@@ -14,6 +14,25 @@
 
     function matchBattlesController($resource, $mdToast, $mdBottomSheet) {
         var model = this;
+        model.battles = [];
+        model.killCount = 0;
+        model.trainEvents = [];
+        model.deathEvents = [];
+        model.battles = [];
+        model.analizedArmiesPlayer1 = [];
+        model.analizedArmiesPlayer2 = [];
+        model.reinforcementsPlayer1 = [];
+        model.reinforcementsPlayer2 = [];
+
+        model.armiesPlayer1 = [];
+        model.reinforcementsPlayer1 = [];
+        model.armiesPlayer2 = [];
+        model.reinforcementsPlayer2 = [];
+        var newArmyPlayer1 = [];
+        var newArmyPlayer2 = [];
+        var newReinforcementsPlayer1 = [];
+        var newReinforcementsPlayer2 = [];
+        var currentUnit = 0;
 
         var resourceGameObjects = $resource("https://www.haloapi.com/metadata/hw2/game-objects",
             {
@@ -39,6 +58,18 @@
                 }
             });
 
+        var resourceMatchResult = $resource("https://www.haloapi.com/stats/hw2/matches/:matchId",
+            {
+                matchId: "@matchId"
+            },
+            {
+                query: {
+                    method: "GET",
+                    headers: { "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
+                    isArray: false
+                }
+            });
+
         model.$onInit = function () {
             model.small = true;
             model.medium = true;
@@ -50,20 +81,23 @@
 
         model.$onChanges = function (changes) {
             if (changes.match && model.match) {
-                armiesPlayer1 = [];
-                reinforcementsPlayer1 = [];
-                armiesPlayer2 = [];
-                reinforcementsPlayer2 = [];
+                model.armiesPlayer1 = [];
+                model.reinforcementsPlayer1 = [];
+                model.armiesPlayer2 = [];
+                model.reinforcementsPlayer2 = [];
+
                 newArmyPlayer1 = [];
                 newArmyPlayer2 = [];
                 newReinforcementsPlayer1 = [];
                 newReinforcementsPlayer2 = [];
+                currentUnit = 0;
+                model.trainEvents = [];
+                model.deathEvents = [];
                 model.battles = [];
                 model.analizedArmiesPlayer1 = [];
                 model.analizedArmiesPlayer2 = [];
                 model.reinforcementsPlayer1 = [];
                 model.reinforcementsPlayer2 = [];
-                battleCount = -1;
                 getGameObjects();
             }
         };
@@ -171,23 +205,37 @@
 
             var matchEvents = resourceMatchEvents.query({ match: model.match })
                 .$promise.then(function (events) {
+                    //console.log(events["IsCompleteSetOfEvents"]);
                     events = events["GameEvents"];
                     events.forEach(function (event) {
                         createPlayerEvents(event);
                     });
 
                     processBattles();
+                    //console.log("Battles Result", model.battles);
                     processArmies();
+                    //console.log("Army1 Result", model.armiesPlayer1);
+                    //console.log("Reinf1 Result", model.reinforcementsPlayer1);
+                    //console.log("Army2 Result", model.armiesPlayer2);
+                    //console.log("Reinf2 Result", model.reinforcementsPlayer2);
                     battleAnalytics();
+                    //console.log("Analized1", model.analizedArmiesPlayer1);
+                    //console.log("Analized2", model.analizedArmiesPlayer2);
+                    //console.log("AnalizedR1", model.reinforcementsPlayer1);
+                    //console.log("AnalizedR2", model.reinforcementsPlayer2);
+                    settleLastBattle();
+                    getTotalArmyCost();
                 });
 
             // Takes the application relevant data from the Events API.
             var createPlayerEvents = function (item) {
                 if (item["EventName"] === "UnitTrained") {
+                    //console.log(item);
                     model.trainEvents.push(item);
                 }
 
                 if (item["EventName"] === "Death") {
+                    //console.log(item);
                     model.deathEvents.push(item);
                 }
             };
@@ -198,36 +246,37 @@
         // When units die in quick succession they are linked inside a single battle. 
         // When the killing stops, the battle is classified and logged in the "battles" array.
         var processBattles = function () {
-            var firstEvent = model.deathEvents[0];
-            var nextEvent = firstEvent["TimeSinceStartMilliseconds"];
-            var deathCount = 0;
+            var newBattle = [];
+            var gameObject = searchGameObject(model.deathEvents[0].VictimObjectTypeId);
+            if (gameObject) {
+                model.deathEvents[0].mediaUrl = gameObject.mediaUrl;
+                model.deathEvents[0].name = gameObject.name;
+            }
+            newBattle.push(model.deathEvents[0]);
 
-            var deathsByBattle = [];
-            model.deathEvents.forEach(function (death) {
-
-                if (deathsByBattle.length === 0) {
-                    nextEvent = death["TimeSinceStartMilliseconds"];
-                    firstEvent = death;
+            for (var i = 1; i < model.deathEvents.length; i++) {
+                //console.log("New Kill!");
+                var death = model.deathEvents[i];
+                var gameObject = searchGameObject(death.VictimObjectTypeId);
+                if (gameObject) {
+                    death.mediaUrl = gameObject.mediaUrl;
+                    death.name = gameObject.name;
                 }
-
-                if ((death["TimeSinceStartMilliseconds"] - nextEvent) <= 20000) {
-                    var gameObject = searchGameObject(death.VictimObjectTypeId);
-                    if (gameObject) {
-                        death.mediaUrl = gameObject.mediaUrl;
-                        death.name = gameObject.name;
-                        deathsByBattle.push(death);
-                        nextEvent = death["TimeSinceStartMilliseconds"];
-                    }
+                if (((model.deathEvents[i])["TimeSinceStartMilliseconds"] - (model.deathEvents[i - 1])["TimeSinceStartMilliseconds"]) <= 30000) {
+                    //console.log("Same Battle");
+                    newBattle.push(death);
                 }
                 else {
-                    classifyBattle(deathsByBattle, firstEvent["TimeSinceStartMilliseconds"], nextEvent);
-                    deathsByBattle = [];
+                    classifyBattle(newBattle, (newBattle[0])["TimeSinceStartMilliseconds"], (newBattle[newBattle.length - 1])["TimeSinceStartMilliseconds"]);
+                    //console.log("New Battle");
+                    newBattle = [];
+                    newBattle.push(death);
+                    if (i === model.deathEvents.length) {
+                        classifyBattle(newBattle, (newBattle[0])["TimeSinceStartMilliseconds"], (newBattle[newBattle.length - 1])["TimeSinceStartMilliseconds"]);
+                    }
                 }
-            });
-            classifyBattle(deathsByBattle, firstEvent["TimeSinceStartMilliseconds"], nextEvent);
+            }
         };
-
-        model.battles = [];
 
         // Converts flat integer value of time into hours:minutes:seconds format.
         model.secondsToTime = function (time) {
@@ -272,66 +321,54 @@
         // Process which units composed the armies at each battle  
         // Units that were trained before the battle starts are considered starting armies. 
         // Units that were trained after the battle stats and before it ends are considered reinforcement armies.
-        var armiesPlayer1 = [];
-        var reinforcementsPlayer1 = [];
-        var armiesPlayer2 = [];
-        var reinforcementsPlayer2 = [];
-        var newArmyPlayer1 = [];
-        var newArmyPlayer2 = [];
-        var newReinforcementsPlayer1 = [];
-        var newReinforcementsPlayer2 = [];
-
         var processArmies = function () {
-            // Requests the first Battle that happened irregardless of size.
-            var battle = nextBattle();
+            var armyCount = 0;
+            var reinCount = 0;
+            //console.log(model.battles);
+            for (var i = 0; i < model.battles.length; i++) {
+                //console.log("train", model.trainEvents.length);
+                for (var a = currentUnit; a < model.trainEvents.length; a++) {
+                    var battle = model.battles[i];
+                    var unitTrained = model.trainEvents[a];
 
-            model.trainEvents.forEach(function (unitTrained) {
-
-                // Determines if an unit existed before the battle started.
-                if (unitTrained["TimeSinceStartMilliseconds"] <= battle["start"]) {
-                    //newArmy.push(unitTrained);
-                    classifyArmy(unitTrained);
-                }
-                else {
-                    // Determines if an unit was trained before the battle finished.
-                    if (unitTrained["TimeSinceStartMilliseconds"] <= battle["finish"]) {
-                        //newReinforcements.push(unitTrained);
-                        classifyReinforcement(unitTrained);
+                    if (unitTrained["TimeSinceStartMilliseconds"] <= battle["start"]) {
+                        //console.log("Army unit!");
+                        armyCount++;
+                        classifyArmy(unitTrained);
                     }
-                    // When an unit was trained after a battle, it will participate in the next.
-                    // The battle is logged and the armies and reinforcements classified by player.
                     else {
-                        var newBattle = nextBattle();
-                        if (newBattle) {
-                            battle = newBattle;
-                            armiesPlayer1.push(newArmyPlayer1);
-                            armiesPlayer2.push(newArmyPlayer2);
-                            reinforcementsPlayer1.push(newReinforcementsPlayer1);
-                            reinforcementsPlayer2.push(newReinforcementsPlayer2);
+                        if (unitTrained["TimeSinceStartMilliseconds"] <= (model.battles[i])["finish"]) {
+                            //console.log("Reinforcement unit!");
+                            reinCount++;
+                            classifyReinforcement(unitTrained);
+                        }
+                        else {
+                            //console.log("New Army!");
+                            currentUnit = Number(a + 1);
+                            a = model.trainEvents.length;
+                            model.armiesPlayer1.push(newArmyPlayer1);
+                            model.armiesPlayer2.push(newArmyPlayer2);
+                            model.reinforcementsPlayer1.push(newReinforcementsPlayer1);
+                            model.reinforcementsPlayer2.push(newReinforcementsPlayer2);
                             newArmyPlayer1 = [];
                             newArmyPlayer2 = [];
-                            // An unit that fits nowhere is carried to the next battle.
-                            classifyArmy(unitTrained);
                             newReinforcementsPlayer1 = [];
                             newReinforcementsPlayer2 = [];
+                            // An unit that fits nowhere is carried to the next battle.
+                            classifyArmy(unitTrained);
+                            armyCount++;
                         }
                     }
                 }
-            });
-
-            // If all units are processed before the next battle (last battle)
-            // They are pushed to the armies and reinforcements arrays as the last battle that took place.
-            armiesPlayer1.push(newArmyPlayer1);
-            armiesPlayer2.push(newArmyPlayer2);
-            reinforcementsPlayer1.push(newReinforcementsPlayer1);
-            reinforcementsPlayer2.push(newReinforcementsPlayer2);
-        };
+            }
+            //console.log("Army and Reinforcements", armyCount, reinCount);
+        }
 
         // Adds the game object data to the unit and splits the armies into players.
         var classifyArmy = function (unit) {
             var gameObject = searchGameObject(unit.SquadId);
             unit.mediaUrl = (gameObject) ? gameObject.mediaUrl : "";
-            unit.name = (gameObject) ? gameObject.name : "unknown";
+            unit.name = (gameObject) ? gameObject.name : unit.SquadId;
             if (unit["PlayerIndex"] === 1) {
                 newArmyPlayer1.push(unit);
             }
@@ -344,7 +381,7 @@
         var classifyReinforcement = function (unit) {
             var gameObject = searchGameObject(unit.SquadId);
             unit.mediaUrl = (gameObject) ? gameObject.mediaUrl : "";
-            unit.name = (gameObject) ? gameObject.name : "unknown";
+            unit.name = (gameObject) ? gameObject.name : unit.SquadId;
             if (unit["PlayerIndex"] === 1) {
                 newReinforcementsPlayer1.push(unit);
             }
@@ -353,83 +390,71 @@
             }
         }
 
-        // This method serves battle by battle so that units can be correctly matched in armies or reinforcements.
-        var battleCount = -1;
-        var nextBattle = function () {
-            battleCount++;
-            if (battleCount <= model.battles.length) {
-                return model.battles[battleCount];
-            }
-            else {
-                return null;
-            }
-        };
-
         //---------------BATTLE ANALYTICS----------------------//
         // (Army + Reinforcement) - Deaths = Remainder.
         // Remainder is then added to the next army.
         // The end result of the 3 arrays is what will be displayed in the UI.
+        var player1TemporaryArmy = [];
+        var player2TemporaryArmy = [];
         var battleAnalytics = function () {
-            model.player1TemporaryArmy = [];
-            model.player2TemporaryArmy = [];
+            player1TemporaryArmy = [];
+            player2TemporaryArmy = [];
+            model.killCount = 0;
 
-            for (var i = 0; i < armiesPlayer1.length; i++) {
-                armiesPlayer1[i] = (armiesPlayer1[i]).concat(model.player1TemporaryArmy);
-                armiesPlayer2[i] = (armiesPlayer2[i]).concat(model.player2TemporaryArmy);
-                model.player1TemporaryArmy = (armiesPlayer1[i]).concat(reinforcementsPlayer1[i]);
-                model.player2TemporaryArmy = (armiesPlayer2[i]).concat(reinforcementsPlayer2[i]);
+            for (var i = 0; i < model.battles.length; i++) {
+                model.armiesPlayer1[i] = (model.armiesPlayer1[i]).concat(player1TemporaryArmy);
+                model.armiesPlayer2[i] = (model.armiesPlayer2[i]).concat(player2TemporaryArmy);
+                player1TemporaryArmy = (model.armiesPlayer1[i]).concat(model.reinforcementsPlayer1[i]);
+                player2TemporaryArmy = (model.armiesPlayer2[i]).concat(model.reinforcementsPlayer2[i]);
 
+                tagUnitsKilled(i);
                 killUnits(i);
+
+                player1TemporaryArmy = JSON.parse(JSON.stringify(player1TemporaryArmy));
+                player2TemporaryArmy = JSON.parse(JSON.stringify(player2TemporaryArmy));
             }
 
-            model.analizedArmiesPlayer1 = JSON.parse(JSON.stringify(armiesPlayer1));
-            model.analizedArmiesPlayer2 = JSON.parse(JSON.stringify(armiesPlayer2));
-            model.reinforcementsPlayer1 = JSON.parse(JSON.stringify(reinforcementsPlayer1));
-            model.reinforcementsPlayer2 = JSON.parse(JSON.stringify(reinforcementsPlayer2));
+            model.analizedArmiesPlayer1 = JSON.parse(JSON.stringify(model.armiesPlayer1));
+            model.analizedArmiesPlayer2 = JSON.parse(JSON.stringify(model.armiesPlayer2));
+            model.reinforcementsPlayer1 = JSON.parse(JSON.stringify(model.reinforcementsPlayer1));
+            model.reinforcementsPlayer2 = JSON.parse(JSON.stringify(model.reinforcementsPlayer2));
 
-            tagUnitsKilled();
-            getTotalArmyCost();
+            //console.log("Train length", model.trainEvents.length);
+            //console.log("Deaths length", model.deathEvents.length);
+            //console.log("Kill Count", model.killCount);
+            /*
+            var battleKills = 0;
+            model.battles.forEach(function (battle) {
+                battleKills += battle["deaths"].length;
+            });
+            //console.log("Battle Kills", battleKills);
+            model.deathEvents.forEach(function (death) {
+                if (!death.processed) {
+                    //console.log("Non processed", death);
+                }
+            });*/
         };
 
         // Tags the units from the armies as killed but does not remove them from the arrays.
         // The UI will then show these tagged units as killed in a different color for easy reference.
-        var tagUnitsKilled = function () {
-            for (var i = 0; i < model.battles.length; i++) {
-                var battleIndex = i;
-                (model.battles[battleIndex])["deaths"].forEach(function (kill) {
-                    for (var i = 0; i < model.analizedArmiesPlayer1[battleIndex].length; i++) {
-                        var unit = (model.analizedArmiesPlayer1[battleIndex])[i];
-                        if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                            tagUnit(unit, kill);
-                            i = model.analizedArmiesPlayer1[battleIndex].length + 1;
-                        }
+        var tagUnitsKilled = function (battleIndex) {
+            (model.battles[battleIndex])["deaths"].forEach(function (kill) {
+                for (var i = 0; i < player1TemporaryArmy.length; i++) {
+                    var unit = player1TemporaryArmy[i];
+                    if (unit["InstanceId"] === kill["VictimInstanceId"]) {
+                        tagUnit(unit, kill);
+                        i = player1TemporaryArmy.length + 1;
                     }
+                }
 
-                    for (var i = 0; i < model.reinforcementsPlayer1[battleIndex].length; i++) {
-                        var unit = (model.reinforcementsPlayer1[battleIndex])[i];
-                        if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                            tagUnit(unit, kill);
-                            i = model.reinforcementsPlayer1[battleIndex].length + 1;
-                        }
+                for (var i = 0; i < player2TemporaryArmy.length; i++) {
+                    var unit = player2TemporaryArmy[i];
+                    if (unit["InstanceId"] === kill["VictimInstanceId"]) {
+                        tagUnit(unit, kill);
+                        i = player2TemporaryArmy.length + 1;
                     }
-
-                    for (var i = 0; i < model.analizedArmiesPlayer2[battleIndex].length; i++) {
-                        var unit = (model.analizedArmiesPlayer2[battleIndex])[i];
-                        if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                            tagUnit(unit, kill);
-                            i = model.analizedArmiesPlayer2[battleIndex].length + 1;
-                        }
-                    }
-
-                    for (var i = 0; i < model.reinforcementsPlayer2[battleIndex].length; i++) {
-                        var unit = (model.reinforcementsPlayer2[battleIndex])[i];
-                        if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                            tagUnit(unit, kill);
-                            i = model.reinforcementsPlayer2[battleIndex].length + 1;
-                        }
-                    }
-                });
-            }
+                }
+            });
         };
 
         var tagUnit = function (unit, kill) {
@@ -444,11 +469,11 @@
                     var gameObject = searchGameObject(a);
                     unit.Killers.push({
                         mediaUrl: (gameObject) ? gameObject.mediaUrl : "",
-                        name: (gameObject) ? gameObject.name : "unknown"
+                        name: (gameObject) ? gameObject.name : a
                     });
                     kill.Killers.push({
                         mediaUrl: (gameObject) ? gameObject.mediaUrl : "",
-                        name: (gameObject) ? gameObject.name : "unknown"
+                        name: (gameObject) ? gameObject.name : a
                     });
                 });
             });
@@ -456,36 +481,106 @@
 
         // Takes a specific battle to remove units from the temporary armies before adding them to each player.
         var killUnits = function (battleIndex) {
+            model.deathEvents.forEach(function (kill) {
+                if (kill["TimeSinceStartMilliseconds"] <= (model.battles[battleIndex])["finish"]) {
+                    var gameObject = searchGameObject(kill["VictimObjectTypeId"]);
+                    kill.SupplyCost = (gameObject) ? gameObject.supplyCost : 0;
+                    kill.EnergyCost = (gameObject) ? gameObject.energyCost : 0;
+                    kill.PopulationCost = (gameObject) ? gameObject.populationCost : 0;
 
-            (model.battles[battleIndex])["deaths"].forEach(function (kill) {
-                var gameObject = searchGameObject(kill["VictimObjectTypeId"]);
-                kill.SupplyCost = gameObject.supplyCost;
-                kill.EnergyCost = gameObject.energyCost;
-                kill.PopulationCost = gameObject.populationCost;
+                    for (var i = 0; i < player1TemporaryArmy.length; i++) {
+                        var unit = player1TemporaryArmy[i];
+                        if (unit["InstanceId"] === kill["VictimInstanceId"]) {
+                            player1TemporaryArmy.splice(i, 1);
+                            model.killCount++;
+                            kill.processed = true;
+                            i = player1TemporaryArmy.length + 1;
+                        }
+                    }
 
-                for (var i = 0; i < model.player1TemporaryArmy.length; i++) {
-                    var unit = model.player1TemporaryArmy[i];
-                    if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                        model.player1TemporaryArmy.splice(i, 1);
-                        i = model.player1TemporaryArmy.length + 1;
+                    for (var i = 0; i < player2TemporaryArmy.length; i++) {
+                        var unit = player2TemporaryArmy[i];
+                        if (unit["InstanceId"] === kill["VictimInstanceId"]) {
+                            player2TemporaryArmy.splice(i, 1);
+                            model.killCount++;
+                            kill.processed = true;
+                            i = player2TemporaryArmy.length + 1;
+                        }
                     }
                 }
-
-                for (var i = 0; i < model.player2TemporaryArmy.length; i++) {
-                    var unit = model.player2TemporaryArmy[i];
-                    if (unit["InstanceId"] === kill["VictimInstanceId"]) {
-                        model.player2TemporaryArmy.splice(i, 1);
-                        i = model.player2TemporaryArmy.length + 1;
-                    }
-                }
+                return;
             });
         };
 
+        var settleLastBattle = function () {
+            //var killsTest = 0;
+            //var notKilled = 0;
+            model.analizedArmiesPlayer1[model.analizedArmiesPlayer1.length - 1].forEach(function (unit) {
+                model.deathEvents.forEach(function (death) {
+                    if ((unit["InstanceId"] === death["VictimInstanceId"]) && (!unit.killed)) {
+                        //unit.gotcha = true;
+                        //console.log("gotcha", unit["SquadId"]);
+                        tagUnit(unit, death);
+                        //killsTest++;
+                    }
+                    else {
+                        //notKilled++;
+                    }
+                });
+            });
+            model.analizedArmiesPlayer2[model.analizedArmiesPlayer2.length - 1].forEach(function (unit) {
+                model.deathEvents.forEach(function (death) {
+                    if ((unit["InstanceId"] === death["VictimInstanceId"]) && (!unit.killed)) {
+                        //unit.gotcha = true;
+                        //console.log("gotcha", unit["SquadId"]);
+                        tagUnit(unit, death);
+                        //killsTest++;
+                    }
+                    else {
+                        //notKilled++;
+                    }
+                });
+            });
+            model.reinforcementsPlayer1[model.reinforcementsPlayer1.length - 1].forEach(function (unit) {
+                model.deathEvents.forEach(function (death) {
+                    if ((unit["InstanceId"] === death["VictimInstanceId"]) && (!unit.killed)) {
+                        //unit.gotcha = true;
+                        //console.log("gotcha", unit["SquadId"]);
+                        tagUnit(unit, death);
+                        //killsTest++;
+                    }
+                    else {
+                        //notKilled++;
+                    }
+                });
+            });
+            model.reinforcementsPlayer2[model.reinforcementsPlayer2.length - 1].forEach(function (unit) {
+                model.deathEvents.forEach(function (death) {
+                    if ((unit["InstanceId"] === death["VictimInstanceId"]) && (!unit.killed)) {
+                        //unit.gotcha = true;
+                        //console.log("gotcha", unit["SquadId"]);
+                        tagUnit(unit, death);
+                        //killsTest++;
+                    }
+                    else {
+                        //notKilled++;
+                    }
+                });
+            });
+            //console.log("killed", killsTest, "notkilled", notKilled);
+        };
+
+        // Calculate army costs, losses and battle winner.
         var getTotalArmyCost = function () {
             for (var i = 0; i < model.battles.length; i++) {
                 var battle = model.battles[i];
                 battle.SupplyLost1 = 0;
                 battle.RSupplyLost1 = 0;
+                battle.SupplyCost1 = 0;
+                battle.RSupplyCost1 = 0;
+
+                battle.EnergyCost1 = 0;
+                battle.REnergyCost1 = 0;
                 battle.EnergyLost1 = 0;
                 battle.REnergyLost1 = 0;
 
@@ -494,11 +589,16 @@
                 battle.PopulationLost1 = 0;
                 battle.RPopulationLost1 = 0;
 
+                battle.SupplyCost2 = 0;
+                battle.RSupplyCost2 = 0;
                 battle.SupplyLost2 = 0;
                 battle.RSupplyLost2 = 0;
+
+                battle.EnergyCost2 = 0;
+                battle.REnergyCost2 = 0;
                 battle.EnergyLost2 = 0;
                 battle.REnergyLost2 = 0;
-                
+
                 battle.PopulationCost2 = 0;
                 battle.RPopulationCost2 = 0;
                 battle.PopulationLost2 = 0;
