@@ -65,6 +65,42 @@ ng-md-icon {
     -moz-transform:scale(0.70);    
 }
 
+.leader {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    border: 1px solid #ddd;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0px;
+    vertical-align: middle;
+    background-color: black;
+}
+
+.leaderflipped {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    border: 1px solid #ddd;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0px;
+    vertical-align: middle;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+    background-color: black;
+}
+
+.md-unstyled-image img{
+    max-width: 100%;
+    width: auto;
+    height: auto !important; /* needs to be important because md-card also sets it that way */
+}
+
 .background-map {
     background-image: url('{{match.mapMediaUrl}}');
     background-size: cover;

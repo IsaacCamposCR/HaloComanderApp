@@ -6,13 +6,13 @@
     module.component("matchHistoryComponent", {
         templateUrl: "/components/match-history-component/match.history.component.html",
         controllerAs: "model",
-        controller: ["$resource", "$mdSidenav", "$mdMedia", "$mdDialog", matchHistoryController],
+        controller: ["$resource", "$mdSidenav", "$mdMedia", "$mdDialog", "gameLeadersService", matchHistoryController],
         bindings: {
             selected: "="
         }
     });
 
-    function matchHistoryController($resource, $mdSidenav, $mdMedia, $mdDialog) {
+    function matchHistoryController($resource, $mdSidenav, $mdMedia, $mdDialog, gameLeadersService) {
         var model = this;
 
         model.searchMatch = "";
@@ -33,16 +33,6 @@
                 }
             });
 
-        var resourceLeaders = $resource("https://www.haloapi.com/metadata/hw2/leaders",
-            {},
-            {
-                query: {
-                    method: "GET",
-                    headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
-                    isArray: false
-                }
-            });
-
         var resourceMaps = $resource("https://www.haloapi.com/metadata/hw2/maps",
             {},
             {
@@ -54,66 +44,6 @@
             });
 
         model.$onInit = function () {
-        };
-
-        //---------------GAME LEADERS----------------------//
-        var getLeaders = function () {
-            model.leaders = [];
-            if (!localStorage.getItem("gameLeaders")) {
-                console.log("No stored leaders found. Requesting...");
-                sleep(5000);
-                resourceLeaders.query()
-                    .$promise.then(function (leaders) {
-                        createGameLeaders(leaders);
-                        if (typeof (Storage) !== "undefined") {
-                            // Code for localStorage/sessionStorage.
-                            localStorage.setItem("gameLeaders", JSON.stringify(model.leaders));
-                            console.log("stored");
-                        } else {
-                            console.log("No storage found...");
-                        }
-                        getMaps();
-                    });
-            }
-            else {
-                model.leaders = JSON.parse(localStorage.getItem("gameLeaders"));
-                console.log("Stored leaders found");
-                getMaps();
-            }
-        };
-
-        // Takes the application relevant data from the Leaders API.
-        var createGameLeaders = function (leaders) {
-            var contentItems = leaders["ContentItems"];
-
-            contentItems.forEach(function (gameLeader) {
-                var view = gameLeader["View"];
-                var hw2Leader = view["HW2Leader"];
-                var id = hw2Leader["Id"];
-                var displayInfo = hw2Leader["DisplayInfo"];
-                var viewDisplayInfo = displayInfo["View"];
-                var hw2LeaderDisplayInfo = viewDisplayInfo["HW2LeaderDisplayInfo"];
-                var name = hw2LeaderDisplayInfo["Name"];
-                var image = hw2Leader["Image"];
-                var viewImage = image["View"];
-                var media = viewImage ? viewImage["Media"] : null;
-                var mediaUrl = media ? media["MediaUrl"] : null;
-
-                model.leaders.push({
-                    name: name,
-                    id: id,
-                    mediaUrl: mediaUrl
-                });
-            });
-        }
-
-        // Searches the game maps array for a specific map to get the map's metadata.
-        function searchGameLeader(id) {
-            for (var i = 1; i < model.leaders.length; i++) {
-                if (model.leaders[i].id === id) {
-                    return model.leaders[i];
-                }
-            }
         };
 
         //---------------GAME MAPS----------------------//
@@ -193,7 +123,7 @@
                 var date = matchStartDate["ISO8601Date"];
 
                 var gameMap = searchGameMap(item["MapId"]);
-                var gameLeader = searchGameLeader(item["LeaderId"]);
+                var gameLeader = gameLeadersService.find(item["LeaderId"]);
 
                 model.playerRecentMatches.push({
                     matchId: matchId,
@@ -238,7 +168,7 @@
 
         model.changeGamertag = function () {
             model.match = null;
-            getLeaders();
+            getMaps();
         };
 
         /*

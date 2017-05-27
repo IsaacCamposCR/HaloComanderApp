@@ -2,17 +2,6 @@
     <h1>Match History</h1>
 </md-toolbar>
 <div layout-padding>
-    <!--
-    <md-autocomplete md-search-text="model.searchMatch" md-items="match in model.playerRecentMatches | filter:model.searchMatch"
-        md-item-text="match.leader" md-min-length="3" placeholder="filter">
-        <md-item-template>
-            <span md-highlight-text="model.searchMatch" md-highlight-flags="^i">{{match.leader}}</span>
-        </md-item-template>
-        <md-not-found>
-            No matches for "{{model.searchMatch}}" were found.
-        </md-not-found>
-    </md-autocomplete>
-    -->
     <md-content>
         <form name="gamertag" ng-submit="model.changeGamertag()">
             <div layout="column" layout-padding>
@@ -50,7 +39,7 @@
                     <div flex>
                         <p class="list-details"><b>{{match.result}} on {{match.map}}</b></p>
                         <p class="list-details">LEADER: {{model.selected.leader}}</p>
-                        <p class="list-details">{{model.selected.date | date:'dd/MM/yyyy HH:mma'}}</p>
+                        <p class="list-details">{{model.selected.date | date:'medium'}}</p>
                     </div>
                 </md-button>
             </md-list-item>

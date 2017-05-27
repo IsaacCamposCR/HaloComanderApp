@@ -16,6 +16,7 @@
             .primaryPalette("cyan")
             .accentPalette("orange")
             .warnPalette("lime");
+        $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
     });
 
     function mainController($mdSidenav, $mdDialog) {

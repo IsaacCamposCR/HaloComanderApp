@@ -6,13 +6,13 @@
     module.component("matchStatisticsComponent", {
         templateUrl: "/components/match-statistics-component/match.statistics.component.html",
         controllerAs: "model",
-        controller: ["$resource", "gameObjectsService", matchStatisticsController],
+        controller: ["$resource", "gameObjectsService", "gameLeadersService", matchStatisticsController],
         bindings: {
             selected: "<"
         }
     });
 
-    function matchStatisticsController($resource, gameObjectsService) {
+    function matchStatisticsController($resource, gameObjectsService, gameLeadersService) {
         var model = this;
 
         var resourceMatchResult = $resource("https://www.haloapi.com/stats/hw2/matches/:matchId",
@@ -50,9 +50,11 @@
                     var duration = objects["MatchDuration"];
                     var player1 = (((objects["Players"])["1"])["HumanPlayerId"])["Gamertag"];
                     var outcome1 = ((objects["Players"])["1"])["PlayerMatchOutcome"];
+                    var leader1 = ((objects["Players"])["1"])["LeaderId"];
                     var unitStats1 = ((objects["Players"])["1"])["UnitStats"];
                     var player2 = (((objects["Players"])["2"])["HumanPlayerId"])["Gamertag"];
                     var outcome2 = ((objects["Players"])["2"])["PlayerMatchOutcome"];
+                    var leader2 = ((objects["Players"])["2"])["LeaderId"];
                     var unitStats2 = ((objects["Players"])["2"])["UnitStats"];
                     var units1 = [];
                     var units2 = [];
@@ -82,9 +84,11 @@
                     model.matchResult.gameMode = gameMode;
                     model.matchResult.duration = duration;
                     model.matchResult.player1 = player1;
+                    model.matchResult.leader1 = gameLeadersService.find(leader1);
                     model.matchResult.outcome1 = outcome1;
                     model.matchResult.units1 = units1;
                     model.matchResult.player2 = player2;
+                    model.matchResult.leader2 = gameLeadersService.find(leader2);
                     model.matchResult.outcome2 = outcome2;
                     model.matchResult.units2 = units2;
                 });

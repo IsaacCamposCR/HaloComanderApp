@@ -1,16 +1,94 @@
-<md-card>
-    <img ng-src="{{model.selected.mapMediaUrl}}" class="md-card-image" alt="{{model.selected.map}}">
-    <md-card-title>
-        <md-card-title-text>
-            <span class="md-headline">{{model.selected.map}}</span>
-        </md-card-title-text>
-    </md-card-title>
-    <md-card-content>
+<md-content>
+    <md-card>
+        <md-card-title-media>
+            <div layout-gt-xs="row">
+                <div style="display: inline-block" flex="50">
 
-        <span>LEADER: {{model.selected.leader}} {{model.selected.date | date:'dd/MM/yyyy HH:mma'}}</span>
-    </md-card-content>
-    <md-card-actions layout="row" layout-align="end center">
-        <md-button>Action 1</md-button>
-        <md-button>Action 2</md-button>
-    </md-card-actions>
-</md-card>
+                </div>
+                <div style="display: inline-block" flex>
+
+                </div>
+            </div>
+            <div class="md-unstyled-image">
+                <img src="{{model.selected.mapMediaUrl}}" alt="{{model.selected.map}}">
+            </div>
+        </md-card-title-media>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{model.selected.map}}</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <p>{{model.selected.date | date:'medium'}}</p>
+            <p>{{model.matchResult.gameMode}} {{model.matchResult.duration | date:'dd/MM/yyyy HH:mma'}}</p>
+            <div layout-gt-xs="row">
+                <div style="display: inline-block" flex="50">
+                    <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
+                        <md-card-title>
+                            <md-card-title-media>
+                                <div class="md-media-lg card-media">
+                                    <img ng-src="{{model.matchResult.leader1.mediaUrl}}" alt="{{model.matchResult.leader1.name}}" class="leaderflipped" />
+                                </div>
+                            </md-card-title-media>
+                            <md-card-title-text>
+                                <span class="md-headline">{{model.matchResult.player1}}</span>
+                                <span class="md-subhead">{{model.matchResult.outcome1 === 1 ? 'VICTORY' : 'DEFEAT'}} as {{model.matchResult.leader1.name}}</span>
+                            </md-card-title-text>
+                        </md-card-title>
+                    </md-card>
+                    <div style="display: inline-block" ng-repeat="unit in model.matchResult.units1 | orderBy: '-TotalBuilt' track by $index">
+                        <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">{{unit.TotalBuilt}}/{{unit.TotalLost}}/{{unit.TotalDestroyed}}</span>
+                                    <span class="md-subhead">Built/Lost/Destroyed</span>
+                                </md-card-title-text>
+                                <span flex></span>
+                                <md-card-title-media>
+                                    <div class="md-media-sm card-media" style="text-align:right">
+                                        <img style="background-color:white" ng-src="{{unit.mediaUrl}}" alt="{{unit.name}}" width="75" height="75" />
+                                    </div>
+                                </md-card-title-media>
+                            </md-card-title>
+                        </md-card>
+                    </div>
+                </div>
+                <div style="display: inline-block" flex>
+                    <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-headline">{{model.matchResult.player2}}</span>
+                                <span class="md-subhead">{{model.matchResult.outcome2 === 1 ? 'VICTORY' : 'DEFEAT'}} as {{model.matchResult.leader2.name}}</span>
+                            </md-card-title-text>
+                            <md-card-title-media>
+                                <div class="md-media-lg card-media">
+                                    <img ng-src="{{model.matchResult.leader2.mediaUrl}}" alt="{{model.matchResult.leader2.name}}" class="leader" />
+                                </div>
+                            </md-card-title-media>
+                        </md-card-title>
+                    </md-card>
+                    <div style="display: inline-block" ng-repeat="unit in model.matchResult.units2 | orderBy: '-TotalBuilt' track by $index">
+                        <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">{{unit.TotalBuilt}}/{{unit.TotalLost}}/{{unit.TotalDestroyed}}</span>
+                                    <span class="md-subhead">Built/Lost/Destroyed</span>
+                                </md-card-title-text>
+                                <span flex></span>
+                                <md-card-title-media>
+                                    <div class="md-media-sm card-media" style="text-align:right">
+                                        <img style="background-color:white" ng-src="{{unit.mediaUrl}}" alt="{{unit.name}}" width="75" height="75" />
+                                    </div>
+                                </md-card-title-media>
+                            </md-card-title>
+                        </md-card>
+                    </div>
+                </div>
+            </div>
+        </md-card-content>
+        <!--<md-card-actions layout="row" layout-align="end center">
+            <md-button>Action 1</md-button>
+            <md-button>Action 2</md-button>
+        </md-card-actions>-->
+    </md-card>
+</md-content>
