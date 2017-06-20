@@ -15,14 +15,17 @@
     function matchHistoryController($resource, $mdSidenav, $mdMedia, $mdDialog, gameLeadersService) {
         var model = this;
 
+        model.page = 1;
         model.searchMatch = "";
         model.start = 0;
+        model.count = 10;
+        model.playerRecentMatches = [];
 
         var resourcePlayerMatchHistory = $resource("https://www.haloapi.com/stats/hw2/players/:player/matches",
             {
                 player: "@player",
                 matchType: "matchmaking",
-                count: "10",
+                count: "@count",
                 start: "@start"
             },
             {
@@ -44,6 +47,7 @@
             });
 
         model.$onInit = function () {
+            model.page = 1;
         };
 
         //---------------GAME MAPS----------------------//
@@ -105,42 +109,56 @@
 
         //---------------PLAYER MATCH HISTORY----------------------//
         var getPlayerMatchHistory = function () {
-            model.playerRecentMatches = [];
-            var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, start: model.start })
+            //model.playerRecentMatches = [];
+            var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: Number(model.count), start: Number(model.start) })
                 .$promise.then(function (matchHistory) {
                     var results = matchHistory["Results"];
+                    model.start = model.start + model.count;
                     results.forEach(function (match) {
                         createMatchHistory(match);
                     });
+                    if (model.count > 0) {
+                        getPlayerMatchHistory();
+                    }
+
                     model.selected = model.playerRecentMatches[0];
                 });
 
             var createMatchHistory = function (item) {
-                var matchId = item["MatchId"];
-                var result = item["PlayerMatchOutcome"];
-                var time = item["PlayerMatchDuration"];
-                var matchStartDate = item["MatchStartDate"];
-                var date = matchStartDate["ISO8601Date"];
+                if (((item["Teams"])["1"])["TeamSize"] === 1) {
+                    var matchId = item["MatchId"];
+                    var result = item["PlayerMatchOutcome"];
+                    var time = item["PlayerMatchDuration"];
+                    var matchStartDate = item["MatchStartDate"];
+                    var date = matchStartDate["ISO8601Date"];
 
-                var gameMap = searchGameMap(item["MapId"]);
-                var gameLeader = gameLeadersService.find(item["LeaderId"]);
+                    var gameMap = searchGameMap(item["MapId"]);
+                    var gameLeader = gameLeadersService.find(item["LeaderId"]);
 
-                model.playerRecentMatches.push({
-                    matchId: matchId,
-                    map: gameMap["name"],
-                    mapMediaUrl: gameMap["mediaUrl"],
-                    leader: gameLeader["name"],
-                    leaderMediaUrl: gameLeader["mediaUrl"],
-                    result: result === 1 ? "VICTORY" : "DEFEAT",
-                    time: time,
-                    date: date
-                });
-            };
+                    model.playerRecentMatches.push({
+                        matchId: matchId,
+                        map: gameMap["name"],
+                        mapMediaUrl: gameMap["mediaUrl"],
+                        leader: gameLeader["name"],
+                        leaderMediaUrl: gameLeader["mediaUrl"],
+                        result: result === 1 ? "VICTORY" : "DEFEAT",
+                        time: time,
+                        date: date
+                    });
+                    model.count = model.count - 1;
+                };
+            }
         };
+
+        function sleep(delay) {
+            var start = new Date().getTime();
+            while (new Date().getTime() < start + delay);
+        }
 
         // Requests a new set of matches starting at the next 10 games.
         model.backward = function () {
             model.start += 10;
+            model.page++;
             model.changeGamertag();
         };
 
@@ -152,6 +170,7 @@
             else {
                 model.start -= 10;
             }
+            model.page--;
             model.changeGamertag();
         };
 
@@ -167,6 +186,9 @@
         };
 
         model.changeGamertag = function () {
+            model.playerRecentMatches = [];
+            model.count = 10;
+            model.start = 0;
             model.match = null;
             getMaps();
         };

@@ -6,13 +6,13 @@
     module.component("matchStatisticsComponent", {
         templateUrl: "/components/match-statistics-component/match.statistics.component.html",
         controllerAs: "model",
-        controller: ["$resource", "gameObjectsService", "gameLeadersService", matchStatisticsController],
+        controller: ["$resource", "gameObjectsService", "gameLeadersService", "playerSeasonService", matchStatisticsController],
         bindings: {
             selected: "<"
         }
     });
 
-    function matchStatisticsController($resource, gameObjectsService, gameLeadersService) {
+    function matchStatisticsController($resource, gameObjectsService, gameLeadersService, playerSeasonService) {
         var model = this;
 
         var resourceMatchResult = $resource("https://www.haloapi.com/stats/hw2/matches/:matchId",
@@ -28,6 +28,7 @@
             });
 
         model.$onInit = function () {
+            playerSeasonService.find("ll blaky ll");
             if (model.selected) {
                 getMatchResults();
             }
@@ -84,10 +85,12 @@
                     model.matchResult.gameMode = gameMode;
                     model.matchResult.duration = duration;
                     model.matchResult.player1 = player1;
+                    model.selected.player1 = player1;
                     model.matchResult.leader1 = gameLeadersService.find(leader1);
                     model.matchResult.outcome1 = outcome1;
                     model.matchResult.units1 = units1;
                     model.matchResult.player2 = player2;
+                    model.selected.player2 = player2;
                     model.matchResult.leader2 = gameLeadersService.find(leader2);
                     model.matchResult.outcome2 = outcome2;
                     model.matchResult.units2 = units2;

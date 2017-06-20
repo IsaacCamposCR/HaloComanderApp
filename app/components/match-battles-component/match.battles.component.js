@@ -8,7 +8,9 @@
         controllerAs: "model",
         controller: ["$resource", "$mdToast", "$mdBottomSheet", "gameObjectsService", matchBattlesController],
         bindings: {
-            match: "<"
+            match: "<",
+            player1: "<",
+            player2: "<"
         }
     });
 

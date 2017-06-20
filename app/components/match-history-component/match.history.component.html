@@ -24,7 +24,7 @@
             <md-button class="md-icon-button md-accent" aria-label="Favorite" ng-click="model.forward()" ng-disabled="!model.start">
                 <ng-md-icon icon="fast_rewind"></ng-md-icon>
             </md-button>
-            Page {{(model.start / 10) + 1}}
+            Page {{model.page}}
             <md-button class="md-icon-button md-accent" ng-click="model.backward()">
                 <ng-md-icon icon="fast_forward"></ng-md-icon>
             </md-button>
@@ -38,8 +38,8 @@
                     </div>
                     <div flex>
                         <p class="list-details"><b>{{match.result}} on {{match.map}}</b></p>
-                        <p class="list-details">LEADER: {{model.selected.leader}}</p>
-                        <p class="list-details">{{model.selected.date | date:'medium'}}</p>
+                        <p class="list-details">LEADER: {{match.leader}}</p>
+                        <p class="list-details">{{match.date | date:'medium'}}</p>
                     </div>
                 </md-button>
             </md-list-item>

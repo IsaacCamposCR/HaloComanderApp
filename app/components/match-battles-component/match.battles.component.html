@@ -23,12 +23,12 @@
                 <h2>Battle #{{$index+1}}</h2>
                 <div layout="row">
                     <div id="Player 1 Panel" layout="row" flex="50">
-                        <h3>Player 1 -</h3>
+                        <h3>{{model.player1}}: </h3>
                         <h3 ng-if="(model.battles[$index].winner === 1)" style="color:darkgreen"> VICTORY</h3>
                         <h3 ng-if="(model.battles[$index].winner === 2)" style="color:red"> DEFEAT</h3>
                     </div>
                     <div id="Player 2 Panel" layout="row" flex>
-                        <h3>Player 2 -</h3>
+                        <h3>{{model.player2}}: </h3>
                         <h3 ng-if="(model.battles[$index].winner === 2)" style="color:darkgreen"> VICTORY</h3>
                         <h3 ng-if="(model.battles[$index].winner === 1)" style="color:red"> DEFEAT</h3>
                     </div>
