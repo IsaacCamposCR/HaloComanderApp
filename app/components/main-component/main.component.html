@@ -37,19 +37,25 @@
         </div>
 
         <md-content flex id="content">
+            <div>
+                <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
+                    <md-tab label="Statistics">
+                        <div>
+                            <match-statistics-component selected="model.selected" />
+                        </div>
+                    </md-tab>
+                    <md-tab label="Battles">
+                        <div>
+                            <match-battles-component match="model.selected.matchId" player1="model.selected.player1" player2="model.selected.player2"
+                            />
+                        </div>
+                    </md-tab>
+                </md-tabs>
+            </div>
 
-            <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
-                <md-tab label="Statistics">
-                    <div>
-                        <match-statistics-component selected="model.selected" />
-                    </div>
-                </md-tab>
-                <md-tab label="Battles">
-                    <div>
-                        <match-battles-component match="model.selected.matchId" player1="model.selected.player1" player2="model.selected.player2" />
-                    </div>
-                </md-tab>
-            </md-tabs>
+            <div>
+                <welcome-component />
+            </div>
 
         </md-content>
     </div>

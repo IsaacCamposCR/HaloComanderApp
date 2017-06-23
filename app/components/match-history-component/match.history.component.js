@@ -159,7 +159,9 @@
         model.backward = function () {
             model.start += 10;
             model.page++;
-            model.changeGamertag();
+            model.playerRecentMatches = [];
+            model.count = 10;
+            getMaps();
         };
 
         // Requests the previous set of matches from 10 games ago.
@@ -171,7 +173,9 @@
                 model.start -= 10;
             }
             model.page--;
-            model.changeGamertag();
+            model.playerRecentMatches = [];
+            model.count = 10;
+            getMaps();
         };
 
         // Selects a match from the Side Nav and closes it.

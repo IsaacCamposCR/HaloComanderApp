@@ -12,6 +12,7 @@
     "angular": "^1.5.8",
     "angular-material-icons": "^0.7.1",
     "body-parser": "^1.17.1",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "jquery": "^3.2.1"
   }
 }
