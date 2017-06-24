@@ -6,8 +6,6 @@
 
     module.factory("gameObjectsService", function ($resource) {
 
-        console.log("hi game objects");
-
         var resourceGameObjects = $resource("https://www.haloapi.com/metadata/hw2/game-objects",
             {
                 startAt: "@startAt"

@@ -20,7 +20,7 @@
     <md-card ng-repeat="i in model.getNumber(model.battles.length) track by $index">
         <div ng-show="model.showBattle($index)">
             <md-card-content>
-                <h2>Battle #{{$index+1}}</h2>
+                <h1>Battle #{{$index+1}}</h1>
                 <div layout="row">
                     <div id="Player 1 Panel" layout="row" flex="50">
                         <h3>{{model.player1}}: </h3>
@@ -44,12 +44,10 @@
                         <ng-md-icon icon="group" style="color:red"></ng-md-icon> {{model.battles[$index].PopulationLost1}}
                         <p>Army size is {{model.analizedArmiesPlayer1[$index].length}} units.</p>
                         <div style="display: inline-block" ng-repeat="unit in model.analizedArmiesPlayer1[$index] | orderBy: 'name'">
-                            <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="50" height="50" class="unit-icon"
-                                ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }" />
-                            <!--{{unit.InstanceId}}
-                            <span ng-if="unit.gotcha">
-                                X
-                            </span>-->
+                            <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="50"
+                                height="50" class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                            />
+                            <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                         </div>
                     </div>
                     <div id="Player 2 Panel" style="display: inline-block" flex="50">
@@ -62,12 +60,10 @@
                         <ng-md-icon icon="group" style="color:red"></ng-md-icon> {{model.battles[$index].PopulationLost2}}
                         <p>Army size is {{model.analizedArmiesPlayer2[$index].length}} units.</p>
                         <div style="display: inline-block" ng-repeat="unit in model.analizedArmiesPlayer2[$index] | orderBy: 'name'">
-                            <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="50" height="50" class="unit-icon"
-                                ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }" />
-                            <!--{{unit.InstanceId}}
-                            <span ng-if="unit.gotcha">
-                                X
-                            </span>-->
+                            <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="50"
+                                height="50" class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                            />
+                            <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                         </div>
                     </div>
                 </div>
@@ -84,12 +80,10 @@
                         <ng-md-icon icon="group" style="color:red"></ng-md-icon> {{model.battles[$index].RPopulationLost1}}
                         <p>Reinforcements size is {{model.reinforcementsPlayer1[$index].length}} units.</p>
                         <div style="display: inline-block" ng-repeat="unit in model.reinforcementsPlayer1[$index] | orderBy: 'name'">
-                            <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="50" height="50" class="unit-icon"
-                                ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }" />
-                            <!--{{unit.InstanceId}}
-                            <span ng-if="unit.gotcha">
-                                X
-                            </span>-->
+                            <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="50"
+                                height="50" class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                            />
+                            <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                         </div>
                     </div>
                     <div id="Player 2 Reinforcements" style="display: inline-block" flex="50">
@@ -103,12 +97,10 @@
                         <ng-md-icon icon="group" style="color:red"></ng-md-icon> {{model.battles[$index].RPopulationLost2}}
                         <p>Reinforcements size is {{model.reinforcementsPlayer2[$index].length}} units.</p>
                         <div style="display: inline-block" ng-repeat="unit in model.reinforcementsPlayer2[$index] | orderBy: 'name'">
-                            <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="50" height="50" class="unit-icon"
-                                ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }" />
-                            <!--{{unit.InstanceId}}
-                            <span ng-if="unit.gotcha">
-                                X
-                            </span>-->
+                            <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}" width="50"
+                                height="50" class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                            />
+                            <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                         </div>
                     </div>
                 </div>
@@ -119,9 +111,9 @@
                         to {{model.secondsToTime(model.battles[$index].finish)}}.</p>
                     <div style="display: inline-block" ng-repeat="unit in model.battles[$index].deaths | orderBy: 'name'">
                         <div>
-                            <img ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.VictimObjectTypeId}}" width="50" height="50"
-                                class="unit-icon" style="-webkit-filter: sepia(100%);" />
-                            <!--{{unit.VictimInstanceId}}-->
+                            <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.VictimObjectTypeId}}"
+                                width="50" height="50" class="unit-icon" style="-webkit-filter: sepia(100%);" />
+                            <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                         </div>
                     </div>
                 </div>
