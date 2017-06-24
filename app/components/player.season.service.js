@@ -6,8 +6,6 @@
 
     module.factory("playerSeasonService", function ($resource) {
 
-        console.log("hi player season");
-
         var resourcePlayers = $resource("https://www.haloapi.com/stats/hw2/players/:player/stats/seasons/:seasonId",
             {
                 player: "@player",

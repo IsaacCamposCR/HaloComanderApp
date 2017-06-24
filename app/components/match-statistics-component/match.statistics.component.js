@@ -28,7 +28,7 @@
             });
 
         model.$onInit = function () {
-            playerSeasonService.find("ll blaky ll");
+            //playerSeasonService.find("ll blaky ll");
             if (model.selected) {
                 getMatchResults();
             }

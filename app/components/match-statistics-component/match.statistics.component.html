@@ -1,14 +1,6 @@
 <md-content>
     <md-card>
         <md-card-title-media>
-            <div layout-gt-xs="row">
-                <div style="display: inline-block" flex="50">
-
-                </div>
-                <div style="display: inline-block" flex>
-
-                </div>
-            </div>
             <div class="md-unstyled-image">
                 <img src="{{model.selected.mapMediaUrl}}" alt="{{model.selected.map}}">
             </div>
@@ -20,7 +12,7 @@
         </md-card-title>
         <md-card-content>
             <p>{{model.selected.date | date:'medium'}}</p>
-            <p>{{model.matchResult.gameMode}} {{model.matchResult.duration | date:'dd/MM/yyyy HH:mma'}}</p>
+            <!--<p>{{model.matchResult.gameMode}} {{model.matchResult.duration | date:'dd/MM/yyyy HH:mma'}}</p>-->
             <div layout-gt-xs="row">
                 <div style="display: inline-block" flex="50">
                     <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>

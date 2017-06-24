@@ -1,7 +1,7 @@
 <div layout="row">
 
     <div layout="vertical">
-        <md-sidenav class="md-sidenav-left" style="" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" md-whiteframe="4">
+        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" md-whiteframe="4">
             <div>
                 <match-history-component selected="model.selected" />
             </div>
@@ -22,13 +22,13 @@
                             </md-button>
                         </md-fab-trigger>
                         <md-fab-actions>
-                            <md-button class="md-fab md-raised md-mini">
-                                <ng-md-icon icon="face"></ng-md-icon>
-                                <md-tooltip md-direction="left">Contact</md-tooltip>
+                            <md-button class="md-fab md-raised md-mini" ng-click="model.showInstructions($event)">
+                                <ng-md-icon icon="gamepad"></ng-md-icon>
+                                <md-tooltip md-direction="left">Instructions</md-tooltip>
                             </md-button>
-                            <md-button class="md-fab md-raised md-mini" ng-click="model.clearNotes($event)">
-                                <ng-md-icon icon="clear_all"></ng-md-icon>
-                                <md-tooltip md-direction="left">Clear all notes</md-tooltip>
+                            <md-button class="md-fab md-raised md-mini" ng-click="model.showAbout($event)">
+                                <ng-md-icon icon="more_horiz"></ng-md-icon>
+                                <md-tooltip md-direction="left">About</md-tooltip>
                             </md-button>
                         </md-fab-actions>
                     </md-fab-speed-dial>
@@ -37,7 +37,7 @@
         </div>
 
         <md-content flex id="content">
-            <div>
+            <div ng-show="model.selected">
                 <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
                     <md-tab label="Statistics">
                         <div>
@@ -53,10 +53,16 @@
                 </md-tabs>
             </div>
 
-            <div>
-                <welcome-component />
+            <div ng-hide="model.selected">
+                <welcome-component></welcome-component>
+                <br>
+                <tutorial-component></tutorial-component>
+                <br>
+                <md-divider></md-divider>
+                <br>
+                <about-component></about-component>
+                <br>
             </div>
-
         </md-content>
     </div>
 </div>

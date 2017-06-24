@@ -6,8 +6,6 @@
 
     module.factory("gameLeadersService", function ($resource) {
 
-        console.log("hi game leaders");
-
         var resourceLeaders = $resource("https://www.haloapi.com/metadata/hw2/leaders",
             {},
             {
