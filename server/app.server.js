@@ -11,7 +11,7 @@ app.use(express.static(rootPath + "/app"));
 
 app.use(cors({
     allowedOrigins: [
-        'haloapi.com'
+        'haloapi.com', 'photos.google.com'
     ]
 }));
 
@@ -20,4 +20,4 @@ app.get("*", function (req, res) {
 });
 
 app.listen(8000);
-console.log("Listening on port 8000...");
+console.log("Listening on port 8080...");
