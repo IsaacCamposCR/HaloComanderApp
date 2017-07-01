@@ -55,7 +55,6 @@
             model.maps = [];
             if (!localStorage.getItem("gameMaps")) {
                 console.log("No stored maps found. Requesting...");
-                sleep(15000);
                 resourceMaps.query()
                     .$promise.then(function (maps) {
                         createGameMaps(maps);
@@ -71,7 +70,7 @@
             }
             else {
                 model.maps = JSON.parse(localStorage.getItem("gameMaps"));
-                console.log("Stored maps found");
+                //console.log("Stored maps found");
                 getPlayerMatchHistory();
             }
         };

@@ -27,9 +27,9 @@
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
                             localStorage.setItem("gameLeaders", JSON.stringify(gameLeaders));
-                            //console.log("stored", gameLeaders);
+                            console.log("stored", gameLeaders);
                         } else {
-                            //console.log("No storage found...");
+                            console.log("No storage found...");
                         }
                     });
             }
@@ -65,9 +65,7 @@
 
         // Searches the game maps array for a specific map to get the map's metadata.
         function searchGameLeader(id) {
-            if (!gameLeaders || gameLeaders.length === 0) {
-                getLeaders();
-            }
+            storeGameLeaders();
             for (var i = 0; i < gameLeaders.length; i++) {
                 if (gameLeaders[i].id === id) {
                     return gameLeaders[i];
@@ -75,8 +73,16 @@
             }
         };
 
+        // Requests the Halo API for the leader data to store it in cache.
+        function storeGameLeaders() {
+            if (!gameLeaders || gameLeaders.length === 0) {
+                getLeaders();
+            }
+        };
+
         return {
-            find: searchGameLeader
+            find: searchGameLeader,
+            store: storeGameLeaders
         }
     });
 

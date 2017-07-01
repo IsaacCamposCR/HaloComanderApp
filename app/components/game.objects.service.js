@@ -23,28 +23,23 @@
         var getGameObjects = function () {
 
             if (!localStorage.getItem("gameObjects")) {
-                //console.log("No stored objects found. Requesting...");
-                sleep(5000);
+                console.log("No stored objects found. Requesting...");
                 resourceGameObjects.query({ startAt: "0" })
                     .$promise.then(function (objects) {
                         createGameObjects(objects);
-                        sleep(5000);
                         resourceGameObjects.query({ startAt: "100" })
                             .$promise.then(function (objects) {
                                 createGameObjects(objects);
-                                sleep(15000);
                                 resourceGameObjects.query({ startAt: "200" })
                                     .$promise.then(function (objects) {
                                         createGameObjects(objects);
                                         if (typeof (Storage) !== "undefined") {
                                             // Code for localStorage/sessionStorage.
                                             localStorage.setItem("gameObjects", JSON.stringify(gameObjects));
-                                            //console.log("stored");
+                                            console.log("stored");
                                         } else {
-                                            //console.log("No storage found...");
+                                            console.log("No storage found...");
                                         }
-
-                                        //getMatchEvents();
                                     });
                             });
                     });
@@ -52,7 +47,6 @@
             else {
                 gameObjects = JSON.parse(localStorage.getItem("gameObjects"));
                 //console.log("Stored objects found");
-                //getMatchEvents();
             }
         };
 
@@ -92,6 +86,7 @@
         // Searches the game object array for a specific unit to get the unit's metadata.
         function searchGameObject(id) {
             if (!gameObjects || gameObjects.length === 0) {
+                console.log("requesting objects...");
                 getGameObjects();
             }
 
@@ -113,8 +108,15 @@
             return null;
         };
 
+        function storeGameObjects() {
+            if (!gameObjects || gameObjects.length === 0) {
+                getGameObjects();
+            }
+        };
+
         return {
-            find: searchGameObject
+            find: searchGameObject,
+            store: storeGameObjects
         }
     });
 

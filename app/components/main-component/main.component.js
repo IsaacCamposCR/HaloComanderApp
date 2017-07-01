@@ -6,7 +6,7 @@
     module.component("mainComponent", {
         templateUrl: "/components/main-component/main.component.html",
         controllerAs: "model",
-        controller: ["$mdSidenav", "$mdDialog", "$mdMedia", mainController],
+        controller: ["$mdSidenav", "$mdDialog", "$mdMedia", "gameLeadersService", "gameObjectsService", mainController],
         bindings: {
         }
     });
@@ -19,13 +19,16 @@
         $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
     });
 
-    function mainController($mdSidenav, $mdDialog, $mdMedia) {
+    function mainController($mdSidenav, $mdDialog, $mdMedia, gameLeadersService, gameObjectsService) {
         var model = this;
 
         model.$onInit = function () {
             model.tutorial = false;
             model.welcome = false;
             model.about = false;
+            gameLeadersService.store();
+            gameObjectsService.store();
+
         };
 
         model.tabIndex = 0;
