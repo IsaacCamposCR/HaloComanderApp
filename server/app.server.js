@@ -19,5 +19,5 @@ app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");
 });
 
-app.listen(8000);
+app.listen(8080);
 console.log("Listening on port 8080...");

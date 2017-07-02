@@ -1,86 +1,54 @@
 <md-content>
-    <md-card>
-        <md-card-title-media>
-            <div class="md-unstyled-image">
-                <img src="{{model.selected.mapMediaUrl}}" alt="{{model.selected.map}}">
-            </div>
-        </md-card-title-media>
-        <md-card-title>
-            <md-card-title-text>
-                <span class="md-headline">{{model.selected.map}}</span>
-            </md-card-title-text>
-        </md-card-title>
-        <md-card-content>
-            <p>{{model.selected.date | date:'medium'}}</p>
-            <!--<p>{{model.matchResult.gameMode}} {{model.matchResult.duration | date:'dd/MM/yyyy HH:mma'}}</p>-->
-            <div layout-gt-xs="row">
-                <div style="display: inline-block" flex="50">
-                    <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
-                        <md-card-title>
-                            <md-card-title-media>
-                                <div class="md-media-lg card-media">
-                                    <img ng-src="{{model.matchResult.leader1.mediaUrl}}" alt="{{model.matchResult.leader1.name}}" class="leaderflipped" />
-                                </div>
-                            </md-card-title-media>
-                            <md-card-title-text>
-                                <span class="md-headline">{{model.matchResult.player1}}</span>
-                                <span class="md-subhead">{{model.matchResult.outcome1 === 1 ? 'VICTORY' : 'DEFEAT'}} as {{model.matchResult.leader1.name}}</span>
-                            </md-card-title-text>
-                        </md-card-title>
-                    </md-card>
-                    <div style="display: inline-block" ng-repeat="unit in model.matchResult.units1 | orderBy: '-TotalBuilt' track by $index">
-                        <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
-                            <md-card-title>
-                                <md-card-title-text>
-                                    <span class="md-headline">{{unit.TotalBuilt}}/{{unit.TotalLost}}/{{unit.TotalDestroyed}}</span>
-                                    <span class="md-subhead">Built/Lost/Destroyed</span>
-                                </md-card-title-text>
-                                <span flex></span>
-                                <md-card-title-media>
-                                    <div class="md-media-sm card-media" style="text-align:right">
-                                        <img style="background-color:white" ng-src="{{unit.mediaUrl}}" alt="{{unit.name}}" width="75" height="75" />
-                                    </div>
-                                </md-card-title-media>
-                            </md-card-title>
-                        </md-card>
+    <div flex ng-cloak>
+        <div>
+            <md-grid-list md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
+                md-gutter-gt-sm="4px">
+
+                <md-grid-tile style="background: #ff8a80;" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                    <img ng-src="{{model.matchResult.leader1.mediaUrl}}" alt="{{model.matchResult.leader1.name}}" class="avatar" width="300"
+                        height="300" />
+                    <md-grid-tile-footer>
+                        <h3>{{model.matchResult.player1}} {{model.matchResult.outcome1 === 1 ? 'VICTORY' : 'DEFEAT'}} as {{model.matchResult.leader1.name}}</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile ng-if="unit.TotalBuilt" style="background: #ff80ab;" ng-repeat="unit in model.matchResult.units1 | orderBy: '-TotalBuilt' track by $index"
+                    md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
+                    <div class="md-media-sm card-media" style="text-align:right">
+                        <img ng-src="{{unit.mediaUrl}}" alt="{{unit.name}}" width="75" height="75" />
                     </div>
-                </div>
-                <div style="display: inline-block" flex>
-                    <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
-                        <md-card-title>
-                            <md-card-title-text>
-                                <span class="md-headline">{{model.matchResult.player2}}</span>
-                                <span class="md-subhead">{{model.matchResult.outcome2 === 1 ? 'VICTORY' : 'DEFEAT'}} as {{model.matchResult.leader2.name}}</span>
-                            </md-card-title-text>
-                            <md-card-title-media>
-                                <div class="md-media-lg card-media">
-                                    <img ng-src="{{model.matchResult.leader2.mediaUrl}}" alt="{{model.matchResult.leader2.name}}" class="leader" />
-                                </div>
-                            </md-card-title-media>
-                        </md-card-title>
-                    </md-card>
-                    <div style="display: inline-block" ng-repeat="unit in model.matchResult.units2 | orderBy: '-TotalBuilt' track by $index">
-                        <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
-                            <md-card-title>
-                                <md-card-title-text>
-                                    <span class="md-headline">{{unit.TotalBuilt}}/{{unit.TotalLost}}/{{unit.TotalDestroyed}}</span>
-                                    <span class="md-subhead">Built/Lost/Destroyed</span>
-                                </md-card-title-text>
-                                <span flex></span>
-                                <md-card-title-media>
-                                    <div class="md-media-sm card-media" style="text-align:right">
-                                        <img style="background-color:white" ng-src="{{unit.mediaUrl}}" alt="{{unit.name}}" width="75" height="75" />
-                                    </div>
-                                </md-card-title-media>
-                            </md-card-title>
-                        </md-card>
+                    <md-grid-tile-footer>
+                        <h3>{{unit.TotalBuilt}}/{{unit.TotalLost}}</h3>
+                        <h3>B/L</span>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+            </md-grid-list>
+        </div>
+        <br>
+        <md-divider></md-divider>
+        <br>
+        <div>
+            <md-grid-list md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
+                md-gutter-gt-sm="4px">
+
+                <md-grid-tile style="background: #80d8ff;" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                    <img ng-src="{{model.matchResult.leader2.mediaUrl}}" alt="{{model.matchResult.leader2.name}}" class="avatar" />
+                    <md-grid-tile-footer>
+                        <h3>{{model.matchResult.player2}} {{model.matchResult.outcome2 === 1 ? 'VICTORY' : 'DEFEAT'}} as {{model.matchResult.leader2.name}}</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile ng-if="unit.TotalBuilt" style="background: #b388ff;" ng-repeat="unit in model.matchResult.units2 | orderBy: '-TotalBuilt' track by $index"
+                    md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
+                    <div class="md-media-sm card-media" style="text-align:right">
+                        <img ng-src="{{unit.mediaUrl}}" alt="{{unit.name}}" width="75" height="75" />
                     </div>
-                </div>
-            </div>
-        </md-card-content>
-        <!--<md-card-actions layout="row" layout-align="end center">
-            <md-button>Action 1</md-button>
-            <md-button>Action 2</md-button>
-        </md-card-actions>-->
-    </md-card>
+                    <md-grid-tile-footer>
+                        <h3>{{unit.TotalBuilt}}/{{unit.TotalLost}}</h3>
+                        <h3>B/L</span>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+            </md-grid-list>
+        </div>
+    </div>
 </md-content>

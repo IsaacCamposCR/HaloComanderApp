@@ -143,3 +143,12 @@ span.name {
     padding: 0;
     margin: 0;
 }
+
+.justify {
+    text-align: justify;
+}
+
+.wrap {
+    word-wrap: break-word;
+    white-space: normal !important
+}

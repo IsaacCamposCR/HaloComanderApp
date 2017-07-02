@@ -488,3 +488,7 @@ header h1 {
     display: none;
   }
 }
+
+ol, ul {
+	list-style: none;
+}
