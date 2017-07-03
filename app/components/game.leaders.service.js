@@ -23,10 +23,11 @@
                 console.log("No stored leaders found. Requesting...");
                 resourceLeaders.query()
                     .$promise.then(function (leaders) {
+                        console.log("Req API");
                         createGameLeaders(leaders);
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
-                            localStorage.setItem("gameLeaders", JSON.stringify(gameLeaders));
+                            localStorage.setItem("gameLeaders", LZString.compress(JSON.stringify(gameLeaders)));
                             console.log("stored", gameLeaders);
                         } else {
                             console.log("No storage found...");
@@ -34,7 +35,7 @@
                     });
             }
             else {
-                gameLeaders = JSON.parse(localStorage.getItem("gameLeaders"));
+                gameLeaders = JSON.parse(LZString.decompress(localStorage.getItem("gameLeaders")));
                 //console.log("Stored leaders found", gameLeaders);
             }
         };

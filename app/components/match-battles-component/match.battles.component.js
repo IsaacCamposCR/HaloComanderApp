@@ -91,6 +91,7 @@
 
             var matchEvents = resourceMatchEvents.query({ match: model.match })
                 .$promise.then(function (events) {
+                    console.log("Req API");
                     //console.log(events["IsCompleteSetOfEvents"]);
                     events = events["GameEvents"];
                     events.forEach(function (event) {

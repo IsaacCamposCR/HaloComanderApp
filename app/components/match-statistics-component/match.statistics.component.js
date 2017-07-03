@@ -48,6 +48,7 @@
 
             resourceMatchResult.query({ matchId: model.selected.matchId })
                 .$promise.then(function (objects) {
+                    console.log("Req API");
                     model.matchResult = {};
                     var gameMode = objects["GameMode"];
                     var duration = objects["MatchDuration"];

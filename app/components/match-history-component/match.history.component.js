@@ -57,10 +57,11 @@
                 console.log("No stored maps found. Requesting...");
                 resourceMaps.query()
                     .$promise.then(function (maps) {
+                        console.log("Req API");
                         createGameMaps(maps);
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
-                            localStorage.setItem("gameMaps", JSON.stringify(model.maps));
+                            localStorage.setItem("gameMaps", LZString.compress(JSON.stringify(model.maps)));
                             console.log("stored");
                         } else {
                             console.log("No storage found...");
@@ -69,7 +70,7 @@
                     });
             }
             else {
-                model.maps = JSON.parse(localStorage.getItem("gameMaps"));
+                model.maps = JSON.parse(LZString.decompress(localStorage.getItem("gameMaps")));
                 //console.log("Stored maps found");
                 getPlayerMatchHistory();
             }
@@ -111,6 +112,7 @@
             //model.playerRecentMatches = [];
             var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: Number(model.count), start: Number(model.start) })
                 .$promise.then(function (matchHistory) {
+                    console.log("Req API");
                     var results = matchHistory["Results"];
                     model.start = model.start + model.count;
                     results.forEach(function (match) {

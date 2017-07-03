@@ -29,7 +29,6 @@
             gameLeadersService.store();
             gameObjectsService.store();
             //playerSeasonService.store();
-
         };
 
         model.tabIndex = 0;
