@@ -49,7 +49,6 @@
                     if (typeof (Storage) !== "undefined") {
                         // Code for localStorage/sessionStorage.
                         localStorage.setItem("season", LZString.compressToUTF16(JSON.stringify(season)));
-                        season = null;
                     }
                     else {
                         console.log("No storage found...");
@@ -89,7 +88,6 @@
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
                             localStorage.setItem("designations", LZString.compressToUTF16(JSON.stringify(designations)));
-                            designations = null;
                         }
                         else {
                             console.log("No storage found...");
@@ -167,7 +165,7 @@
             var playlistData = (playerSeasonData["RankedPlaylistStats"]).find(function (playlist) {
                 return playlist.PlaylistId === "532bfd6c-3db4-45b7-a010-11460b862be6";
             });
-            
+
             var highestCsr = playlistData["HighestCsr"];
 
             var playerSeasonStats = {};
