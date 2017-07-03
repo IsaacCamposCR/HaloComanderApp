@@ -38,7 +38,7 @@
                                         createGameObjects(objects);
                                         if (typeof (Storage) !== "undefined") {
                                             // Code for localStorage/sessionStorage.
-                                            localStorage.setItem("gameObjects",  LZString.compress(JSON.stringify(gameObjects)));
+                                            localStorage.setItem("gameObjects", LZString.compressToUTF16(JSON.stringify(gameObjects)));
                                             console.log("stored");
                                         } else {
                                             console.log("No storage found...");
@@ -48,7 +48,7 @@
                     });
             }
             else {
-                gameObjects = JSON.parse(LZString.decompress(localStorage.getItem("gameObjects")));
+                gameObjects = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameObjects")));
                 //console.log("Stored objects found");
             }
         };
@@ -88,10 +88,7 @@
 
         // Searches the game object array for a specific unit to get the unit's metadata.
         function searchGameObject(id) {
-            if (!gameObjects || gameObjects.length === 0) {
-                console.log("requesting objects...");
-                getGameObjects();
-            }
+            storeGameObjects();
 
             if (id.includes("cov_bldg_heavy")) {
                 id = id.replace("heavy", "light");

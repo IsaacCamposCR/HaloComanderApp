@@ -27,7 +27,7 @@
                         createGameLeaders(leaders);
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
-                            localStorage.setItem("gameLeaders", LZString.compress(JSON.stringify(gameLeaders)));
+                            localStorage.setItem("gameLeaders", LZString.compressToUTF16(JSON.stringify(gameLeaders)));
                             console.log("stored", gameLeaders);
                         } else {
                             console.log("No storage found...");
@@ -35,7 +35,7 @@
                     });
             }
             else {
-                gameLeaders = JSON.parse(LZString.decompress(localStorage.getItem("gameLeaders")));
+                gameLeaders = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameLeaders")));
                 //console.log("Stored leaders found", gameLeaders);
             }
         };

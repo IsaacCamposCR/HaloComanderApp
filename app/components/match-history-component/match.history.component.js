@@ -61,7 +61,7 @@
                         createGameMaps(maps);
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
-                            localStorage.setItem("gameMaps", LZString.compress(JSON.stringify(model.maps)));
+                            localStorage.setItem("gameMaps", LZString.compressToUTF16(JSON.stringify(model.maps)));
                             console.log("stored");
                         } else {
                             console.log("No storage found...");
@@ -70,7 +70,7 @@
                     });
             }
             else {
-                model.maps = JSON.parse(LZString.decompress(localStorage.getItem("gameMaps")));
+                model.maps = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameMaps")));
                 //console.log("Stored maps found");
                 getPlayerMatchHistory();
             }

@@ -153,3 +153,17 @@ span.name {
     word-wrap: break-word;
     white-space: normal !important
 }
+
+.rank {
+    width: 50%;
+    right: -5%;
+    bottom: -5%;
+    position: absolute;
+    height: auto;
+    padding: 0px;
+    margin: 0px;
+    zoom: 0.70;
+    transform: translateZ(0);
+    -webkit-transform: scale(0.70);
+    -moz-transform: scale(0.70);   
+}

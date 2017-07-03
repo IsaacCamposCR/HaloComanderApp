@@ -99,17 +99,8 @@
                     });
 
                     processBattles();
-                    //console.log("Battles Result", model.battles.length);
                     processArmies();
-                    //console.log("Army1 Result", model.armiesPlayer1.length);
-                    //console.log("Reinf1 Result", model.reinforcementsPlayer1);
-                    //console.log("Army2 Result", model.armiesPlayer2);
-                    //console.log("Reinf2 Result", model.reinforcementsPlayer2);
                     battleAnalytics();
-                    //console.log("Analized1", model.analizedArmiesPlayer1);
-                    //console.log("Analized2", model.analizedArmiesPlayer2);
-                    //console.log("AnalizedR1", model.reinforcementsPlayer1);
-                    //console.log("AnalizedR2", model.reinforcementsPlayer2);
                     settleLastBattle();
                     getTotalArmyCost();
                 });

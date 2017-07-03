@@ -50,6 +50,7 @@
                 .$promise.then(function (objects) {
                     console.log("Req API");
                     model.matchResult = {};
+                    model.playerSeasons = {};
                     var gameMode = objects["GameMode"];
                     var duration = objects["MatchDuration"];
                     var player1 = (((objects["Players"])["1"])["HumanPlayerId"])["Gamertag"];
@@ -101,7 +102,20 @@
                     model.matchResult.leader2 = gameLeadersService.find(leader2);
                     model.matchResult.outcome2 = outcome2;
                     model.matchResult.units2 = units2;
+                    getPlayerSeasons();
                 });
+        };
+
+        var getPlayerSeasons = function () {
+            playerSeasonService.find(model.selected.player1).$promise
+                .then(function (playerSeasonData) {
+                    model.matchResult.season1 = playerSeasonService.create(playerSeasonData);
+                });
+            playerSeasonService.find(model.selected.player2).$promise
+                .then(function (playerSeasonData) {
+                    model.matchResult.season2 = playerSeasonService.create(playerSeasonData);
+                });
+
         };
     }
 }());

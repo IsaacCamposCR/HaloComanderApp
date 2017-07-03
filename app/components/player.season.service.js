@@ -48,7 +48,7 @@
                     createSeason(data);
                     if (typeof (Storage) !== "undefined") {
                         // Code for localStorage/sessionStorage.
-                        localStorage.setItem("season", JSON.stringify(season));
+                        localStorage.setItem("season", LZString.compressToUTF16(JSON.stringify(season)));
                         season = null;
                     }
                     else {
@@ -79,20 +79,27 @@
 
         var designations = [];
         var getCSRDesignations = function () {
-            resourceCSRDesignations.query()
-                .$promise.then(function (data) {
 
-                    createDesignations(data);
+            if (!localStorage.getItem("designations")) {
+                resourceCSRDesignations.query()
+                    .$promise.then(function (data) {
 
-                    if (typeof (Storage) !== "undefined") {
-                        // Code for localStorage/sessionStorage.
-                        localStorage.setItem("designations", JSON.stringify(designations));
-                        designations = null;
-                    }
-                    else {
-                        console.log("No storage found...");
-                    }
-                });
+                        createDesignations(data);
+
+                        if (typeof (Storage) !== "undefined") {
+                            // Code for localStorage/sessionStorage.
+                            localStorage.setItem("designations", LZString.compressToUTF16(JSON.stringify(designations)));
+                            designations = null;
+                        }
+                        else {
+                            console.log("No storage found...");
+                        }
+                    });
+            }
+            else {
+                designations = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("designations")));
+                //console.log("Stored objects found");
+            }
         };
 
         var createDesignations = function (data) {
@@ -136,48 +143,68 @@
                         createSeason(data);
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
-                            localStorage.setItem("season", JSON.stringify(season));
+                            localStorage.setItem("season", LZString.compressToUTF16(JSON.stringify(season)));
                             season = null;
                         }
                         else {
                             console.log("No storage found...");
                         }
-                        getPlayerSeason(player);
+                        return getPlayerSeason(player);
                     });
             }
             else {
-                season = JSON.parse(localStorage.getItem("season"));
+                season = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("season")));
                 //console.log("Stored objects found");
-                getPlayerSeason(player);
+                return getPlayerSeason(player);
             }
         };
 
         var getPlayerSeason = function (player) {
-            resourcePlayers.query({ player: player, seasonId: season.id })
-                .$promise.then(function (playerSeasonData) {
-
-                    var playlistData = (playerSeasonData["RankedPlaylistStats"]).find(function (playlist) {
-                        return playlist.PlaylistId === "532bfd6c-3db4-45b7-a010-11460b862be6";
-                    });
-
-                    var playerSeasonStats = {};
-
-                    playerSeasonStats.designation = (playlistData["HighestCsr"])["Designation"];
-                    playerSeasonStats.tier = (playlistData["HighestCsr"])["Tier"];
-                    playerSeasonStats.raw = (playlistData["HighestCsr"])["Raw"];
-
-                    playlistData = null;
-
-                    return playerSeasonStats;
-                });
+            return resourcePlayers.query({ player: player, seasonId: season.id });
         };
 
-        var createPlayerSeason = function (data) {
+        var createPlayerSeason = function (playerSeasonData) {
+            var playlistData = (playerSeasonData["RankedPlaylistStats"]).find(function (playlist) {
+                return playlist.PlaylistId === "532bfd6c-3db4-45b7-a010-11460b862be6";
+            });
+            
+            var highestCsr = playlistData["HighestCsr"];
+
+            var playerSeasonStats = {};
+
+            var designationData = designations.find(function (designation) {
+                if (highestCsr != null) {
+                    return designation.designationId === highestCsr["Designation"];
+                }
+                else {
+                    return designation.designationId === 0;
+                }
+            });
+
+            var tierData = designationData.tiers.find(function (tier) {
+                if (highestCsr != null) {
+                    return tier.Id === highestCsr["Tier"];
+                }
+                else {
+                    return tier.Id === playlistData["TotalMatchesStarted"];
+                }
+            });
+
+            playerSeasonStats.rank = designationData.name;
+            playerSeasonStats.rankIcon = tierData.mediaUrl;
+            playerSeasonStats.raw = (highestCsr != null) ? highestCsr["Raw"] : 0;
+
+            playlistData = null;
+            designationData = null;
+            tierData = null;
+
+            return playerSeasonStats;
         };
 
         // Searches the game maps array for a specific map to get the map's metadata.
         function searchPlayerSeason(player) {
-            getPlayerSeasonStats(player);
+            var pss = getPlayerSeasonStats(player);
+            return pss;
         };
 
         // Requests the Halo API for the season data to store it in cache. 
@@ -189,6 +216,7 @@
 
         return {
             find: searchPlayerSeason,
+            create: createPlayerSeason,
             store: storeSeason
         }
     });
