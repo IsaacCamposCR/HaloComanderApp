@@ -65,34 +65,35 @@ ng-md-icon {
     -moz-transform:scale(0.70);    
 }
 
-.leader {
+.leader-div {
+    height: 100%; /* Suggestive number; pick your own height as desired */
     position: relative;
-    width: 128px;
-    height: 128px;
-    border: 1px solid #ddd;
-    display: inline-block;
-    overflow: hidden;
-    margin: 0px;
-    vertical-align: middle;
-    background-color: black;
+    overflow: hidden; /* This will do the magic */
+    width: 100%; /* Pick an appropriate width as desired, unless you already use a grid, in that case use 100% */
+}
+.leader {
+    width: 100%;
+    position: absolute;
+    left: 15%;
+    top: 40%;
+    height: auto;
+
+    zoom:2;
+    transform: translateZ(0);
+    -webkit-transform: scale(2);
+    -moz-transform:scale(2); 
 }
 
-.leaderflipped {
-    position: relative;
-    width: 128px;
-    height: 128px;
-    border: 1px solid #ddd;
-    display: inline-block;
-    overflow: hidden;
-    margin: 0px;
-    vertical-align: middle;
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
-    background-color: black;
+.map {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: auto;
+
+    zoom:2;
+    transform: translateZ(0);
+    -webkit-transform: scale(2);
+    -moz-transform:scale(2); 
 }
 
 .md-unstyled-image img{

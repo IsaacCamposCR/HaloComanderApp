@@ -32,6 +32,8 @@
             if (model.selected) {
                 getMatchResults();
             }
+
+            playerSeasonService.find("ll Blaky ll");
         };
 
         model.$onChanges = function (changes) {
@@ -62,24 +64,28 @@
 
                     Object.keys(unitStats1).map((e) => {
                         var gameObject = gameObjectsService.find(e);
-                        units1.push({
-                            TotalBuilt: (unitStats1[e])["TotalBuilt"],
-                            TotalLost: (unitStats1[e])["TotalLost"],
-                            TotalDestroyed: (unitStats1[e])["TotalDestroyed"],
-                            mediaUrl: (gameObject) ? gameObject.mediaUrl : "",
-                            name: (gameObject) ? gameObject.name : "unknown"
-                        });
+                        if (gameObject != null) {
+                            units1.push({
+                                TotalBuilt: (unitStats1[e])["TotalBuilt"],
+                                TotalLost: (unitStats1[e])["TotalLost"],
+                                TotalDestroyed: (unitStats1[e])["TotalDestroyed"],
+                                mediaUrl: gameObject.mediaUrl,
+                                name: gameObject.name
+                            });
+                        }
                     });
 
                     Object.keys(unitStats2).map((e) => {
                         var gameObject = gameObjectsService.find(e);
-                        units2.push({
-                            TotalBuilt: (unitStats2[e])["TotalBuilt"],
-                            TotalLost: (unitStats2[e])["TotalLost"],
-                            TotalDestroyed: (unitStats2[e])["TotalDestroyed"],
-                            mediaUrl: (gameObject) ? gameObject.mediaUrl : "",
-                            name: (gameObject) ? gameObject.name : "unknown"
-                        });
+                        if (gameObject != null) {
+                            units2.push({
+                                TotalBuilt: (unitStats2[e])["TotalBuilt"],
+                                TotalLost: (unitStats2[e])["TotalLost"],
+                                TotalDestroyed: (unitStats2[e])["TotalDestroyed"],
+                                mediaUrl: gameObject.mediaUrl,
+                                name: gameObject.name
+                            });
+                        }
                     });
 
                     model.matchResult.gameMode = gameMode;

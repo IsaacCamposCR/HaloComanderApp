@@ -42,6 +42,93 @@
             });
 
         //---------------PLAYER SEASON----------------------//
+        var getSeason = function () {
+            resourceSeasons.query()
+                .$promise.then(function (data) {
+                    createSeason(data);
+                    if (typeof (Storage) !== "undefined") {
+                        // Code for localStorage/sessionStorage.
+                        localStorage.setItem("season", JSON.stringify(season));
+                        season = null;
+                    }
+                    else {
+                        console.log("No storage found...");
+                    }
+                    getCSRDesignations();
+                });
+        };
+
+        var season = null;
+        var createSeason = function (data) {
+            var seasonData = {};
+
+            var view = ((data["ContentItems"])[0])["View"];
+            seasonData.id = view["Identity"];
+            seasonData.name = ((((view["HW2Season"])["DisplayInfo"])["View"])["HW2SeasonDisplayInfo"])["Name"];
+            seasonData.viewImage = ((view["HW2Season"])["Image"])["View"];
+            seasonData.media = seasonData.viewImage ? seasonData.viewImage["Media"] : null;
+            seasonData.mediaUrl = seasonData.media ? seasonData.media["MediaUrl"] : null;
+
+            season = {
+                id: seasonData.id,
+                name: seasonData.name,
+                mediaUrl: seasonData.mediaUrl
+            };
+            seasonData = null;
+        };
+
+        var designations = [];
+        var getCSRDesignations = function () {
+            resourceCSRDesignations.query()
+                .$promise.then(function (data) {
+
+                    createDesignations(data);
+
+                    if (typeof (Storage) !== "undefined") {
+                        // Code for localStorage/sessionStorage.
+                        localStorage.setItem("designations", JSON.stringify(designations));
+                        designations = null;
+                    }
+                    else {
+                        console.log("No storage found...");
+                    }
+                });
+        };
+
+        var createDesignations = function (data) {
+
+            var contentItemDesignations = data["ContentItems"];
+
+            for (var i = 0; i < contentItemDesignations.length; i++) {
+                var newDesignation = {};
+
+                var designation = contentItemDesignations[i];
+
+                newDesignation.identity = ((((designation["View"])["HW2CsrDesignation"])["DisplayInfo"])["View"])["Identity"];
+                newDesignation.name = (((((designation.View)["HW2CsrDesignation"])["DisplayInfo"])["View"])["HW2CsrDesignationDisplayInfo"])["Name"];
+                newDesignation.designationId = ((designation.View)["HW2CsrDesignation"])["ID"];
+
+                var newTiers = [];
+                var tiers = ((designation.View)["HW2CsrDesignation"])["Tiers"];
+                tiers.map(function (tier) {
+                    var tierId = ((tier["View"])["HW2CsrDesignationTier"])["ID"];
+                    var name = (tier["View"])["Title"];
+                    var mediaUrl = (((((tier["View"])["HW2CsrDesignationTier"])["Image"])["View"])["Media"])["MediaUrl"];
+                    newTiers.push({
+                        Id: tierId,
+                        name: name,
+                        mediaUrl: mediaUrl
+                    });
+                });
+                newDesignation.tiers = newTiers;
+
+                designations.push(newDesignation);
+                newDesignation = null;
+                newTiers = null;
+                tiers = null;
+            }
+        };
+
         var getPlayerSeasonStats = function (player) {
             if (!localStorage.getItem("season")) {
                 resourceSeasons.query()
@@ -50,116 +137,38 @@
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
                             localStorage.setItem("season", JSON.stringify(season));
-                            console.log("stored");
+                            season = null;
                         }
                         else {
                             console.log("No storage found...");
                         }
-                        getCSRDesignations();
                         getPlayerSeason(player);
                     });
             }
             else {
                 season = JSON.parse(localStorage.getItem("season"));
-                console.log("Stored objects found");
-                getCSRDesignations();
+                //console.log("Stored objects found");
                 getPlayerSeason(player);
             }
         };
 
-        var season = null;
-        var createSeason = function (data) {
-            var contentItems = data["ContentItems"];
-            var view = (contentItems[0])["View"];
-            var id = view["Identity"];
-            var name = ((((view["HW2Season"])["DisplayInfo"])["View"])["HW2SeasonDisplayInfo"])["Name"];
-            var viewImage = ((view["HW2Season"])["Image"])["View"];
-            var media = viewImage ? viewImage["Media"] : null;
-            var mediaUrl = media ? media["MediaUrl"] : null;
-
-            season = {
-                id: id,
-                name: name,
-                mediaUrl: mediaUrl
-            };
-        };
-
-        var designations = [];
-        var getCSRDesignations = function () {
-            if (!localStorage.getItem("designations")) {
-                resourceCSRDesignations.query()
-                    .$promise.then(function (data) {
-                        console.log("Designations", data);
-                        data.map(function (designation) {
-                            createDesignation(designation);
-                        });
-                        if (typeof (Storage) !== "undefined") {
-                            // Code for localStorage/sessionStorage.
-                            localStorage.setItem("designations", JSON.stringify(designations));
-                            console.log("stored");
-                        }
-                        else {
-                            console.log("No storage found...");
-                        }
-                    });
-            }
-            else {
-                designations = JSON.parse(localStorage.getItem("designations"));
-                console.log("Stored objects found");
-            }
-        };
-
-        var createDesignation = function (designation) {
-            var newDesignation = {};
-
-            var contentItems = designation["ContentItems"];
-            var DisplayInfoId = (((contentItems["View"])["HW2CsrDesignation"])["DisplayInfo"])["Id"];
-            var Identity = ((((contentItems["View"])["HW2CsrDesignation"])["DisplayInfo"])["View"])["Identity"];
-            var Name = (((((contentItems["View"])["HW2CsrDesignation"])["DisplayInfo"])["View"])["HW2CsrDesignationDisplayInfo"])["Name"];
-            var DesignationId = ((contentItems["View"])["HW2CsrDesignation"])["ID"];
-            var tiers = ((contentItems["View"])["HW2CsrDesignation"])["Tiers"];
-
-            newDesignation.tiers = [];
-            tiers.map(function (tier) {
-                var tierId = tier["Id"];
-                var mediaUrl = (((tier["Image"])["View"])["Media"])["MediaUrl"];
-                newDesignation.tiers.push({
-                    Id: tierId,
-                    mediaUrl: mediaUrl
-                });
-            });
-            newDesignation.identity = Identity;
-            newDesignation.name = Name;
-            newDesignation.designationId = DesignationId;
-
-            designations.push(newDesignation);
-
-            /*View
-                HW2CsrDesignation
-                    DisplayInfo
-                        Id
-                        View
-                            Identity
-                            HW2CsrDesignationDisplayInfo
-                                Name
-                    ID
-                    Tiers []
-                        Id
-                        View
-                            HW2CsrDesignationTier
-                                ID
-                                Image
-                                    View
-                                        Media
-                                            MediaUrl
-                                            */
-        };
-
         var getPlayerSeason = function (player) {
-            console.log(season);
             resourcePlayers.query({ player: player, seasonId: season.id })
                 .$promise.then(function (playerSeasonData) {
-                    console.log("Player Season", playerSeasonData);
+
+                    var playlistData = (playerSeasonData["RankedPlaylistStats"]).find(function (playlist) {
+                        return playlist.PlaylistId === "532bfd6c-3db4-45b7-a010-11460b862be6";
+                    });
+
+                    var playerSeasonStats = {};
+
+                    playerSeasonStats.designation = (playlistData["HighestCsr"])["Designation"];
+                    playerSeasonStats.tier = (playlistData["HighestCsr"])["Tier"];
+                    playerSeasonStats.raw = (playlistData["HighestCsr"])["Raw"];
+
+                    playlistData = null;
+
+                    return playerSeasonStats;
                 });
         };
 
@@ -171,8 +180,16 @@
             getPlayerSeasonStats(player);
         };
 
+        // Requests the Halo API for the season data to store it in cache. 
+        // This data is requested each time the app is opened. As it changes per season.
+        function storeSeason() {
+            getSeason();
+        };
+
+
         return {
-            find: searchPlayerSeason
+            find: searchPlayerSeason,
+            store: storeSeason
         }
     });
 

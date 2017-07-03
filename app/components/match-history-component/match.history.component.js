@@ -149,11 +149,6 @@
             }
         };
 
-        function sleep(delay) {
-            var start = new Date().getTime();
-            while (new Date().getTime() < start + delay);
-        }
-
         // Requests a new set of matches starting at the next 10 games.
         model.backward = function () {
             model.start += 10;

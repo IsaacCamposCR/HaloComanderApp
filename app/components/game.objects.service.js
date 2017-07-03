@@ -108,6 +108,7 @@
             return null;
         };
 
+        // Requests the Halo API for the game object data to store it in cache.
         function storeGameObjects() {
             if (!gameObjects || gameObjects.length === 0) {
                 getGameObjects();
