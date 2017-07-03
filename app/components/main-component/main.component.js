@@ -28,7 +28,7 @@
             model.about = false;
             gameLeadersService.store();
             gameObjectsService.store();
-            playerSeasonService.store();
+            //playerSeasonService.store();
 
         };
 

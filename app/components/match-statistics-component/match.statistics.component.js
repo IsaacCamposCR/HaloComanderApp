@@ -33,7 +33,7 @@
                 getMatchResults();
             }
 
-            playerSeasonService.find("ll Blaky ll");
+            //playerSeasonService.find("ll Blaky ll");
         };
 
         model.$onChanges = function (changes) {
