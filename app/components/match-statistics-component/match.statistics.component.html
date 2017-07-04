@@ -24,7 +24,7 @@
                 <md-grid-tile ng-style="{ 'background' : (model.matchResult.outcome1 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                     md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                     <div class="leader-div">
-                        <img ng-src="{{model.matchResult.leader1.mediaUrl}}" alt="{{model.matchResult.leader1.name}}" class="leader" />
+                        <img ng-src="{{model.selected.leader1.mediaUrl}}" alt="{{model.selected.leader1.name}}" class="leader" />
                     </div>
 
                     <md-grid-tile-footer>
@@ -61,7 +61,7 @@
                 <md-grid-tile ng-style="{ 'background' : (model.matchResult.outcome2 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                     md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                     <div class="leader-div">
-                        <img ng-src="{{model.matchResult.leader2.mediaUrl}}" alt="{{model.matchResult.leader2.name}}" class="leader" />
+                        <img ng-src="{{model.selected.leader2.mediaUrl}}" alt="{{model.selected.leader2.name}}" class="leader" />
                     </div>
 
                     <md-grid-tile-footer>

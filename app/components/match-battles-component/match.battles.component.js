@@ -9,8 +9,7 @@
         controller: ["$resource", "$mdToast", "$mdBottomSheet", "gameObjectsService", matchBattlesController],
         bindings: {
             match: "<",
-            player1: "<",
-            player2: "<"
+            selected: "<"
         }
     });
 
@@ -20,22 +19,23 @@
         model.killCount = 0;
         model.trainEvents = [];
         model.deathEvents = [];
-        model.battles = [];
+        //model.battles = [];
         model.analizedArmiesPlayer1 = [];
         model.analizedArmiesPlayer2 = [];
         model.reinforcementsPlayer1 = [];
         model.reinforcementsPlayer2 = [];
 
         model.armiesPlayer1 = [];
-        model.reinforcementsPlayer1 = [];
+        //model.reinforcementsPlayer1 = [];
         model.armiesPlayer2 = [];
-        model.reinforcementsPlayer2 = [];
+        //model.reinforcementsPlayer2 = [];
+
         var newArmyPlayer1 = [];
         var newArmyPlayer2 = [];
         var newReinforcementsPlayer1 = [];
         var newReinforcementsPlayer2 = [];
         var currentUnit = 0;
-
+        
         var resourceMatchEvents = $resource("https://www.haloapi.com/stats/hw2/matches/:match/events",
             {
                 match: "@match"
@@ -329,21 +329,6 @@
             model.analizedArmiesPlayer2 = JSON.parse(JSON.stringify(model.armiesPlayer2));
             model.reinforcementsPlayer1 = JSON.parse(JSON.stringify(model.reinforcementsPlayer1));
             model.reinforcementsPlayer2 = JSON.parse(JSON.stringify(model.reinforcementsPlayer2));
-
-            //console.log("Train length", model.trainEvents.length);
-            //console.log("Deaths length", model.deathEvents.length);
-            //console.log("Kill Count", model.killCount);
-            /*
-            var battleKills = 0;
-            model.battles.forEach(function (battle) {
-                battleKills += battle["deaths"].length;
-            });
-            //console.log("Battle Kills", battleKills);
-            model.deathEvents.forEach(function (death) {
-                if (!death.processed) {
-                    //console.log("Non processed", death);
-                }
-            });*/
         };
 
         // Tags the units from the armies as killed but does not remove them from the arrays.
@@ -424,65 +409,38 @@
         };
 
         var settleLastBattle = function () {
-            //var killsTest = 0;
-            //var notKilled = 0;
             model.analizedArmiesPlayer1[model.analizedArmiesPlayer1.length - 1].forEach(function (unit) {
                 model.deathEvents.forEach(function (death) {
                     if ((unit["InstanceId"] === death["VictimInstanceId"]) && (!unit.killed)) {
-                        //unit.gotcha = true;
-                        //console.log("gotcha", unit["SquadId"]);
                         tagUnit(unit, death);
                         model.battles[model.battles.length - 1].deaths.push(death);
-                        //killsTest++;
-                    }
-                    else {
-                        //notKilled++;
                     }
                 });
             });
             model.analizedArmiesPlayer2[model.analizedArmiesPlayer2.length - 1].forEach(function (unit) {
                 model.deathEvents.forEach(function (death) {
                     if ((unit["InstanceId"] === death["VictimInstanceId"]) && (!unit.killed)) {
-                        //unit.gotcha = true;
-                        //console.log("gotcha", unit["SquadId"]);
                         tagUnit(unit, death);
                         model.battles[model.battles.length - 1].deaths.push(death);
-                        //killsTest++;
-                    }
-                    else {
-                        //notKilled++;
                     }
                 });
             });
             model.reinforcementsPlayer1[model.reinforcementsPlayer1.length - 1].forEach(function (unit) {
                 model.deathEvents.forEach(function (death) {
                     if ((unit["InstanceId"] === death["VictimInstanceId"]) && (!unit.killed)) {
-                        //unit.gotcha = true;
-                        //console.log("gotcha", unit["SquadId"]);
                         tagUnit(unit, death);
                         model.battles[model.battles.length - 1].deaths.push(death);
-                        //killsTest++;
-                    }
-                    else {
-                        //notKilled++;
                     }
                 });
             });
             model.reinforcementsPlayer2[model.reinforcementsPlayer2.length - 1].forEach(function (unit) {
                 model.deathEvents.forEach(function (death) {
                     if ((unit["InstanceId"] === death["VictimInstanceId"]) && (!unit.killed)) {
-                        //unit.gotcha = true;
-                        //console.log("gotcha", unit["SquadId"]);
                         tagUnit(unit, death);
                         model.battles[model.battles.length - 1].deaths.push(death);
-                        //killsTest++;
-                    }
-                    else {
-                        //notKilled++;
                     }
                 });
             });
-            //console.log("killed", killsTest, "notkilled", notKilled);
         };
 
         // Calculate army costs, losses and battle winner.

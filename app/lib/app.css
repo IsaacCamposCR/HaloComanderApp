@@ -190,3 +190,16 @@ span.name {
     -webkit-transform: scale(0.70);
     -moz-transform: scale(0.70);   
 }
+
+.resource-text {
+    padding-right: 5px; 
+    text-align:center;
+}
+
+.resource-vertical-divider {
+    border-left: thick solid black;
+}
+
+.resource-data {
+    padding-left: 4px;
+}

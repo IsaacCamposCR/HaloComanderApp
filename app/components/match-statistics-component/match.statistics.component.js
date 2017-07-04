@@ -94,12 +94,12 @@
                     model.matchResult.duration = duration;
                     model.matchResult.player1 = player1;
                     model.selected.player1 = player1;
-                    model.matchResult.leader1 = gameLeadersService.find(leader1);
+                    model.selected.leader1 = gameLeadersService.find(leader1);
                     model.matchResult.outcome1 = outcome1;
                     model.matchResult.units1 = units1;
                     model.matchResult.player2 = player2;
                     model.selected.player2 = player2;
-                    model.matchResult.leader2 = gameLeadersService.find(leader2);
+                    model.selected.leader2 = gameLeadersService.find(leader2);
                     model.matchResult.outcome2 = outcome2;
                     model.matchResult.units2 = units2;
                     getPlayerSeasons();
