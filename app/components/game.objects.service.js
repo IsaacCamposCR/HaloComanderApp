@@ -23,7 +23,7 @@
         var getGameObjects = function () {
 
             if (!localStorage.getItem("gameObjects")) {
-                console.log("No stored objects found. Requesting...");
+                //console.log("No stored objects found. Requesting...");
                 resourceGameObjects.query({ startAt: "0" })
                     .$promise.then(function (objects) {
                         console.log("Req API");
@@ -39,9 +39,9 @@
                                         if (typeof (Storage) !== "undefined") {
                                             // Code for localStorage/sessionStorage.
                                             localStorage.setItem("gameObjects", LZString.compressToUTF16(JSON.stringify(gameObjects)));
-                                            console.log("stored");
+                                            //console.log("stored");
                                         } else {
-                                            console.log("No storage found...");
+                                            //console.log("No storage found...");
                                         }
                                     });
                             });

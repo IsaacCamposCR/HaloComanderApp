@@ -54,7 +54,7 @@
         var getMaps = function () {
             model.maps = [];
             if (!localStorage.getItem("gameMaps")) {
-                console.log("No stored maps found. Requesting...");
+                //console.log("No stored maps found. Requesting...");
                 resourceMaps.query()
                     .$promise.then(function (maps) {
                         console.log("Req API");
@@ -62,9 +62,9 @@
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
                             localStorage.setItem("gameMaps", LZString.compressToUTF16(JSON.stringify(model.maps)));
-                            console.log("stored");
+                            //console.log("stored");
                         } else {
-                            console.log("No storage found...");
+                            //console.log("No storage found...");
                         }
                         getPlayerMatchHistory();
                     });
@@ -110,6 +110,8 @@
         //---------------PLAYER MATCH HISTORY----------------------//
         var getPlayerMatchHistory = function () {
             //model.playerRecentMatches = [];
+            sleep(1000);
+            console.log("Requesting History", model.start, model.count, model.playerRecentMatches.length);
             var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: Number(model.count), start: Number(model.start) })
                 .$promise.then(function (matchHistory) {
                     console.log("Req API");
@@ -150,6 +152,11 @@
                 };
             }
         };
+
+        function sleep(delay) {
+            var start = new Date().getTime();
+            while (new Date().getTime() < start + delay);
+        }
 
         // Requests a new set of matches starting at the next 10 games.
         model.backward = function () {

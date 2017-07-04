@@ -21,7 +21,8 @@
             <md-grid-list md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
                 md-gutter-gt-sm="4px">
 
-                <md-grid-tile ng-style="{ 'background' : (model.matchResult.outcome1 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                <md-grid-tile ng-style="{ 'background' : (model.matchResult.outcome1 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
+                    md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                     <div class="leader-div">
                         <img ng-src="{{model.matchResult.leader1.mediaUrl}}" alt="{{model.matchResult.leader1.name}}" class="leader" />
                     </div>
@@ -57,7 +58,8 @@
         <div>
             <md-grid-list md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
                 md-gutter-gt-sm="4px">
-                <md-grid-tile ng-style="{ 'background' : (model.matchResult.outcome2 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                <md-grid-tile ng-style="{ 'background' : (model.matchResult.outcome2 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
+                    md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                     <div class="leader-div">
                         <img ng-src="{{model.matchResult.leader2.mediaUrl}}" alt="{{model.matchResult.leader2.name}}" class="leader" />
                     </div>
@@ -88,4 +90,6 @@
             </md-grid-list>
         </div>
     </div>
+    <br>
+    <br>
 </md-content>

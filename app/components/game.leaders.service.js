@@ -20,7 +20,7 @@
         var gameLeaders = [];
         var getLeaders = function () {
             if (!localStorage.getItem("gameLeaders")) {
-                console.log("No stored leaders found. Requesting...");
+                //console.log("No stored leaders found. Requesting...");
                 resourceLeaders.query()
                     .$promise.then(function (leaders) {
                         console.log("Req API");
@@ -28,9 +28,9 @@
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
                             localStorage.setItem("gameLeaders", LZString.compressToUTF16(JSON.stringify(gameLeaders)));
-                            console.log("stored", gameLeaders);
+                            //console.log("stored", gameLeaders);
                         } else {
-                            console.log("No storage found...");
+                            //console.log("No storage found...");
                         }
                     });
             }

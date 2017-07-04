@@ -51,7 +51,7 @@
                         localStorage.setItem("season", LZString.compressToUTF16(JSON.stringify(season)));
                     }
                     else {
-                        console.log("No storage found...");
+                        //console.log("No storage found...");
                     }
                     getCSRDesignations();
                 });
@@ -90,7 +90,7 @@
                             localStorage.setItem("designations", LZString.compressToUTF16(JSON.stringify(designations)));
                         }
                         else {
-                            console.log("No storage found...");
+                            //console.log("No storage found...");
                         }
                     });
             }
@@ -145,7 +145,7 @@
                             season = null;
                         }
                         else {
-                            console.log("No storage found...");
+                            //console.log("No storage found...");
                         }
                         return getPlayerSeason(player);
                     });
