@@ -21,27 +21,30 @@
 <md-content>
     <md-list>
         <div layout="row" layout-align="center center" ng-show="model.playerRecentMatches.length">
-            <md-button class="md-icon-button md-accent" aria-label="Favorite" ng-click="model.forward()" ng-disabled="!model.start">
+            <md-button class="md-icon-button md-accent" aria-label="Rewind" ng-click="model.forward()" ng-disabled="model.disableSelecting">
                 <ng-md-icon icon="fast_rewind"></ng-md-icon>
             </md-button>
             Page {{model.page}}
-            <md-button class="md-icon-button md-accent" ng-click="model.backward()">
+            <md-button class="md-icon-button md-accent" aria-label="Forward" ng-click="model.backward()" ng-disabled="model.disableSelecting">
                 <ng-md-icon icon="fast_forward"></ng-md-icon>
             </md-button>
         </div>
         <md-divider></md-divider>
         <div ng-repeat="match in model.playerRecentMatches | filter:model.searchMatch">
             <md-list-item>
-                <md-button ng-click="model.selectMatch(match)" ng-class="{'selected': match === model.selected}" flex layout="row">
-                    <div flex="30">
-                        <img ng-src="{{match.mapMediaUrl}}" alt="{{match.map}}" class="avatar" />
-                    </div>
-                    <div flex>
-                        <p class="list-details"><b>{{match.result}} on {{match.map}}</b></p>
-                        <p class="list-details">LEADER: {{match.leader}}</p>
-                        <p class="list-details">{{match.date | date:'medium'}}</p>
-                    </div>
-                </md-button>
+                <div flex>
+                    <md-button ng-disabled="model.disableSelecting" ng-click="model.selectMatch(match)" ng-class="{'selected': match === model.selected}"
+                        layout="row">
+                        <div flex="30">
+                            <img ng-src="{{match.mapMediaUrl}}" alt="{{match.map}}" class="avatar" />
+                        </div>
+                        <div flex>
+                            <p class="list-details"><b>{{match.result}} on {{match.map}}</b></p>
+                            <p class="list-details">LEADER: {{match.leader}}</p>
+                            <p class="list-details">{{match.date | date:'medium'}}</p>
+                        </div>
+                    </md-button>
+                </div>
             </md-list-item>
             <md-divider ng-if="!$last"></md-divider>
         </div>

@@ -13,9 +13,9 @@
 
     module.config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('default')
-            .primaryPalette("cyan")
+            .primaryPalette("deep-purple")
             .accentPalette("orange")
-            .warnPalette("lime");
+            .warnPalette("deep-orange");
         $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
     });
 
@@ -59,6 +59,7 @@
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
+                escapeToClose: true,
                 fullscreen: useFullScreen
             });
         };

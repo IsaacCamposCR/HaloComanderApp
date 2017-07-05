@@ -43,6 +43,7 @@
 
         //---------------PLAYER SEASON----------------------//
         var getSeason = function () {
+            sleep(1000);
             resourceSeasons.query()
                 .$promise.then(function (data) {
                     createSeason(data);
@@ -56,6 +57,11 @@
                     getCSRDesignations();
                 });
         };
+
+        function sleep(delay) {
+            var start = new Date().getTime();
+            while (new Date().getTime() < start + delay);
+        }
 
         var season = null;
         var createSeason = function (data) {

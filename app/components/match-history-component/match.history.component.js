@@ -8,7 +8,9 @@
         controllerAs: "model",
         controller: ["$resource", "$mdSidenav", "$mdMedia", "$mdDialog", "gameLeadersService", matchHistoryController],
         bindings: {
-            selected: "="
+            selected: "=",
+            disablePaging: "=",
+            disableSelecting: "="
         }
     });
 
@@ -16,6 +18,8 @@
         var model = this;
 
         model.page = 1;
+        model.disablePaging = true;
+        model.disableSelecting = true;
         model.searchMatch = "";
         model.start = 0;
         model.count = 10;
@@ -111,7 +115,7 @@
         var getPlayerMatchHistory = function () {
             //model.playerRecentMatches = [];
             sleep(1000);
-            console.log("Requesting History", model.start, model.count, model.playerRecentMatches.length);
+            //console.log("Requesting History", model.start, model.count, model.playerRecentMatches.length);
             var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: Number(model.count), start: Number(model.start) })
                 .$promise.then(function (matchHistory) {
                     console.log("Req API");
@@ -123,8 +127,13 @@
                     if (model.count > 0) {
                         getPlayerMatchHistory();
                     }
+                    else {
+                        model.disablePaging = false;
+                        model.disableSelecting = false;
+                    }
 
                     model.selected = model.playerRecentMatches[0];
+
                 });
 
             var createMatchHistory = function (item) {
@@ -160,6 +169,8 @@
 
         // Requests a new set of matches starting at the next 10 games.
         model.backward = function () {
+            model.disablePaging = true;
+            model.disableSelecting = true;
             model.start += 10;
             model.page++;
             model.playerRecentMatches = [];
@@ -169,20 +180,26 @@
 
         // Requests the previous set of matches from 10 games ago.
         model.forward = function () {
-            if (model.start < 10) {
-                model.start = 0;
+            if (model.page > 1) {
+                model.disablePaging = true;
+                model.disableSelecting = true;
+                if (model.start < 10) {
+                    model.start = 0;
+                }
+                else {
+                    model.start -= 10;
+                }
+                model.page--;
+                model.playerRecentMatches = [];
+                model.count = 10;
+                getMaps();
             }
-            else {
-                model.start -= 10;
-            }
-            model.page--;
-            model.playerRecentMatches = [];
-            model.count = 10;
-            getMaps();
         };
 
         // Selects a match from the Side Nav and closes it.
         model.selectMatch = function (match) {
+            console.log("selecting");
+            model.disableSelecting = true;
             model.selected = match;
 
             var sidenav = $mdSidenav("left");
@@ -193,7 +210,10 @@
         };
 
         model.changeGamertag = function () {
+            model.disablePaging = true;
+            model.disableSelecting = true;
             model.playerRecentMatches = [];
+            model.page = 1;
             model.count = 10;
             model.start = 0;
             model.match = null;

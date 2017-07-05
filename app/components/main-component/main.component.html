@@ -1,9 +1,9 @@
 <div layout="row">
 
     <div layout="vertical">
-        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" md-whiteframe="4">
+        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
             <div>
-                <match-history-component selected="model.selected" />
+                <match-history-component selected="model.selected" disable-paging="model.disablePaging" disable-selecting="model.disableSelecting" />
             </div>
         </md-sidenav>
     </div>
@@ -11,13 +11,13 @@
         <div>
             <md-toolbar class="md-hue-2">
                 <div class="md-toolbar-tools">
-                    <md-button hide-gt-sm class="md-icon-button" ng-click="model.toggleSideNav()">
+                    <md-button hide-gt-md class="md-icon-button" ng-click="model.toggleSideNav()" aria-label="Menu">
                         <md-icon md-svg-icon="./lib/svg/menu.svg"></md-icon>
                     </md-button>
                     <h1>Match Details</h1>
                     <md-fab-speed-dial md-direction="down" class="md-scale md-fab-top-right">
                         <md-fab-trigger>
-                            <md-button class="md-fab">
+                            <md-button class="md-fab" aria-label="More">
                                 <ng-md-icon icon="build"></ng-md-icon>
                             </md-button>
                         </md-fab-trigger>
@@ -46,7 +46,7 @@
                     </md-tab>
                     <md-tab label="Battles">
                         <div>
-                            <match-battles-component match="model.selected.matchId" selected="model.selected" />
+                            <match-battles-component match="model.selected.matchId" selected="model.selected" disable-selecting="model.disableSelecting" disable-paging="model.disablePaging"/>
                         </div>
                     </md-tab>
                 </md-tabs>
