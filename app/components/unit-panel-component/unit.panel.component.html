@@ -1,24 +1,31 @@
 <md-bottom-sheet class="scrollable-bottom-sheet" style="text-align:center">
-    <md-subheader>
-        <p class="name">{{Item.unit.name}}</p>
+    <md-grid-list md-cols="6" md-cols-sm="6" md-cols-md="12" md-cols-gt-md="12" md-row-height-gt-md="1:1" md-row-height="1:1"
+        md-gutter="5px" md-gutter-gt-sm="3px">
 
-        <img ng-src="{{Item.unit.mediaUrl}}" alt="{{unit.SquadId}}" width="75" height="75" />
+        <md-grid-tile style="background: white;" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="4">
 
-        <p>
-            <ng-md-icon icon="layers"></ng-md-icon> {{Item.unit.SupplyCost}}
-            <ng-md-icon icon="flash_on"></ng-md-icon> {{Item.unit.EnergyCost}}
-            <ng-md-icon icon="group"></ng-md-icon> {{Item.unit.PopulationCost}}
-        </p>
+            <div class="resource-text">
+                <img style="margin:-6%" ng-src="{{Item.unit.mediaUrl}}" alt="{{unit.SquadId}}" width="125" height="125" />
+            </div>
+            <div class="resource-vertical-divider">
+                <div class="resource-data">
+                    <md-tooltip md-direction="top">Resource Cost</md-tooltip>
+                    <ng-md-icon icon="layers"></ng-md-icon> {{Item.unit.SupplyCost}}
+                    <br/>
+                    <ng-md-icon icon="flash_on"></ng-md-icon> {{Item.unit.EnergyCost}}
+                    <br/>
+                    <ng-md-icon icon="group"></ng-md-icon> {{Item.unit.PopulationCost}}
+                </div>
+            </div>
+        </md-grid-tile>
 
-    </md-subheader>
+        <md-grid-tile style="background: #F44336;" ng-repeat="participant in Item.unit.Killers" md-rowspan="1" md-colspan="1" md-colspan-sm="1"
+            md-colspan-xs="1">
+            <div>
+                <img ng-src="{{participant.mediaUrl}}" alt="{{participant.name}}" class="unit-icon" />
+            </div>
+        </md-grid-tile>
 
-    <md-content>
-        <p><span class="name" ng-show="Item.unit.Killers">UNIT KILLED BY</span></p>
-        <div ng-repeat="participant in Item.unit.Killers" style="display:inline-block">
-            <img ng-src="{{participant.mediaUrl}}" alt="{{participant.name}}" width="75" height="75" />
-            <!--<p class="name">{{participant.name}}</p>-->
-        </div>
-    </md-content>
-
-    <md-button ng-click="submitContact(unit)">CLOSE</md-button>
+    </md-grid-list>
+    <md-button style="text-align:center" ng-click="submitContact(unit)">CLOSE</md-button>
 </md-bottom-sheet>

@@ -587,7 +587,7 @@
                 bindToController: true,
                 targetEvent: $event
             }).then((clickedItem) => {
-                clickedItem && console.log(clickedItem.SquadId + "clicked!");
+                ///clickedItem && console.log(clickedItem.SquadId + "clicked!");
             })
         };
     }

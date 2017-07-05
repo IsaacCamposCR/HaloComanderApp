@@ -39,10 +39,15 @@ ng-md-icon {
     line-height: 1;
 }
 
+md-content {
+    background: #E0E0E0;
+}
+
 #content {
-    padding-left: 40px;
-    padding-right: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-top: 5px;
+    background: #E0E0E0;
 }
 
 #content img.avatar {
@@ -86,14 +91,9 @@ ng-md-icon {
 
 .map {
     position: absolute;
-    left: 0;
-    top: 0;
+    top: -40%;
     height: auto;
-
-    zoom:2;
     transform: translateZ(0);
-    -webkit-transform: scale(2);
-    -moz-transform:scale(2); 
 }
 
 .md-unstyled-image img{
@@ -202,4 +202,19 @@ span.name {
 
 .resource-data {
     padding-left: 4px;
+}
+
+md-grid-list md-grid-tile {
+    box-sizing: border-box;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+}
+
+.leader-tile-footer {
+    font-size: 14px;
+    text-align: left;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    margin: 0 !important;
+    background: inherit;
 }

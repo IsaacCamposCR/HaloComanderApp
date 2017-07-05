@@ -1,25 +1,19 @@
 <md-content>
-    <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
-        <md-card-title>
-            <md-card-title-text>
-                <span class="md-headline">{{model.selected.map}}</span>
-                <span class="md-subhead">{{model.selected.date | date:'medium'}} </span>
-            </md-card-title-text>
-            <md-card-title-media>
-                <div class="md-media-md card-media">
-                    <div class="leader-div" flex>
-                        <img src="{{model.selected.mapMediaUrl}}" alt="{{model.selected.map}}" class="map">
-                    </div>
-                </div>
-            </md-card-title-media>
-        </md-card-title>
-    </md-card>
-
     <br>
     <div flex ng-cloak>
         <div>
             <md-grid-list md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
                 md-gutter-gt-sm="4px">
+
+                <md-grid-tile md-rowspan="1" md-colspan-gt-md="9" md-colspan="7" md-colspan-sm="5" md-colspan-xs="3">
+                    <div class="leader-div" flex>
+                        <img src="{{model.selected.mapMediaUrl}}" alt="{{model.selected.map}}" class="map">
+                    </div>
+                    <md-grid-tile-footer class="leader-tile-footer">
+                        <h3>{{model.selected.map}}</h3>
+                        <h3>{{model.selected.date | date:'medium'}}</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
 
                 <md-grid-tile ng-style="{ 'background' : (model.matchResult.outcome1 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                     md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
@@ -27,7 +21,7 @@
                         <img ng-src="{{model.selected.leader1.mediaUrl}}" alt="{{model.selected.leader1.name}}" class="leader" />
                     </div>
 
-                    <md-grid-tile-footer>
+                    <md-grid-tile-footer class="leader-tile-footer">
                         <h3>{{model.matchResult.player1}}</h3>
                         <h3> {{model.matchResult.outcome1 === 1 ? 'VICTORY' : 'DEFEAT'}}</h3>
                     </md-grid-tile-footer>
@@ -64,7 +58,7 @@
                         <img ng-src="{{model.selected.leader2.mediaUrl}}" alt="{{model.selected.leader2.name}}" class="leader" />
                     </div>
 
-                    <md-grid-tile-footer>
+                    <md-grid-tile-footer class="leader-tile-footer">
                         <h3>{{model.matchResult.player2}}</h3>
                         <h3> {{model.matchResult.outcome2 === 1 ? 'VICTORY' : 'DEFEAT'}}</h3>
                     </md-grid-tile-footer>
