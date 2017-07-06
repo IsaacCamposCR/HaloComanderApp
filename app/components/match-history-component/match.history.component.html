@@ -1,55 +1,57 @@
-<md-toolbar>
-    <h1>Match History</h1>
-</md-toolbar>
-<div layout-padding>
-    <md-content>
-        <form name="gamertag" ng-submit="model.changeGamertag()">
-            <div layout="column" layout-padding>
-                <div layout-gt-xs="row">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Gamertag</label>
-                        <input name="title" ng-model="model.gamertag">
-                    </md-input-container>
-                    <div class="md-actions">
-                        <md-button class="md-primary md-raised date-row" type="submit" class="date-row">GO</md-button>
+<div>
+    <md-toolbar>
+        <h1>Match History</h1>
+    </md-toolbar>
+    <div layout-padding>
+        <md-content>
+            <form name="gamertag" ng-submit="model.changeGamertag()">
+                <div layout="column" layout-padding>
+                    <div layout-gt-xs="row">
+                        <md-input-container class="md-block" flex-gt-xs>
+                            <label>Enter your Gamertag</label>
+                            <input name="title" ng-model="model.gamertag">
+                        </md-input-container>
+                        <div class="md-actions">
+                            <md-button class="md-primary md-raised date-row" type="submit" class="date-row">GO</md-button>
+                        </div>
                     </div>
                 </div>
+            </form>
+        </md-content>
+    </div>
+    <md-content>
+        <md-list style="overflow-x: hidden;">
+            <div layout="row" layout-align="center center" ng-show="model.playerRecentMatches.length">
+                <md-button class="md-icon-button md-accent" aria-label="Rewind" ng-click="model.forward()" ng-disabled="model.disableSelecting">
+                    <ng-md-icon icon="fast_rewind"></ng-md-icon>
+                </md-button>
+                Page {{model.page}}
+                <md-button class="md-icon-button md-accent" aria-label="Forward" ng-click="model.backward()" ng-disabled="model.disableSelecting">
+                    <ng-md-icon icon="fast_forward"></ng-md-icon>
+                </md-button>
             </div>
-        </form>
+            <md-divider></md-divider>
+            <div ng-repeat="match in model.playerRecentMatches | orderBy: '-date'">
+                <md-list-item>
+                    <div flex>
+                        <md-button ng-disabled="model.disableSelecting" ng-click="model.selectMatch(match)" ng-class="{'selected': match === model.selected}"
+                            layout="row">
+                            <div flex="30">
+                                <img ng-src="{{match.mapMediaUrl}}" alt="{{match.map}}" class="avatar" />
+                            </div>
+                            <div flex>
+                                <p class="list-details"><b>{{match.result}} on {{match.map}}</b></p>
+                                <p class="list-details">LEADER: {{match.leader}}</p>
+                                <p class="list-details">{{match.date | date:'medium'}}</p>
+                            </div>
+                        </md-button>
+                    </div>
+                </md-list-item>
+                <md-divider ng-if="!$last"></md-divider>
+            </div>
+        </md-list>
     </md-content>
 </div>
-<md-content>
-    <md-list>
-        <div layout="row" layout-align="center center" ng-show="model.playerRecentMatches.length">
-            <md-button class="md-icon-button md-accent" aria-label="Rewind" ng-click="model.forward()" ng-disabled="model.disableSelecting">
-                <ng-md-icon icon="fast_rewind"></ng-md-icon>
-            </md-button>
-            Page {{model.page}}
-            <md-button class="md-icon-button md-accent" aria-label="Forward" ng-click="model.backward()" ng-disabled="model.disableSelecting">
-                <ng-md-icon icon="fast_forward"></ng-md-icon>
-            </md-button>
-        </div>
-        <md-divider></md-divider>
-        <div ng-repeat="match in model.playerRecentMatches | filter:model.searchMatch">
-            <md-list-item>
-                <div flex>
-                    <md-button ng-disabled="model.disableSelecting" ng-click="model.selectMatch(match)" ng-class="{'selected': match === model.selected}"
-                        layout="row">
-                        <div flex="30">
-                            <img ng-src="{{match.mapMediaUrl}}" alt="{{match.map}}" class="avatar" />
-                        </div>
-                        <div flex>
-                            <p class="list-details"><b>{{match.result}} on {{match.map}}</b></p>
-                            <p class="list-details">LEADER: {{match.leader}}</p>
-                            <p class="list-details">{{match.date | date:'medium'}}</p>
-                        </div>
-                    </md-button>
-                </div>
-            </md-list-item>
-            <md-divider ng-if="!$last"></md-divider>
-        </div>
-    </md-list>
-</md-content>
 <!--
 <md-button class="md-fab md-fab-bottom-right" ng-click="model.addUser($event)">
     <ng-md-icon icon="add"></ng-md-icon>

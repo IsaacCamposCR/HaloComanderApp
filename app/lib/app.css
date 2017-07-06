@@ -21,7 +21,8 @@ md-list .md-button {
     color: inherit;
     font-weight: 500;
     text-align: left;
-    width: 100%;
+    width: 95%;
+    border-radius: 2%
 }
 
 md-list .md-button.selected {
@@ -96,28 +97,6 @@ md-content {
     transform: translateZ(0);
 }
 
-.md-unstyled-image img{
-    max-width: 100%;
-    width: auto;
-    height: auto !important; /* needs to be important because md-card also sets it that way */
-}
-
-.background-map {
-    background-image: url('{{match.mapMediaUrl}}');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-.scrollable-nav-content {
-    position: absolute;
-    top: 250px;
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
-    overflow: auto;
-}
-
 .scrollable-bottom-sheet {
     position: fixed;
 }
@@ -137,12 +116,6 @@ span.name {
     padding-bottom: 0;
     margin-top: 0;
     margin-bottom: 0;
-}
-
-.unit-icons {
-    transform: scale(1.5,1.5);
-    padding: 0;
-    margin: 0;
 }
 
 .unit-div {

@@ -113,26 +113,28 @@
 
         //---------------PLAYER MATCH HISTORY----------------------//
         var getPlayerMatchHistory = function () {
-            //model.playerRecentMatches = [];
             sleep(1000);
-            //console.log("Requesting History", model.start, model.count, model.playerRecentMatches.length);
             var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: Number(model.count), start: Number(model.start) })
                 .$promise.then(function (matchHistory) {
                     console.log("Req API");
                     var results = matchHistory["Results"];
-                    model.start = model.start + model.count;
+                    model.pageStart = (model.forwardPaging) ? model.start : model.pageStart;
+                    model.start = (model.forwardPaging) ? model.start : model.start + model.count;
                     results.forEach(function (match) {
                         createMatchHistory(match);
                     });
+                    model.start = (model.forwardPaging) ? model.start - model.count : model.start;
                     if (model.count > 0) {
                         getPlayerMatchHistory();
                     }
                     else {
                         model.disablePaging = false;
                         model.disableSelecting = false;
+                        model.pageFinish = (model.forwardPaging) ? model.pageFinish : model.start;
+                        model.start = model.pageFinish;
                     }
 
-                    model.selected = model.playerRecentMatches[0];
+                    //model.selected = model.playerRecentMatches[0];
 
                 });
 
@@ -147,7 +149,7 @@
                     var gameMap = searchGameMap(item["MapId"]);
                     var gameLeader = gameLeadersService.find(item["LeaderId"]);
 
-                    model.playerRecentMatches.push({
+                    var recentMatch = {
                         matchId: matchId,
                         map: gameMap["name"],
                         mapMediaUrl: gameMap["mediaUrl"],
@@ -156,7 +158,14 @@
                         result: result === 1 ? "VICTORY" : "DEFEAT",
                         time: time,
                         date: date
-                    });
+                    };
+
+                    if (model.forwardPaging) {
+                        model.playerRecentMatches.unshift(recentMatch);
+                    }
+                    else {
+                        model.playerRecentMatches.push(recentMatch);
+                    }
                     model.count = model.count - 1;
                 };
             }
@@ -171,24 +180,41 @@
         model.backward = function () {
             model.disablePaging = true;
             model.disableSelecting = true;
-            model.start += 10;
+            model.forwardPaging = false;
+            model.pageStart = model.start;
             model.page++;
             model.playerRecentMatches = [];
             model.count = 10;
             getMaps();
         };
 
-        // Requests the previous set of matches from 10 games ago.
         model.forward = function () {
             if (model.page > 1) {
                 model.disablePaging = true;
                 model.disableSelecting = true;
+                model.forwardPaging = true;
+                model.start = model.pageStart - 10;
+                model.pageFinish = model.pageStart;
+                model.page--;
+                model.playerRecentMatches = [];
+                model.count = 10;
+                getMaps();
+            }
+        };
+
+        // Requests the previous set of matches from 10 games ago.
+        model.forward2 = function () {
+            if (model.page > 1) {
+                model.disablePaging = true;
+                model.disableSelecting = true;
+
                 if (model.start < 10) {
                     model.start = 0;
                 }
                 else {
                     model.start -= 10;
                 }
+
                 model.page--;
                 model.playerRecentMatches = [];
                 model.count = 10;
@@ -198,7 +224,6 @@
 
         // Selects a match from the Side Nav and closes it.
         model.selectMatch = function (match) {
-            console.log("selecting");
             model.disableSelecting = true;
             model.selected = match;
 
@@ -212,10 +237,12 @@
         model.changeGamertag = function () {
             model.disablePaging = true;
             model.disableSelecting = true;
+            model.forwardPaging = false;
             model.playerRecentMatches = [];
             model.page = 1;
             model.count = 10;
             model.start = 0;
+            model.pageStart = 0;
             model.match = null;
             getMaps();
         };
@@ -223,7 +250,7 @@
         /*
         model.addUser = function (ev) {
             var useFullScreen = ($mdMedia("sm") || $mdMedia("xs"));
-
+    
             $mdDialog.show({
                 controller: DialogController,
                 templateUrl: "/components/dialog-component/dialog.component.html",

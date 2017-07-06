@@ -1,40 +1,37 @@
 <div layout="row">
-
     <div layout="vertical">
-        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
-            <div>
-                <match-history-component selected="model.selected" disable-paging="model.disablePaging" disable-selecting="model.disableSelecting" />
-            </div>
+        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')"
+            md-whiteframe="4">
+            <match-history-component selected="model.selected" disable-paging="model.disablePaging" disable-selecting="model.disableSelecting"
+            />
         </md-sidenav>
     </div>
-    <div layout="column" flex id="wrapper">
-        <div>
-            <md-toolbar class="md-hue-2">
-                <div class="md-toolbar-tools">
-                    <md-button hide-gt-md class="md-icon-button" ng-click="model.toggleSideNav()" aria-label="Menu">
-                        <md-icon md-svg-icon="./lib/svg/menu.svg"></md-icon>
-                    </md-button>
-                    <h1>Match Details</h1>
-                    <md-fab-speed-dial md-direction="down" class="md-scale md-fab-top-right">
-                        <md-fab-trigger>
-                            <md-button class="md-fab" aria-label="More">
-                                <ng-md-icon icon="build"></ng-md-icon>
-                            </md-button>
-                        </md-fab-trigger>
-                        <md-fab-actions>
-                            <md-button class="md-fab md-raised md-mini" ng-click="model.showInstructions($event)">
-                                <ng-md-icon icon="gamepad"></ng-md-icon>
-                                <md-tooltip md-direction="left">Instructions</md-tooltip>
-                            </md-button>
-                            <md-button class="md-fab md-raised md-mini" ng-click="model.showAbout($event)">
-                                <ng-md-icon icon="more_horiz"></ng-md-icon>
-                                <md-tooltip md-direction="left">About</md-tooltip>
-                            </md-button>
-                        </md-fab-actions>
-                    </md-fab-speed-dial>
-                </div>
-            </md-toolbar>
-        </div>
+    <div flex id="wrapper">
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <md-button hide-gt-md class="md-icon-button" ng-click="model.toggleSideNav()" aria-label="Menu">
+                    <md-icon md-svg-icon="./lib/svg/menu.svg"></md-icon>
+                </md-button>
+                <h1>Match Details</h1>
+                <md-fab-speed-dial md-direction="down" class="md-scale md-fab-top-right">
+                    <md-fab-trigger>
+                        <md-button class="md-fab" aria-label="More">
+                            <ng-md-icon icon="build"></ng-md-icon>
+                        </md-button>
+                    </md-fab-trigger>
+                    <md-fab-actions>
+                        <md-button class="md-fab md-raised md-mini" ng-click="model.showInstructions($event)">
+                            <ng-md-icon icon="gamepad"></ng-md-icon>
+                            <md-tooltip md-direction="left">Instructions</md-tooltip>
+                        </md-button>
+                        <md-button class="md-fab md-raised md-mini" ng-click="model.showAbout($event)">
+                            <ng-md-icon icon="more_horiz"></ng-md-icon>
+                            <md-tooltip md-direction="left">About</md-tooltip>
+                        </md-button>
+                    </md-fab-actions>
+                </md-fab-speed-dial>
+            </div>
+        </md-toolbar>
 
         <md-content flex id="content">
             <div ng-show="model.selected">
@@ -46,7 +43,8 @@
                     </md-tab>
                     <md-tab label="Battles">
                         <div>
-                            <match-battles-component match="model.selected.matchId" selected="model.selected" disable-selecting="model.disableSelecting" disable-paging="model.disablePaging"/>
+                            <match-battles-component match="model.selected.matchId" selected="model.selected" disable-selecting="model.disableSelecting"
+                                disable-paging="model.disablePaging" />
                         </div>
                     </md-tab>
                 </md-tabs>
