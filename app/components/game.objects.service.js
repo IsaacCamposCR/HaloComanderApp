@@ -68,16 +68,16 @@
                 var name = view["Title"];
                 var hw2Object = view["HW2Object"];
                 var id = hw2Object["ObjectTypeId"];
+                var categories = hw2Object["Categories"];
                 var image = hw2Object["Image"];
                 var viewImage = image["View"];
                 var media = viewImage ? viewImage["Media"] : null;
                 var mediaUrl = media ? media["MediaUrl"] : null;
 
-                //console.log(hw2Object["StandardSupplyCost"], hw2Object["StandardEnergyCost"], hw2Object["StandardPopulationCost"]);
-
                 gameObjects.push({
                     name: name,
                     id: id,
+                    category: (categories.length > 0) ? (categories[0])["Id"] : 0,
                     mediaUrl: mediaUrl,
                     supplyCost: hw2Object["StandardSupplyCost"],
                     energyCost: hw2Object["StandardEnergyCost"],

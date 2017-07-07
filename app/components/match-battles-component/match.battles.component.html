@@ -64,8 +64,8 @@
                         </md-grid-tile>
 
                         <!-- Army Units Tile -->
-                        <md-grid-tile style="background: #ff8a80;" ng-repeat="unit in model.analizedArmiesPlayer1[$index] | orderBy: 'name'" md-rowspan="1"
-                            md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
+                        <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer1[$index] | orderBy: 'name'"
+                            md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
                             <div>
                                 <md-tooltip md-direction="top">{{unit.name}} {{(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
                                 <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"
@@ -100,8 +100,8 @@
                         </md-grid-tile>
 
                         <!-- Reinforcement Units Tile -->
-                        <md-grid-tile style="background: #ff8a80;" ng-repeat="unit in model.reinforcementsPlayer1[$index] | orderBy: 'name'" md-rowspan="1"
-                            md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
+                        <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.reinforcementsPlayer1[$index] | orderBy: 'name'"
+                            md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
                             <div>
                                 <md-tooltip md-direction="top">{{unit.name}} {{(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
                                 <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"
@@ -150,8 +150,8 @@
                         </md-grid-tile>
 
                         <!-- Army Units Tile -->
-                        <md-grid-tile style="background: #80d8ff;" ng-repeat="unit in model.analizedArmiesPlayer2[$index] | orderBy: 'name'" md-rowspan="1"
-                            md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
+                        <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer2[$index] | orderBy: 'name'"
+                            md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
                             <div>
                                 <md-tooltip md-direction="top">{{unit.name}} {{(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
                                 <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"
@@ -187,8 +187,8 @@
                         </md-grid-tile>
 
                         <!-- Reinforcement Units Tile -->
-                        <md-grid-tile style="background: #80d8ff;" ng-repeat="unit in model.reinforcementsPlayer2[$index] | orderBy: 'name'" md-rowspan="1"
-                            md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
+                        <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.reinforcementsPlayer2[$index] | orderBy: 'name'"
+                            md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
                             <div>
                                 <md-tooltip md-direction="top">{{unit.name}} {{(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
                                 <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"

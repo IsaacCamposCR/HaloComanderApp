@@ -6,7 +6,7 @@
     module.component("matchBattlesComponent", {
         templateUrl: "/components/match-battles-component/match.battles.component.html",
         controllerAs: "model",
-        controller: ["$resource", "$mdToast", "$mdBottomSheet", "gameObjectsService", matchBattlesController],
+        controller: ["$resource", "$mdToast", "$mdBottomSheet", "gameObjectsService", "unitTypeService", matchBattlesController],
         bindings: {
             match: "<",
             selected: "<",
@@ -15,10 +15,10 @@
         }
     });
 
-    function matchBattlesController($resource, $mdToast, $mdBottomSheet, gameObjectsService) {
+    function matchBattlesController($resource, $mdToast, $mdBottomSheet, gameObjectsService, unitTypeService) {
         var model = this;
         model.battles = [];
-        //model.killCount = 0;
+
         model.trainEvents = [];
         model.deathEvents = [];
         model.analizedArmiesPlayer1 = [];
@@ -217,8 +217,10 @@
                 newArmyPlayer2 = [];
                 newReinforcementsPlayer1 = [];
                 newReinforcementsPlayer2 = [];
+
                 for (var a = currentUnit; a < model.trainEvents.length; a++) {
                     var unitTrained = model.trainEvents[a];
+
                     if (unitTrained["TimeSinceStartMilliseconds"] <= battle["start"]) {
                         classifyArmy(unitTrained);
                     }
@@ -232,6 +234,7 @@
                         }
                     }
                 }
+
                 model.armiesPlayer1.push(newArmyPlayer1);
                 model.armiesPlayer2.push(newArmyPlayer2);
                 model.reinforcementsPlayer1.push(newReinforcementsPlayer1);
@@ -241,26 +244,34 @@
 
         // Adds the game object data to the unit and splits the armies into players.
         var classifyArmy = function (unit) {
-            var gameObject = gameObjectsService.find(unit.SquadId); //searchGameObject(unit.SquadId);
+            var gameObject = gameObjectsService.find(unit.SquadId);
             unit.mediaUrl = (gameObject) ? gameObject.mediaUrl : "";
+            unit.type = unitTypeService.find(unit.SquadId);
+            unit.span = (unit.type === "SUPER" || unit.type === "ULTIMATE") ? 2 : 1;
             unit.name = (gameObject) ? gameObject.name : unit.SquadId;
             if (unit["PlayerIndex"] === 1) {
+                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#ff8a80" : "rgb(75,50,50)");
                 newArmyPlayer1.push(unit);
             }
             if (unit["PlayerIndex"] === 2) {
+                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#80d8ff" : "rgb(50,50,75)");
                 newArmyPlayer2.push(unit);
             }
         }
 
         // Adds the game object data to the unit and splits the reinforcements into players.
         var classifyReinforcement = function (unit) {
-            var gameObject = gameObjectsService.find(unit.SquadId); //searchGameObject(unit.SquadId);
+            var gameObject = gameObjectsService.find(unit.SquadId);
             unit.mediaUrl = (gameObject) ? gameObject.mediaUrl : "";
+            unit.type = unitTypeService.find(unit.SquadId);
+            unit.span = (unit.type === "SUPER" || unit.type === "ULTIMATE") ? 2 : 1;
             unit.name = (gameObject) ? gameObject.name : unit.SquadId;
             if (unit["PlayerIndex"] === 1) {
+                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#ff8a80" : "rgb(75,50,50)");
                 newReinforcementsPlayer1.push(unit);
             }
             if (unit["PlayerIndex"] === 2) {
+                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#80d8ff" : "rgb(50,50,75)");
                 newReinforcementsPlayer2.push(unit);
             }
         }
