@@ -70,13 +70,24 @@
                         } else {
                             //console.log("No storage found...");
                         }
-                        getPlayerMatchHistory();
+                        //getPlayerMatchHistory(); 
+                        if (model.forwardPaging === true) {
+                            getPlayerMatchHistoryForwards();
+                        }
+                        else {
+                            getPlayerMatchHistoryBackwards();
+                        }
                     });
             }
             else {
                 model.maps = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameMaps")));
                 //console.log("Stored maps found");
-                getPlayerMatchHistory();
+                if (model.forwardPaging === true) {
+                    getPlayerMatchHistoryForwards();
+                }
+                else {
+                    getPlayerMatchHistoryBackwards();
+                }
             }
         };
 
@@ -112,62 +123,99 @@
         };
 
         //---------------PLAYER MATCH HISTORY----------------------//
-        var getPlayerMatchHistory = function () {
+
+        var getPlayerMatchHistoryBackwards = function () {
+            sleep(1000);
+            var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: 50, start: Number(model.start) })
+                .$promise.then(function (matchHistory) {
+                    console.log("Req API");
+                    var results = matchHistory["Results"];
+                    if (results.length > 0) {
+                        model.pageStart = model.pageStart;
+                        for (var i = 0; i < results.length; i++) {
+                            var match = results[i];
+                            if (model.playerRecentMatches.length < 10) {
+                                createMatchHistory(match);
+                                model.start++;
+                            }
+                            else {
+                                i = results.length;
+                            }
+                        }
+                        model.start = model.start;
+                        if (model.count > 0) {
+                            getPlayerMatchHistoryBackwards();
+                        }
+                        else {
+                            model.disablePaging = false;
+                            model.disableSelecting = false;
+                            model.pageFinish = model.start;
+                            model.start = model.pageFinish;
+                        }
+                    }
+                    else {
+                        model.disablePaging = false;
+                        model.disableSelecting = false;
+                    }
+                });
+        };
+
+        var getPlayerMatchHistoryForwards = function () {
             sleep(1000);
             var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: Number(model.count), start: Number(model.start) })
                 .$promise.then(function (matchHistory) {
                     console.log("Req API");
                     var results = matchHistory["Results"];
-                    model.pageStart = (model.forwardPaging) ? model.start : model.pageStart;
-                    model.start = (model.forwardPaging) ? model.start : model.start + model.count;
+                    model.pageStart = model.start;
                     results.forEach(function (match) {
                         createMatchHistory(match);
                     });
-                    model.start = (model.forwardPaging) ? model.start - model.count : model.start;
+                    model.start = model.start - model.count;
                     if (model.count > 0) {
-                        getPlayerMatchHistory();
+                        getPlayerMatchHistoryForwards();
                     }
                     else {
                         model.disablePaging = false;
                         model.disableSelecting = false;
-                        model.pageFinish = (model.forwardPaging) ? model.pageFinish : model.start;
+                        model.pageFinish = model.pageFinish;
                         model.start = model.pageFinish;
                     }
-
-                    //model.selected = model.playerRecentMatches[0];
-
                 });
+        };
 
-            var createMatchHistory = function (item) {
-                if (((item["Teams"])["1"])["TeamSize"] === 1) {
-                    var matchId = item["MatchId"];
-                    var result = item["PlayerMatchOutcome"];
-                    var time = item["PlayerMatchDuration"];
-                    var matchStartDate = item["MatchStartDate"];
-                    var date = matchStartDate["ISO8601Date"];
+        var createMatchHistory = function (item) {
+            if (((item["Teams"])["1"])["TeamSize"] === 1) {
+                var matchId = item["MatchId"];
+                var result = item["PlayerMatchOutcome"];
+                var time = item["PlayerMatchDuration"];
+                var matchStartDate = item["MatchStartDate"];
+                var date = matchStartDate["ISO8601Date"];
 
-                    var gameMap = searchGameMap(item["MapId"]);
-                    var gameLeader = gameLeadersService.find(item["LeaderId"]);
+                var gameMap = searchGameMap(item["MapId"]);
+                var gameLeader = gameLeadersService.find(item["LeaderId"]);
 
-                    var recentMatch = {
-                        matchId: matchId,
-                        map: gameMap["name"],
-                        mapMediaUrl: gameMap["mediaUrl"],
-                        leader: gameLeader["name"],
-                        leaderMediaUrl: gameLeader["mediaUrl"],
-                        result: result === 1 ? "VICTORY" : "DEFEAT",
-                        time: time,
-                        date: date
-                    };
-
-                    if (model.forwardPaging) {
-                        model.playerRecentMatches.unshift(recentMatch);
-                    }
-                    else {
-                        model.playerRecentMatches.push(recentMatch);
-                    }
-                    model.count = model.count - 1;
+                var recentMatch = {
+                    matchId: matchId,
+                    map: gameMap["name"],
+                    mapMediaUrl: gameMap["mediaUrl"],
+                    leader: gameLeader["name"],
+                    leaderMediaUrl: gameLeader["mediaUrl"],
+                    result: result === 1 ? "VICTORY" : "DEFEAT",
+                    time: time,
+                    date: date
                 };
+
+                if (model.forwardPaging) {
+                    model.playerRecentMatches.unshift(recentMatch);
+                }
+                else {
+                    model.playerRecentMatches.push(recentMatch);
+                }
+                model.count = model.count - 1;
+                return true;
+            }
+            else {
+                return false;
             }
         };
 
@@ -178,24 +226,12 @@
 
         // Requests a new set of matches starting at the next 10 games.
         model.backward = function () {
-            model.disablePaging = true;
-            model.disableSelecting = true;
-            model.forwardPaging = false;
-            model.pageStart = model.start;
-            model.page++;
-            model.playerRecentMatches = [];
-            model.count = 10;
-            getMaps();
-        };
-
-        model.forward = function () {
-            if (model.page > 1) {
+            if (model.playerRecentMatches.length === 10) {
                 model.disablePaging = true;
                 model.disableSelecting = true;
-                model.forwardPaging = true;
-                model.start = model.pageStart - 10;
-                model.pageFinish = model.pageStart;
-                model.page--;
+                model.forwardPaging = false;
+                model.pageStart = model.start;
+                model.page++;
                 model.playerRecentMatches = [];
                 model.count = 10;
                 getMaps();
@@ -203,18 +239,13 @@
         };
 
         // Requests the previous set of matches from 10 games ago.
-        model.forward2 = function () {
+        model.forward = function () {
             if (model.page > 1) {
                 model.disablePaging = true;
                 model.disableSelecting = true;
-
-                if (model.start < 10) {
-                    model.start = 0;
-                }
-                else {
-                    model.start -= 10;
-                }
-
+                model.forwardPaging = true;
+                model.start = model.pageStart - 10;
+                model.pageFinish = model.pageStart;
                 model.page--;
                 model.playerRecentMatches = [];
                 model.count = 10;

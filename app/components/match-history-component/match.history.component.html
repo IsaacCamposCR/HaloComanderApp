@@ -4,7 +4,7 @@
     </md-toolbar>
     <div layout-padding>
         <md-content>
-            <form name="gamertag" ng-submit="model.changeGamertag()">
+            <form name="gamertag" ng-disabled="model.disableSelecting" ng-submit="model.changeGamertag()">
                 <div layout="column" layout-padding>
                     <div layout-gt-xs="row">
                         <md-input-container class="md-block" flex-gt-xs>
