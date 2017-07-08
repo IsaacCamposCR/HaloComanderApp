@@ -245,10 +245,11 @@
         // Adds the game object data to the unit and splits the armies into players.
         var classifyArmy = function (unit) {
             var gameObject = gameObjectsService.find(unit.SquadId);
-            unit.mediaUrl = (gameObject) ? gameObject.mediaUrl : "";
+            unit.mediaUrl = (gameObject != null) ? gameObject.mediaUrl : "";
+            unit.category = (gameObject != null) ? gameObject.category : "";
             unit.type = unitTypeService.find(unit.SquadId);
             unit.span = (unit.type === "SUPER" || unit.type === "ULTIMATE") ? 2 : 1;
-            unit.name = (gameObject) ? gameObject.name : unit.SquadId;
+            unit.name = (gameObject != null) ? gameObject.name : unit.SquadId;
             if (unit["PlayerIndex"] === 1) {
                 unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#ff8a80" : "rgb(75,50,50)");
                 newArmyPlayer1.push(unit);

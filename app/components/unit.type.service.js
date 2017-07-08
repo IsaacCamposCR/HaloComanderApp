@@ -65,11 +65,9 @@
 
         // Returns the unit category, if it is a vehicle, air or infantry unit.
         function searchUnitCategory(id) {
-            console.log(id);
             var unitCategory = unitCategories.find(function (category) {
                 return category.id === id;
             });
-            console.log(unitCategory);
             return (unitCategory != null) ? unitCategory.name : "UNKNOWN";
         };
 

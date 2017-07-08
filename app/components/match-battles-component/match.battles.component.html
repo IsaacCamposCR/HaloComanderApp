@@ -17,6 +17,10 @@
         </md-card-actions>
     </md-card>
 
+    <div>
+        <battle-chart-component army="model.analizedArmiesPlayer2[3]"></battle-chart-component>
+    </div>
+
     <div ng-cloak ng-repeat="i in model.getNumber(model.battles.length) track by $index">
         <div ng-show="model.showBattle($index)">
             <h2 style="display:inline-block">Battle #{{$index+1}} {{model.battles[$index].size}} </h2>
