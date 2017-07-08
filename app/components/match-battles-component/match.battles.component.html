@@ -18,7 +18,7 @@
     </md-card>
 
     <div>
-        <battle-chart-component army="model.analizedArmiesPlayer2[3]"></battle-chart-component>
+        <battle-chart-component army="model.analizedArmiesPlayer1[9]"></battle-chart-component>
     </div>
 
     <div ng-cloak ng-repeat="i in model.getNumber(model.battles.length) track by $index">
@@ -232,7 +232,7 @@
         </div>
 
         <br>
-        <md-divider></md-divider>
+        <md-divider ng-show="!$last"></md-divider>
         <br>
     </div>
 

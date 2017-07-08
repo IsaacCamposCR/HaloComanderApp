@@ -1,9 +1,10 @@
 <div>
-    <canvas id="radar" class="chart chart-radar" chart-colors="model.colors" chart-data="model.categoryData" chart-options="options"
+    <canvas id="radar" class="chart chart-radar" chart-colors="model.colors" chart-data="model.affinityData" chart-options="model.affinityOptions"
         chart-labels="model.labels">
     </canvas>
     <br>
     <canvas id="pie" class="chart chart-pie" chart-colors="model.colors" chart-data="model.categoryData" chart-labels="model.labels"
-        chart-options="options">
+        chart-dataset-override="model.override">
     </canvas>
+
 </div>

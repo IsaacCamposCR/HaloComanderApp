@@ -81,7 +81,10 @@
                     mediaUrl: mediaUrl,
                     supplyCost: hw2Object["StandardSupplyCost"],
                     energyCost: hw2Object["StandardEnergyCost"],
-                    populationCost: hw2Object["StandardPopulationCost"]
+                    populationCost: hw2Object["StandardPopulationCost"],
+                    againstInfantry: hw2Object["EffectivenessAgainstInfantry"],
+                    againstVehicles: hw2Object["EffectivenessAgainstVehicles"],
+                    againstAir: hw2Object["EffectivenessAgainstAir"]
                 });
             });
         };

@@ -244,38 +244,59 @@
 
         // Adds the game object data to the unit and splits the armies into players.
         var classifyArmy = function (unit) {
-            var gameObject = gameObjectsService.find(unit.SquadId);
-            unit.mediaUrl = (gameObject != null) ? gameObject.mediaUrl : "";
-            unit.category = (gameObject != null) ? gameObject.category : "";
-            unit.type = unitTypeService.find(unit.SquadId);
-            unit.span = (unit.type === "SUPER" || unit.type === "ULTIMATE") ? 2 : 1;
-            unit.name = (gameObject != null) ? gameObject.name : unit.SquadId;
+            unit = populateUnitData(unit);
             if (unit["PlayerIndex"] === 1) {
-                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#ff8a80" : "rgb(75,50,50)");
                 newArmyPlayer1.push(unit);
             }
             if (unit["PlayerIndex"] === 2) {
-                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#80d8ff" : "rgb(50,50,75)");
                 newArmyPlayer2.push(unit);
             }
-        }
+        };
 
         // Adds the game object data to the unit and splits the reinforcements into players.
         var classifyReinforcement = function (unit) {
-            var gameObject = gameObjectsService.find(unit.SquadId);
-            unit.mediaUrl = (gameObject) ? gameObject.mediaUrl : "";
-            unit.type = unitTypeService.find(unit.SquadId);
-            unit.span = (unit.type === "SUPER" || unit.type === "ULTIMATE") ? 2 : 1;
-            unit.name = (gameObject) ? gameObject.name : unit.SquadId;
+            unit = populateUnitData(unit);
             if (unit["PlayerIndex"] === 1) {
-                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#ff8a80" : "rgb(75,50,50)");
                 newReinforcementsPlayer1.push(unit);
             }
             if (unit["PlayerIndex"] === 2) {
-                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#80d8ff" : "rgb(50,50,75)");
                 newReinforcementsPlayer2.push(unit);
             }
-        }
+        };
+
+        // Whether the unit is a reinforcement or an army piece, there's basic data the unit needs.
+        var populateUnitData = function (unit) {
+            var gameObject = gameObjectsService.find(unit.SquadId);
+            if (gameObject != null) {
+                unit.mediaUrl = gameObject.mediaUrl;
+                unit.category = gameObject.category;
+                unit.name = gameObject.name;
+                unit.affinities = {
+                    air: gameObject.againstAir,
+                    vehicle: gameObject.againstVehicles,
+                    infantry: gameObject.againstInfantry
+                };
+            }
+            else {
+                unit.mediaUrl = "";
+                unit.category = "";
+                unit.name = unit.SquadId;
+                unit.affinities = {
+                    air: "NotApplicable",
+                    vehicle: "NotApplicable",
+                    infantry: "NotApplicable"
+                };
+            }
+            unit.type = unitTypeService.find(unit.SquadId);
+            unit.span = (unit.type === "SUPER" || unit.type === "ULTIMATE") ? 2 : 1;
+            if (unit["PlayerIndex"] === 1) {
+                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#ff8a80" : "rgb(75,50,50)");
+            }
+            if (unit["PlayerIndex"] === 2) {
+                unit.background = (unit.type === "HERO") ? "#FFC107" : ((unit.type === "UNIT") ? "#80d8ff" : "rgb(50,50,75)");
+            }
+            return unit;
+        };
 
         //---------------BATTLE ANALYTICS----------------------//
         // (Army + Reinforcement) - Deaths = Remainder.
