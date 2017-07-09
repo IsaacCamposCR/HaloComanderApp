@@ -1,10 +1,9 @@
 <div>
-    <canvas id="radar" class="chart chart-radar" chart-colors="model.colors" chart-data="model.affinityData" chart-options="model.affinityOptions"
-        chart-labels="model.labels">
+    <canvas ng-if="model.type" style="padding: 10% 10% 5% 10%; font-weight:bold" id="radar" class="chart chart-radar" chart-colors="model.colors" chart-data="model.affinityData" chart-options="model.affinityOptions"
+        chart-labels="model.affinityLabels">
     </canvas>
-    <br>
-    <canvas id="pie" class="chart chart-pie" chart-colors="model.colors" chart-data="model.categoryData" chart-labels="model.labels"
-        chart-dataset-override="model.override">
+    <canvas ng-if="!model.type" style="padding: 5% 10% 5% 10%; font-weight:bold" id="pie" class="chart chart-pie" chart-colors="model.colors" chart-data="model.categoryData"
+        chart-labels="model.labels" chart-options="model.categoryOptions" chart-dataset-override="model.override">
     </canvas>
 
 </div>

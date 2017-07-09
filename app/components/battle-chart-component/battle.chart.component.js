@@ -8,7 +8,8 @@
         controllerAs: "model",
         controller: ["unitTypeService", battleChartController],
         bindings: {
-            army: "<"
+            army: "<",
+            type: "<"
         }
     });
 
@@ -27,8 +28,6 @@
             infantry: 0
         };
 
-        'use strict';
-
         model.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
 
         model.override = {
@@ -36,9 +35,11 @@
             hoverBorderColor: ['#45b7cd', '#ff6384', '#ff8e72']
         };
 
-        model.labels = ["AIR", "INFANTRY", "VEHICLE"];
+        model.labels = ["AIR", "INF", "VEH"];
+        model.affinityLabels = ["AIR", "INF", "VEH"];
 
         model.affinityOptions = {
+            responsive: false,
             scale: {
                 ticks: {
                     display: false,
@@ -52,6 +53,11 @@
                 }
             }
         };
+
+        model.categoryOptions = {
+            responsive: false,
+            showTooltips: false,
+        }
 
         model.affinityData = [
             [model.affinities.air, model.affinities.infantry, model.affinities.vehicle]
@@ -67,9 +73,12 @@
 
         model.$onChanges = function (changes) {
             if (changes.army && model.army != null) {
-                dissectArmy();
-
-                console.log(model.categories);
+                if (model.type) {
+                    dissectArmyAffinity();
+                }
+                else {
+                    dissectArmyCategory();
+                }
 
                 model.affinityData = [
                     model.affinities.air, model.affinities.infantry, model.affinities.vehicle
@@ -81,15 +90,72 @@
             }
         };
 
-        var dissectArmy = function () {
-            var air = 0;
-            var vehicle = 0;
-            var infantry = 0;
-
+        var dissectArmyAffinity = function () {
             var antiAir = 0;
             var antiVehicle = 0;
             var antiInfantry = 0;
             var totalAffinity = 0;
+
+            model.army.forEach(function (unit) {
+
+                switch (unit.affinities.air) {
+                    case "NotApplicable":
+                        antiAir += (unit.PopulationCost);
+                        break;
+                    case "Poor":
+                        antiAir += (2 * unit.PopulationCost);
+                        break;
+                    case "Neutral":
+                        antiAir += (4 * unit.PopulationCost);
+                        break;
+                    case "Good":
+                        antiAir += (8 * unit.PopulationCost);
+                        break;
+                }
+
+                switch (unit.affinities.vehicle) {
+                    case "NotApplicable":
+                        antiVehicle += (unit.PopulationCost);
+                        break;
+                    case "Poor":
+                        antiVehicle += (2 * unit.PopulationCost);
+                        break;
+                    case "Neutral":
+                        antiVehicle += (4 * unit.PopulationCost);
+                        break;
+                    case "Good":
+                        antiVehicle += (8 * unit.PopulationCost);
+                        break;
+                }
+
+                switch (unit.affinities.infantry) {
+                    case "NotApplicable":
+                        antiInfantry += (unit.PopulationCost);
+                        break;
+                    case "Poor":
+                        antiInfantry += (2 * unit.PopulationCost);
+                        break;
+                    case "Neutral":
+                        antiInfantry += (4 * unit.PopulationCost);
+                        break;
+                    case "Good":
+                        antiInfantry += (8 * unit.PopulationCost);
+                        break;
+                }
+
+                totalAffinity += 8 * unit.PopulationCost;
+            });
+
+            var percentAffinity = (100 / totalAffinity);
+            model.affinities.air = antiAir * percentAffinity;
+            model.affinities.vehicle = antiVehicle * percentAffinity;
+            model.affinities.infantry = antiInfantry * percentAffinity;
+        };
+
+        var dissectArmyCategory = function () {
+            var air = 0;
+            var vehicle = 0;
+            var infantry = 0;
 
             model.army.forEach(function (unit) {
                 if (unit.type === "HERO") {
@@ -107,59 +173,13 @@
                         infantry = infantry + unit.PopulationCost;
                         break;
                 }
-
-                switch (unit.affinities.air) {
-                    case "Poor":
-                        antiAir++;
-                        break;
-                    case "Neutral":
-                        antiAir += 2;
-                        break;
-                    case "Good":
-                        antiAir += 3;
-                        break;
-                }
-
-                switch (unit.affinities.vehicle) {
-                    case "Poor":
-                        antiVehicle++;
-                        break;
-                    case "Neutral":
-                        antiVehicle += 2;
-                        break;
-                    case "Good":
-                        antiVehicle += 3;
-                        break;
-                }
-
-                switch (unit.affinities.infantry) {
-                    case "Poor":
-                        antiInfantry++;
-                        break;
-                    case "Neutral":
-                        antiInfantry += 2;
-                        break;
-                    case "Good":
-                        antiInfantry += 3;
-                        break;
-                }
-
-                totalAffinity += 3;
             });
 
             var percentArmy = (100 / (air + vehicle + infantry));
-            console.log(percentArmy, air, vehicle, infantry);
-            model.categories.air = air * percentArmy;
-            model.categories.vehicle = vehicle * percentArmy;
-            model.categories.infantry = infantry * percentArmy;
-
-            var percentAffinity = (100 / totalAffinity);
-            console.log(percentAffinity, antiAir, antiVehicle, antiInfantry);
-            model.affinities.air = antiAir * percentAffinity;
-            model.affinities.vehicle = antiVehicle * percentAffinity;
-            model.affinities.infantry = antiInfantry * percentAffinity;
+            model.categories.air = Math.trunc(air * percentArmy);
+            model.categories.vehicle = Math.trunc(vehicle * percentArmy);
+            model.categories.infantry = Math.trunc(infantry * percentArmy);
         };
-
     };
 
 

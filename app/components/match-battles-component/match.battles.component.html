@@ -17,9 +17,11 @@
         </md-card-actions>
     </md-card>
 
-    <div>
+    <!--
+        <div>
         <battle-chart-component army="model.analizedArmiesPlayer1[9]"></battle-chart-component>
     </div>
+    -->
 
     <div ng-cloak ng-repeat="i in model.getNumber(model.battles.length) track by $index">
         <div ng-show="model.showBattle($index)">
@@ -67,6 +69,17 @@
                             </div>
                         </md-grid-tile>
 
+                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <div>
+                                <battle-chart-component style="top:0;left:0;" type="false" army="model.analizedArmiesPlayer1[$index]"></battle-chart-component>
+                            </div>
+                        </md-grid-tile>
+                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <div>
+                                <battle-chart-component style="top:0;left:0;" type="true" army="model.analizedArmiesPlayer1[$index]"></battle-chart-component>
+                            </div>
+                        </md-grid-tile>
+
                         <!-- Army Units Tile -->
                         <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer1[$index] | orderBy: 'name'"
                             md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
@@ -100,6 +113,17 @@
                                     <br/>
                                     <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].RPopulationCost1}}/{{model.battles[$index].RPopulationLost1}}
                                 </div>
+                            </div>
+                        </md-grid-tile>
+
+                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <div>
+                                <battle-chart-component style="top:0;left:0;" type="false" army="model.reinforcementsPlayer1[$index]"></battle-chart-component>
+                            </div>
+                        </md-grid-tile>
+                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <div>
+                                <battle-chart-component style="top:0;left:0;" type="true" army="model.reinforcementsPlayer1[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
 
@@ -153,6 +177,17 @@
                             </div>
                         </md-grid-tile>
 
+                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <div>
+                                <battle-chart-component style="top:0;left:0;" type="false" army="model.analizedArmiesPlayer2[$index]"></battle-chart-component>
+                            </div>
+                        </md-grid-tile>
+                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <div>
+                                <battle-chart-component style="top:0;left:0;" type="true" army="model.analizedArmiesPlayer2[$index]"></battle-chart-component>
+                            </div>
+                        </md-grid-tile>
+
                         <!-- Army Units Tile -->
                         <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer2[$index] | orderBy: 'name'"
                             md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
@@ -187,6 +222,17 @@
                                     <br/>
                                     <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].RPopulationCost2}}/{{model.battles[$index].RPopulationLost2}}
                                 </div>
+                            </div>
+                        </md-grid-tile>
+
+                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <div>
+                                <battle-chart-component style="top:0;left:0;" type="false" army="model.reinforcementsPlayer2[$index]"></battle-chart-component>
+                            </div>
+                        </md-grid-tile>
+                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <div>
+                                <battle-chart-component style="top:0;left:0;" type="true" army="model.reinforcementsPlayer2[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
 
