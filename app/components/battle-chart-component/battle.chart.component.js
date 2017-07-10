@@ -19,7 +19,8 @@
         model.affinities = {
             air: 0,
             vehicle: 0,
-            infantry: 0
+            infantry: 0,
+            support: 0
         };
 
         model.categories = {
@@ -36,10 +37,11 @@
         };
 
         model.labels = ["AIR", "INF", "VEH"];
-        model.affinityLabels = ["AIR", "INF", "VEH"];
+        model.affinityLabels = ["AIR", "INF", "VEH", "SUP"];
 
         model.affinityOptions = {
             responsive: false,
+            animation: false,
             scale: {
                 ticks: {
                     display: false,
@@ -55,12 +57,13 @@
         };
 
         model.categoryOptions = {
+            animation: false,
             responsive: false,
             showTooltips: false,
         }
 
         model.affinityData = [
-            [model.affinities.air, model.affinities.infantry, model.affinities.vehicle]
+            [model.affinities.air, model.affinities.infantry, model.affinities.vehicle, model.affinities.support]
         ];
 
         model.categoryData = [
@@ -81,7 +84,7 @@
                 }
 
                 model.affinityData = [
-                    model.affinities.air, model.affinities.infantry, model.affinities.vehicle
+                    model.affinities.air, model.affinities.infantry, model.affinities.vehicle, model.affinities.support
                 ];
 
                 model.categoryData = [
@@ -94,62 +97,99 @@
             var antiAir = 0;
             var antiVehicle = 0;
             var antiInfantry = 0;
+            var support = 0;
+            var isSupport = true;
             var totalAffinity = 0;
 
             model.army.forEach(function (unit) {
+                isSupport = true;
+                var population = 0;
+                if (unit.PopulationCost === 0 && unit.type != "HERO") {
+                    // This will happen only for the Mantis, for the moment.
+                    population = 4;
+                }
+                else {
+                    population = (unit.type === "HERO") ? 12 : unit.PopulationCost;
+                }
 
                 switch (unit.affinities.air) {
                     case "NotApplicable":
-                        antiAir += (unit.PopulationCost);
+                        antiAir++;
                         break;
                     case "Poor":
-                        antiAir += (2 * unit.PopulationCost);
+                        antiAir += (2 * population);
+                        isSupport = false;
                         break;
                     case "Neutral":
-                        antiAir += (4 * unit.PopulationCost);
+                        antiAir += (4 * population);
+                        isSupport = false;
                         break;
                     case "Good":
-                        antiAir += (8 * unit.PopulationCost);
+                        antiAir += (8 * population);
+                        isSupport = false;
                         break;
                 }
 
                 switch (unit.affinities.vehicle) {
                     case "NotApplicable":
-                        antiVehicle += (unit.PopulationCost);
+                        antiVehicle++;
                         break;
                     case "Poor":
-                        antiVehicle += (2 * unit.PopulationCost);
+                        antiVehicle += (2 * population);
+                        isSupport = false;
                         break;
                     case "Neutral":
-                        antiVehicle += (4 * unit.PopulationCost);
+                        antiVehicle += (4 * population);
+                        isSupport = false;
                         break;
                     case "Good":
-                        antiVehicle += (8 * unit.PopulationCost);
+                        antiVehicle += (8 * population);
+                        isSupport = false;
                         break;
                 }
 
                 switch (unit.affinities.infantry) {
                     case "NotApplicable":
-                        antiInfantry += (unit.PopulationCost);
+                        antiInfantry++;
                         break;
                     case "Poor":
-                        antiInfantry += (2 * unit.PopulationCost);
+                        antiInfantry += (2 * population);
+                        isSupport = false;
                         break;
                     case "Neutral":
-                        antiInfantry += (4 * unit.PopulationCost);
+                        antiInfantry += (4 * population);
+                        isSupport = false;
                         break;
                     case "Good":
-                        antiInfantry += (8 * unit.PopulationCost);
+                        antiInfantry += (8 * population);
+                        isSupport = false;
                         break;
                 }
 
-                totalAffinity += 8 * unit.PopulationCost;
+                // Since there is no indication of a support unit. This will have to do, so long as support units keep having no weapons.
+                if (isSupport === true) {
+                    support += (8 * population);
+                }
+                else {
+                    support++;
+                }
+
+                // Currently the Jack Rabbit has incorrect affinity options. This will have to do for the moment.
+                if (unit.SquadId === "unsc_veh_mongoose_01") {
+                    antiInfantry += 7;
+                    antiAir += 3;
+                    antiVehicle += 7;
+                    support -= 15;
+                }
+
+                totalAffinity += 8 * population;
             });
 
             var percentAffinity = (100 / totalAffinity);
             model.affinities.air = antiAir * percentAffinity;
             model.affinities.vehicle = antiVehicle * percentAffinity;
             model.affinities.infantry = antiInfantry * percentAffinity;
+            model.affinities.support = support * percentAffinity;
         };
 
         var dissectArmyCategory = function () {

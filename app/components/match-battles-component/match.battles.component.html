@@ -17,19 +17,27 @@
         </md-card-actions>
     </md-card>
 
-    <!--
-        <div>
-        <battle-chart-component army="model.analizedArmiesPlayer1[9]"></battle-chart-component>
-    </div>
-    -->
+    <div ng-cloak ng-repeat="i in model.getNumber(model.battles.length) | limitTo:model.battles.length track by $index">
+        <div ng-if="model.showBattle($index)">
 
-    <div ng-cloak ng-repeat="i in model.getNumber(model.battles.length) track by $index">
-        <div ng-show="model.showBattle($index)">
-            <h2 style="display:inline-block">Battle #{{$index+1}} {{model.battles[$index].size}} </h2>
-            <md-button style="background:#FFC107" ng-click="model.removeBattle(model.battles[$index])">Remove</md-button>
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools">
+                    <h2 flex md-truncate>{{::model.battles[$index].size}} Battle {{::$index+1}}</h2>
+
+                    <md-button class="md-icon-button" ng-click="model.showCharts(model.battles[$index])" aria-label="Charts">
+                        <md-tooltip md-direction="top">Display Battle Chart</md-tooltip>
+                        <ng-md-icon icon="pie_chart"></ng-md-icon>
+                    </md-button>
+
+                    <md-button class="md-icon-button" ng-click="model.removeBattle(model.battles[$index])" aria-label="Delete">
+                        <md-tooltip md-direction="top">Remove Battle</md-tooltip>
+                        <ng-md-icon icon="delete"></ng-md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
             <p>
-                {{model.battles[$index].deaths.length}} units/buildings killed from {{model.secondsToTime(model.battles[$index].start)}}
-                to {{model.secondsToTime(model.battles[$index].finish)}}.
+                {{::model.battles[$index].deaths.length}} units/buildings killed from {{::model.secondsToTime(model.battles[$index].start)}}
+                to {{::model.secondsToTime(model.battles[$index].finish)}}.
             </p>
 
             <div layout="row">
@@ -39,103 +47,109 @@
                         md-gutter-gt-sm="3px">
 
                         <!-- Leader Tile -->
-                        <md-grid-tile ng-style="{ 'background' : (model.battles[$index].winner === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
+                        <md-grid-tile class="grid-tile" ng-style="{ 'background' : (model.battles[$index].winner === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                             md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="3" md-rowspan-xs="1">
                             <md-tooltip md-direction="top">The color of the background shows victory (green) or defeat (red)</md-tooltip>
                             <div class="leader-div">
-                                <img ng-src="{{model.selected.leader1.mediaUrl}}" alt="{{model.selected.leader1.name}}" class="leader" />
+                                <img ng-src="{{::model.selected.leader1.mediaUrl}}" alt="{{::model.selected.leader1.name}}" class="leader" />
                             </div>
                             <md-grid-tile-footer class="leader-tile-footer">
-                                <h3>{{model.selected.player1}}</h3>
+                                <h3>{{::model.selected.player1}}</h3>
                             </md-grid-tile-footer>
                         </md-grid-tile>
 
                         <!-- Army Resources Tile -->
-                        <md-grid-tile style="background: white;" md-rowspan="2" md-colspan="3" md-colspan-sm="3" md-colspan-xs="3">
+                        <md-grid-tile class="grid-tile" style="background: white;" md-rowspan="2" md-colspan="3" md-colspan-sm="3" md-colspan-xs="3">
                             <div class="resource-text">
                                 <md-tooltip md-direction="top">EXISTING units at the start of the battle</md-tooltip>
                                 <h3>ARMY</h3>
-                                <h3>{{model.analizedArmiesPlayer1[$index].length}} UNITS</h3>
+                                <h3>{{::model.analizedArmiesPlayer1[$index].length}} UNITS</h3>
                             </div>
                             <div class="resource-vertical-divider">
                                 <div class="resource-data">
                                     <md-tooltip md-direction="top">Resources Spent / Resources Lost</md-tooltip>
-                                    <ng-md-icon icon="layers"></ng-md-icon> {{model.battles[$index].SupplyCost1}}/{{model.battles[$index].SupplyLost1}}
+                                    <ng-md-icon icon="layers"></ng-md-icon> {{::model.battles[$index].SupplyCost1}}/{{::model.battles[$index].SupplyLost1}}
                                     <br/>
-                                    <ng-md-icon icon="flash_on"></ng-md-icon> {{model.battles[$index].EnergyCost1}}/{{model.battles[$index].EnergyLost1}}
+                                    <ng-md-icon icon="flash_on"></ng-md-icon> {{::model.battles[$index].EnergyCost1}}/{{::model.battles[$index].EnergyLost1}}
                                     <br/>
-                                    <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].PopulationCost1}}/{{model.battles[$index].PopulationLost1}}
+                                    <ng-md-icon icon="group"></ng-md-icon> {{::model.battles[$index].PopulationCost1}}/{{::model.battles[$index].PopulationLost1}}
                                 </div>
                             </div>
                         </md-grid-tile>
 
-                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                        <!-- Chart Tiles -->
+                        <md-grid-tile ng-cloak ng-if="model.battles[$index].chart" class="grid-tile" style="background: rgb(200,200,200)" md-rowspan="2"
+                            md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                             <div>
                                 <battle-chart-component style="top:0;left:0;" type="false" army="model.analizedArmiesPlayer1[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
-                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                        <md-grid-tile ng-cloak ng-if="model.battles[$index].chart" class="grid-tile" style="background: rgb(200,200,200)" md-rowspan="2"
+                            md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                             <div>
                                 <battle-chart-component style="top:0;left:0;" type="true" army="model.analizedArmiesPlayer1[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
 
                         <!-- Army Units Tile -->
-                        <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer1[$index] | orderBy: 'name'"
-                            md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
+                        <md-grid-tile class="grid-tile" ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer1[$index] | orderBy: 'name' | limitTo:model.analizedArmiesPlayer1[$index].length track by unit.InstanceId"
+                            md-rowspan="{{::unit.span}}" md-colspan="{{::unit.span}}" md-colspan-sm="{{::unit.span}}" md-colspan-xs="{{::unit.span}}">
                             <div>
-                                <md-tooltip md-direction="top">{{unit.name}} {{(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
-                                <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"
+                                <md-tooltip md-direction="top">{{::unit.name}} {{::(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
+                                <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{::unit.mediaUrl}}" alt="{{::unit.SquadId}}"
                                     class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
                                 />
-                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-show="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
+                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                             </div>
                         </md-grid-tile>
 
                     </md-grid-list>
                     <!-- Reinforcements List P1 -->
-                    <md-grid-list ng-show="{{(model.battles[$index].RPopulationCost1 > 0)}}" md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9"
+                    <md-grid-list ng-if="(model.battles[$index].RPopulationCost1 > 0)" md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9"
                         md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="5px" md-gutter-gt-sm="3px">
                         <br>
                         <!-- Reinforcements Resources Tile -->
-                        <md-grid-tile style="background: white;" md-rowspan="2" md-colspan="3" md-colspan-sm="3" md-colspan-xs="3">
+                        <md-grid-tile class="grid-tile" style="background: white;" md-rowspan="2" md-colspan="3" md-colspan-sm="3" md-colspan-xs="3">
                             <div class="resource-text">
                                 <md-tooltip md-direction="top">Units BUILT during the battle</md-tooltip>
                                 <h3>BACKUP</h3>
-                                <h3>{{model.reinforcementsPlayer1[$index].length}} UNITS</h3>
+                                <h3>{{::model.reinforcementsPlayer1[$index].length}} UNITS</h3>
                             </div>
                             <div class="resource-vertical-divider">
                                 <div class="resource-data">
                                     <md-tooltip md-direction="top">Resources Spent / Resources Lost</md-tooltip>
-                                    <ng-md-icon icon="layers"></ng-md-icon> {{model.battles[$index].RSupplyCost1}}/{{model.battles[$index].RSupplyLost1}}
+                                    <ng-md-icon icon="layers"></ng-md-icon> {{::model.battles[$index].RSupplyCost1}}/{{::model.battles[$index].RSupplyLost1}}
                                     <br/>
-                                    <ng-md-icon icon="flash_on"></ng-md-icon> {{model.battles[$index].REnergyCost1}}/{{model.battles[$index].REnergyLost1}}
+                                    <ng-md-icon icon="flash_on"></ng-md-icon> {{::model.battles[$index].REnergyCost1}}/{{::model.battles[$index].REnergyLost1}}
                                     <br/>
-                                    <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].RPopulationCost1}}/{{model.battles[$index].RPopulationLost1}}
+                                    <ng-md-icon icon="group"></ng-md-icon> {{::model.battles[$index].RPopulationCost1}}/{{::model.battles[$index].RPopulationLost1}}
                                 </div>
                             </div>
                         </md-grid-tile>
 
-                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                        <!-- Chart Tiles -->
+                        <md-grid-tile ng-cloak ng-if="model.battles[$index].chart" class="grid-tile" style="background: rgb(200,200,200)" md-rowspan="2"
+                            md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                             <div>
                                 <battle-chart-component style="top:0;left:0;" type="false" army="model.reinforcementsPlayer1[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
-                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                        <md-grid-tile ng-cloak ng-if="model.battles[$index].chart" class="grid-tile" style="background: rgb(200,200,200)" md-rowspan="2"
+                            md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                             <div>
                                 <battle-chart-component style="top:0;left:0;" type="true" army="model.reinforcementsPlayer1[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
 
                         <!-- Reinforcement Units Tile -->
-                        <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.reinforcementsPlayer1[$index] | orderBy: 'name'"
-                            md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
+                        <md-grid-tile class="grid-tile" ng-style="{background: unit.background}" ng-repeat="unit in model.reinforcementsPlayer1[$index] | orderBy: 'name' | limitTo:model.reinforcementsPlayer1[$index].length track by unit.InstanceId"
+                            md-rowspan="{{::unit.span}}" md-colspan="{{::unit.span}}" md-colspan-sm="{{::unit.span}}" md-colspan-xs="{{::unit.span}}">
                             <div>
-                                <md-tooltip md-direction="top">{{unit.name}} {{(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
-                                <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"
+                                <md-tooltip md-direction="top">{{::unit.name}} {{::(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
+                                <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{::unit.mediaUrl}}" alt="{{::unit.SquadId}}"
                                     class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
                                 />
-                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-show="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
+                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                             </div>
                         </md-grid-tile>
 
@@ -147,104 +161,110 @@
                         md-gutter-gt-sm="3px">
 
                         <!-- Leader Tile -->
-                        <md-grid-tile ng-style="{ 'background' : (model.battles[$index].winner === 2) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
+                        <md-grid-tile class="grid-tile" ng-style="{ 'background' : (model.battles[$index].winner === 2) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                             md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="3" md-rowspan-xs="1">
                             <md-tooltip md-direction="top">The color of the background shows victory (green) or defeat (red)</md-tooltip>
                             <div class="leader-div">
-                                <img ng-src="{{model.selected.leader2.mediaUrl}}" alt="{{model.selected.leader2.name}}" class="leader" />
+                                <img ng-src="{{::model.selected.leader2.mediaUrl}}" alt="{{::model.selected.leader2.name}}" class="leader" />
                             </div>
                             <md-grid-tile-footer class="leader-tile-footer">
-                                <h3>{{model.selected.player2}}</h3>
+                                <h3>{{::model.selected.player2}}</h3>
                             </md-grid-tile-footer>
                         </md-grid-tile>
 
                         <!-- Army Resources Tile -->
-                        <md-grid-tile style="background: white;" md-rowspan="2" md-colspan="3" md-colspan-sm="3" md-colspan-xs="3">
+                        <md-grid-tile class="grid-tile" style="background: white;" md-rowspan="2" md-colspan="3" md-colspan-sm="3" md-colspan-xs="3">
                             <div class="resource-text">
                                 <md-tooltip md-direction="top">EXISTING units at the start of the battle</md-tooltip>
                                 <h3>ARMY</h3>
-                                <h3>{{model.analizedArmiesPlayer2[$index].length}} UNITS</h3>
+                                <h3>{{::model.analizedArmiesPlayer2[$index].length}} UNITS</h3>
                             </div>
                             <div class="resource-vertical-divider">
                                 <div class="resource-data">
                                     <md-tooltip md-direction="top">Resources Spent / Resources Lost</md-tooltip>
-                                    <ng-md-icon icon="layers"></ng-md-icon> {{model.battles[$index].SupplyCost2}}/{{model.battles[$index].SupplyLost2}}
+                                    <ng-md-icon icon="layers"></ng-md-icon> {{::model.battles[$index].SupplyCost2}}/{{::model.battles[$index].SupplyLost2}}
                                     <br/>
-                                    <ng-md-icon icon="flash_on"></ng-md-icon> {{model.battles[$index].EnergyCost2}}/{{model.battles[$index].EnergyLost2}}
+                                    <ng-md-icon icon="flash_on"></ng-md-icon> {{::model.battles[$index].EnergyCost2}}/{{::model.battles[$index].EnergyLost2}}
                                     <br/>
-                                    <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].PopulationCost2}}/{{model.battles[$index].PopulationLost2}}
+                                    <ng-md-icon icon="group"></ng-md-icon> {{::model.battles[$index].PopulationCost2}}/{{::model.battles[$index].PopulationLost2}}
                                 </div>
                             </div>
                         </md-grid-tile>
 
-                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                        <!-- Chart Tiles -->
+                        <md-grid-tile ng-cloak ng-if="model.battles[$index].chart" class="grid-tile" style="background: rgb(200,200,200)" md-rowspan="2"
+                            md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                             <div>
                                 <battle-chart-component style="top:0;left:0;" type="false" army="model.analizedArmiesPlayer2[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
-                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                        <md-grid-tile ng-cloak ng-if="model.battles[$index].chart" class="grid-tile" style="background: rgb(200,200,200)" md-rowspan="2"
+                            md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                             <div>
                                 <battle-chart-component style="top:0;left:0;" type="true" army="model.analizedArmiesPlayer2[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
 
                         <!-- Army Units Tile -->
-                        <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer2[$index] | orderBy: 'name'"
-                            md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
+                        <md-grid-tile class="grid-tile" ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer2[$index] | orderBy: 'name' | limitTo:model.analizedArmiesPlayer2[$index].length track by unit.InstanceId"
+                            md-rowspan="{{::unit.span}}" md-colspan="{{::unit.span}}" md-colspan-sm="{{::unit.span}}" md-colspan-xs="{{::unit.span}}">
                             <div>
-                                <md-tooltip md-direction="top">{{unit.name}} {{(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
-                                <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"
+                                <md-tooltip md-direction="top">{{::unit.name}} {{::(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
+                                <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{::unit.mediaUrl}}" alt="{{::unit.SquadId}}"
                                     class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
                                 />
-                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-show="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
+                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                             </div>
                         </md-grid-tile>
 
                     </md-grid-list>
 
                     <!-- Reinforcements List P2 -->
-                    <md-grid-list ng-show="{{(model.battles[$index].RPopulationCost2 > 0)}}" md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9"
+                    <md-grid-list ng-if="(model.battles[$index].RPopulationCost2 > 0)" md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9"
                         md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="5px" md-gutter-gt-sm="3px">
                         <br>
                         <!-- Reinforcements Resources Tile -->
-                        <md-grid-tile style="background: white;" md-rowspan="2" md-colspan="3" md-colspan-sm="3" md-colspan-xs="3">
+                        <md-grid-tile class="grid-tile" style="background: white;" md-rowspan="2" md-colspan="3" md-colspan-sm="3" md-colspan-xs="3">
                             <div class="resource-text">
                                 <md-tooltip md-direction="top">Units BUILT during the battle</md-tooltip>
                                 <h3>BACKUP</h3>
-                                <h3>{{model.reinforcementsPlayer2[$index].length}} UNITS</h3>
+                                <h3>{{::model.reinforcementsPlayer2[$index].length}} UNITS</h3>
                             </div>
                             <div class="resource-vertical-divider">
                                 <div class="resource-data">
                                     <md-tooltip md-direction="top">Resources Spent / Resources Lost</md-tooltip>
-                                    <ng-md-icon icon="layers"></ng-md-icon> {{model.battles[$index].RSupplyCost2}}/{{model.battles[$index].RSupplyLost2}}
+                                    <ng-md-icon icon="layers"></ng-md-icon> {{::model.battles[$index].RSupplyCost2}}/{{::model.battles[$index].RSupplyLost2}}
                                     <br/>
-                                    <ng-md-icon icon="flash_on"></ng-md-icon> {{model.battles[$index].REnergyCost2}}/{{model.battles[$index].REnergyLost2}}
+                                    <ng-md-icon icon="flash_on"></ng-md-icon> {{::model.battles[$index].REnergyCost2}}/{{::model.battles[$index].REnergyLost2}}
                                     <br/>
-                                    <ng-md-icon icon="group"></ng-md-icon> {{model.battles[$index].RPopulationCost2}}/{{model.battles[$index].RPopulationLost2}}
+                                    <ng-md-icon icon="group"></ng-md-icon> {{::model.battles[$index].RPopulationCost2}}/{{::model.battles[$index].RPopulationLost2}}
                                 </div>
                             </div>
                         </md-grid-tile>
 
-                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                        <!-- Chart Tiles -->
+                        <md-grid-tile ng-cloak ng-if="model.battles[$index].chart" style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2"
+                            md-colspan-sm="2" md-colspan-xs="2">
                             <div>
                                 <battle-chart-component style="top:0;left:0;" type="false" army="model.reinforcementsPlayer2[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
-                        <md-grid-tile style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                        <md-grid-tile ng-cloak ng-if="model.battles[$index].chart" style="background: rgb(200,200,200)" md-rowspan="2" md-colspan="2"
+                            md-colspan-sm="2" md-colspan-xs="2">
                             <div>
                                 <battle-chart-component style="top:0;left:0;" type="true" army="model.reinforcementsPlayer2[$index]"></battle-chart-component>
                             </div>
                         </md-grid-tile>
 
                         <!-- Reinforcement Units Tile -->
-                        <md-grid-tile ng-style="{background: unit.background}" ng-repeat="unit in model.reinforcementsPlayer2[$index] | orderBy: 'name'"
-                            md-rowspan="{{unit.span}}" md-colspan="{{unit.span}}" md-colspan-sm="{{unit.span}}" md-colspan-xs="{{unit.span}}">
+                        <md-grid-tile class="grid-tile" ng-style="{background: unit.background}" ng-repeat="unit in model.reinforcementsPlayer2[$index] | orderBy: 'name' | limitTo:model.reinforcementsPlayer2[$index].length track by unit.InstanceId"
+                            md-rowspan="{{::unit.span}}" md-colspan="{{::unit.span}}" md-colspan-sm="{{::unit.span}}" md-colspan-xs="{{::unit.span}}">
                             <div>
-                                <md-tooltip md-direction="top">{{unit.name}} {{(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
-                                <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"
+                                <md-tooltip md-direction="top">{{::unit.name}} {{::(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
+                                <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{::unit.mediaUrl}}" alt="{{::unit.SquadId}}"
                                     class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
                                 />
-                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-show="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
+                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                             </div>
                         </md-grid-tile>
                     </md-grid-list>
@@ -255,31 +275,31 @@
             <md-grid-list md-cols="6" md-cols-sm="10" md-cols-md="14" md-cols-gt-md="18" md-row-height-gt-md="1:1" md-row-height="1:1"
                 md-gutter="5px" md-gutter-gt-sm="3px">
 
-                <md-grid-tile style="background: white;" md-rowspan="1" md-colspan="3" md-colspan-sm="2" md-colspan-xs="2">
+                <md-grid-tile class="grid-tile" style="background: white;" md-rowspan="1" md-colspan="3" md-colspan-sm="2" md-colspan-xs="2">
                     <div class="resource-text">
                         <md-tooltip md-direction="top">Units KILLED during the battle</md-tooltip>
                         <h3>TOTAL KILLS</h3>
-                        <h3>{{model.battles[$index].deaths.length}} UNITS</h3>
+                        <h3>{{::model.battles[$index].deaths.length}} UNITS</h3>
                     </div>
                 </md-grid-tile>
 
                 <!-- Deaths Tile -->
-                <md-grid-tile style="background: #F44336;" ng-repeat="unit in model.battles[$index].deaths | orderBy: 'name'" md-rowspan="1"
-                    md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
+                <md-grid-tile class="grid-tile" style="background: #F44336;" ng-repeat="unit in model.battles[$index].deaths | orderBy: 'name' | limitTo:model.battles[$index].deaths.length track by unit.VictimInstanceId"
+                    md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
                     <div>
-                        <md-tooltip md-direction="top">{{unit.name}} KILLED</md-tooltip>
-                        <img ng-show="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{unit.mediaUrl}}" alt="{{unit.SquadId}}"
+                        <md-tooltip md-direction="top">{{::unit.name}} KILLED</md-tooltip>
+                        <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{::unit.mediaUrl}}" alt="{{::unit.SquadId}}"
                             class="unit-icon" />
-                        <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-show="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
+                        <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                     </div>
                 </md-grid-tile>
 
             </md-grid-list>
-        </div>
 
-        <br>
-        <md-divider ng-show="!$last"></md-divider>
-        <br>
+            <br>
+            <md-divider ng-if="!$last"></md-divider>
+            <br>
+        </div>
     </div>
 
     <br>

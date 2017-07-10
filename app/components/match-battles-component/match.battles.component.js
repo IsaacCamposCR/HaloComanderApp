@@ -48,7 +48,7 @@
             });
 
         model.$onInit = function () {
-            model.small = true;
+            model.small = false;
             model.medium = true;
             model.large = true;
             if (model.match != undefined) {
@@ -184,7 +184,8 @@
                         start: start,
                         finish: finish,
                         deaths: deathsByBattle,
-                        size: "Small"
+                        size: "Small",
+                        chart: false
                     });
                 }
                 if (deathsByBattle.length > 10 && deathsByBattle.length <= 30) {
@@ -192,7 +193,8 @@
                         start: start,
                         finish: finish,
                         deaths: deathsByBattle,
-                        size: "Medium"
+                        size: "Medium",
+                        chart: false
                     });
                 }
                 if (deathsByBattle.length > 30) {
@@ -200,7 +202,8 @@
                         start: start,
                         finish: finish,
                         deaths: deathsByBattle,
-                        size: "Large"
+                        size: "Large",
+                        chart: false
                     });
                 }
             }
@@ -531,6 +534,11 @@
                     battle.winner = 2;
                 }
             }
+        };
+
+        model.showCharts = function (battle) {
+            battle.chart = !battle.chart;
+            //$scope.$digest();
         };
 
         // Removes a battle from the arrays, this allows the user to clean up undesired battles.
