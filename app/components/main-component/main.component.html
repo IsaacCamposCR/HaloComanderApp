@@ -1,7 +1,6 @@
 <div layout="row">
     <div layout="vertical">
-        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')"
-            md-whiteframe="4">
+        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
             <match-history-component selected="model.selected" disable-paging="model.disablePaging" disable-selecting="model.disableSelecting"
             />
         </md-sidenav>
@@ -38,7 +37,7 @@
                 <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
                     <md-tab label="Statistics">
                         <div>
-                            <match-statistics-component selected="model.selected" />
+                            <match-statistics-component selected="model.selected" disable-selecting="model.disableSelecting" />
                         </div>
                     </md-tab>
                     <md-tab label="Battles">
@@ -50,7 +49,7 @@
                 </md-tabs>
             </div>
 
-            <div ng-hide="model.selected">
+            <div ng-if="!model.selected">
                 <welcome-component></welcome-component>
                 <br>
                 <tutorial-component></tutorial-component>

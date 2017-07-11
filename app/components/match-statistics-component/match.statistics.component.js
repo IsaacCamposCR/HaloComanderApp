@@ -8,7 +8,8 @@
         controllerAs: "model",
         controller: ["$resource", "gameObjectsService", "gameLeadersService", "playerSeasonService", matchStatisticsController],
         bindings: {
-            selected: "<"
+            selected: "<",
+            disableSelecting: "<"
         }
     });
 
@@ -45,7 +46,7 @@
 
             resourceMatchResult.query({ matchId: model.selected.matchId })
                 .$promise.then(function (objects) {
-                    console.log("Req API");
+                    //console.log("Req API");
                     model.matchResult = {};
                     model.playerSeasons = {};
                     var gameMode = objects["GameMode"];

@@ -18,8 +18,8 @@
         var model = this;
 
         model.page = 1;
-        model.disablePaging = true;
-        model.disableSelecting = true;
+        model.disablePaging = false;
+        model.disableSelecting = false;
         model.searchMatch = "";
         model.start = 0;
         model.count = 10;
@@ -61,7 +61,7 @@
                 //console.log("No stored maps found. Requesting...");
                 resourceMaps.query()
                     .$promise.then(function (maps) {
-                        console.log("Req API");
+                        //console.log("Req API");
                         createGameMaps(maps);
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
@@ -128,7 +128,7 @@
             sleep(1000);
             var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: 50, start: Number(model.start) })
                 .$promise.then(function (matchHistory) {
-                    console.log("Req API");
+                    //console.log("Req API");
                     var results = matchHistory["Results"];
                     if (results.length > 0) {
                         model.pageStart = model.pageStart;
@@ -164,7 +164,7 @@
             sleep(1000);
             var playerMatchHistory = resourcePlayerMatchHistory.query({ player: model.gamertag, count: Number(model.count), start: Number(model.start) })
                 .$promise.then(function (matchHistory) {
-                    console.log("Req API");
+                    //console.log("Req API");
                     var results = matchHistory["Results"];
                     model.pageStart = model.start;
                     results.forEach(function (match) {
@@ -291,10 +291,10 @@
                 fullscreen: useFullScreen
             })
                 .then(function (answer) {
-                    console.log("status");
+                    //console.log("status");
                     model.status = 'You said the information was "' + answer + '".';
                 }, function () {
-                    console.log("status cancel");
+                    //console.log("status cancel");
                     model.status = 'You cancelled the dialog.';
                 });
         };

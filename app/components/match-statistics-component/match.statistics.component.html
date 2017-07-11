@@ -1,6 +1,9 @@
 <md-content>
     <br>
-    <div flex ng-cloak>
+    <div layout="row" layout-sm="column" layout-align="center center" aria-label="wait" style="height:70px;" ng-show="model.disableSelecting">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <div flex ng-cloak ng-show="!model.disableSelecting">
         <div>
             <md-grid-list md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
                 md-gutter-gt-sm="4px">
@@ -51,9 +54,9 @@
         <md-divider></md-divider>
         <br>
         <div>
-            <md-grid-list class="grid-tile" md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
+            <md-grid-list md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
                 md-gutter-gt-sm="4px">
-                <md-grid-tile ng-style="{ 'background' : (model.matchResult.outcome2 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
+                <md-grid-tile class="grid-tile" ng-style="{ 'background' : (model.matchResult.outcome2 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                     md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                     <div class="leader-div">
                         <img ng-src="{{model.selected.leader2.mediaUrl}}" alt="{{model.selected.leader2.name}}" class="leader" />

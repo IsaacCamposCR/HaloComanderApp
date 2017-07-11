@@ -26,9 +26,35 @@
             model.tutorial = false;
             model.welcome = false;
             model.about = false;
-            gameLeadersService.store();
-            gameObjectsService.store();
-            playerSeasonService.store();
+            if (needsCacheRefreshing() === true) {
+                gameLeadersService.store();
+                gameObjectsService.store();
+                playerSeasonService.store();
+            }
+        };
+
+        var needsCacheRefreshing = function () {
+            if (!localStorage.getItem("lastRefresh")) {
+                if (typeof (Storage) !== "undefined") {
+                    localStorage.setItem("lastRefresh", LZString.compressToUTF16(JSON.stringify(Date.now())));
+                }
+                return true;
+            }
+            else {
+                var difference = Date.now() - JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("lastRefresh")));
+                if (difference > 604800000) {
+                    localStorage.setItem("lastRefresh", LZString.compressToUTF16(JSON.stringify(Date.now())));
+                    localStorage.removeItem("season");
+                    localStorage.removeItem("gameLeaders");
+                    localStorage.removeItem("gameObjects");
+                    localStorage.removeItem("gameMaps");
+                    localStorage.removeItem("designations");
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
         };
 
         model.tabIndex = 0;
@@ -71,7 +97,7 @@
                 .textContent("Contact me at isaachaloelrey13@gmail.com")
                 .targetEvent($event)
                 .ok("DONE");
-
+    
             $mdDialog.show(confirm).then(() => {
             });
             */

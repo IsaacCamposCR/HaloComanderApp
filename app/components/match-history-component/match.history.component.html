@@ -4,15 +4,23 @@
     </md-toolbar>
     <div layout-padding>
         <md-content>
-            <form name="gamertag" ng-disabled="model.disableSelecting" ng-submit="model.changeGamertag()">
+            <form name="model.gamertagForm" ng-disabled="model.disableSelecting" ng-submit="model.changeGamertag()">
                 <div layout="column" layout-padding>
-                    <div layout-gt-xs="row">
-                        <md-input-container class="md-block" flex-gt-xs>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
                             <label>Enter your Gamertag</label>
-                            <input name="title" ng-model="model.gamertag">
+                            <input required name="gamertag" ng-model="model.gamertag" maxlength="15" ng-pattern="/^[a-zA-Z0-9 ]+$/" />
+
+                            <div ng-messages="model.gamertagForm.$valid" role="alert">
+                                <div ng-message-exp="['required', 'maxlength', 'pattern']">
+                                    You must enter a valid Xbox Live Gamertag.
+                                </div>
+                            </div>
                         </md-input-container>
+
                         <div class="md-actions">
-                            <md-button class="md-primary md-raised date-row" type="submit" class="date-row" aria-label="GO">
+                            <md-button ng-disabled="!model.gamertagForm.$valid" class="md-primary md-raised date-row" type="submit" class="date-row"
+                                aria-label="GO">
                                 <ng-md-icon icon="search"></ng-md-icon>
                             </md-button>
                         </div>
@@ -24,7 +32,7 @@
     <md-content>
         <md-list style="overflow-x: hidden;">
             <div layout="row" layout-align="center center" ng-show="model.playerRecentMatches.length">
-                <md-button class="md-icon-button md-accent" aria-label="Rewind" ng-click="model.forward()" ng-disabled="model.disableSelecting">
+                <md-button class="md-icon-button md-accent" aria-label="Rewind" ng-click="model.forward()" ng-disabled="(model.disableSelecting || model.page === 1)">
                     <ng-md-icon icon="fast_rewind"></ng-md-icon>
                 </md-button>
                 Page {{model.page}}

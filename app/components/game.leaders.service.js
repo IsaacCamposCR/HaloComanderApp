@@ -23,7 +23,7 @@
                 //console.log("No stored leaders found. Requesting...");
                 resourceLeaders.query()
                     .$promise.then(function (leaders) {
-                        console.log("Req API");
+                        //console.log("Req API");
                         createGameLeaders(leaders);
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.

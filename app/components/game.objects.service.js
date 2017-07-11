@@ -26,15 +26,15 @@
                 //console.log("No stored objects found. Requesting...");
                 resourceGameObjects.query({ startAt: "0" })
                     .$promise.then(function (objects) {
-                        console.log("Req API");
+                        //console.log("Req API");
                         createGameObjects(objects);
                         resourceGameObjects.query({ startAt: "100" })
                             .$promise.then(function (objects) {
-                                console.log("Req API");
+                                //console.log("Req API");
                                 createGameObjects(objects);
                                 resourceGameObjects.query({ startAt: "200" })
                                     .$promise.then(function (objects) {
-                                        console.log("Req API");
+                                        //console.log("Req API");
                                         createGameObjects(objects);
                                         if (typeof (Storage) !== "undefined") {
                                             // Code for localStorage/sessionStorage.

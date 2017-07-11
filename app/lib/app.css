@@ -4,6 +4,7 @@ html, body {
     height:100%;
     margin:0px;
     padding:0px;
+    background: #E0E0E0;
 }
 
 md-toolbar h1 {

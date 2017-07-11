@@ -6,7 +6,7 @@
     module.component("matchBattlesComponent", {
         templateUrl: "/components/match-battles-component/match.battles.component.html",
         controllerAs: "model",
-        controller: ["$resource", "$mdToast", "$mdBottomSheet", "gameObjectsService", "unitTypeService", matchBattlesController],
+        controller: ["$resource", "$mdToast", "$mdBottomSheet", "$timeout", "gameObjectsService", "unitTypeService", matchBattlesController],
         bindings: {
             match: "<",
             selected: "<",
@@ -15,7 +15,7 @@
         }
     });
 
-    function matchBattlesController($resource, $mdToast, $mdBottomSheet, gameObjectsService, unitTypeService) {
+    function matchBattlesController($resource, $mdToast, $mdBottomSheet, $timeout, gameObjectsService, unitTypeService) {
         var model = this;
         model.battles = [];
 
@@ -48,9 +48,13 @@
             });
 
         model.$onInit = function () {
-            model.small = false;
+            model.small = true;
+            model.hasSmall = false;
             model.medium = true;
+            model.hasMedium = false;
             model.large = true;
+            model.hasLarge = false;
+
             if (model.match != undefined) {
                 getMatchEvents();
             }
@@ -58,6 +62,10 @@
 
         model.$onChanges = function (changes) {
             if (changes.match && model.match) {
+                model.hasSmall = false;
+                model.hasMedium = false;
+                model.hasLarge = false;
+
                 model.armiesPlayer1 = [];
                 model.reinforcementsPlayer1 = [];
                 model.armiesPlayer2 = [];
@@ -90,7 +98,7 @@
 
             var matchEvents = resourceMatchEvents.query({ match: model.match })
                 .$promise.then(function (events) {
-                    console.log("Req API");
+                    //console.log("Req API");
                     events = events["GameEvents"];
                     events.forEach(function (event) {
                         createPlayerEvents(event);
@@ -101,7 +109,7 @@
                     battleAnalytics();
                     settleLastBattle();
                     getTotalArmyCost();
-                    sleep(1000);
+                    model.battles[0].chart = true;
                     if (model.disablePaging === true) {
                         model.disableSelecting = true;
                     }
@@ -109,6 +117,7 @@
                         model.disableSelecting = false;
                         model.disablePaging = false;
                     }
+                    sleep(1000);
                 });
 
             // Takes the application relevant data from the Events API.
@@ -180,6 +189,7 @@
         var classifyBattle = function (deathsByBattle, start, finish) {
             if (deathsByBattle.length > 0) {
                 if (deathsByBattle.length > 0 && deathsByBattle.length <= 10) {
+                    model.hasSmall = true;
                     model.battles.push({
                         start: start,
                         finish: finish,
@@ -189,6 +199,7 @@
                     });
                 }
                 if (deathsByBattle.length > 10 && deathsByBattle.length <= 30) {
+                    model.hasMedium = true;
                     model.battles.push({
                         start: start,
                         finish: finish,
@@ -198,6 +209,7 @@
                     });
                 }
                 if (deathsByBattle.length > 30) {
+                    model.hasLarge = true;
                     model.battles.push({
                         start: start,
                         finish: finish,
@@ -213,7 +225,7 @@
         // Process which units composed the armies at each battle  
         // Units that were trained before the battle starts are considered starting armies. 
         // Units that were trained after the battle stats and before it ends are considered reinforcement armies.
-        var processArmies = function () {
+        var processArmies1 = function () {
             for (var i = 0; i < model.battles.length; i++) {
                 var battle = model.battles[i];
                 newArmyPlayer1 = [];
@@ -228,7 +240,7 @@
                         classifyArmy(unitTrained);
                     }
                     else {
-                        if (unitTrained["TimeSinceStartMilliseconds"] <= (model.battles[i])["finish"]) {
+                        if (unitTrained["TimeSinceStartMilliseconds"] <= battle["finish"]) {
                             classifyReinforcement(unitTrained);
                         }
                         else {
@@ -245,25 +257,52 @@
             }
         }
 
+        var processArmies = function () {
+            model.battles.forEach(function (battle) {
+                model.armiesPlayer1.push([]);
+                model.armiesPlayer2.push([]);
+                model.reinforcementsPlayer1.push([]);
+                model.reinforcementsPlayer2.push([]);
+            });
+            model.trainEvents.forEach(function (unit) {
+                for (var i = 0; i < model.battles.length; i++) {
+                    if (unit["TimeSinceStartMilliseconds"] <= (model.battles[i])["start"]) {
+                        classifyArmy(unit, i);
+                        i = 1000;
+                    }
+                    else {
+                        if (unit["TimeSinceStartMilliseconds"] <= (model.battles[i]["finish"])) {
+                            classifyReinforcement(unit, i);
+                            i = 1000;
+                        }
+                    }
+                }
+            });
+        };
+
         // Adds the game object data to the unit and splits the armies into players.
-        var classifyArmy = function (unit) {
+        var classifyArmy = function (unit, i) {
             unit = populateUnitData(unit);
             if (unit["PlayerIndex"] === 1) {
-                newArmyPlayer1.push(unit);
+                //newArmyPlayer1.push(unit);
+                model.armiesPlayer1[i].push(unit);
             }
             if (unit["PlayerIndex"] === 2) {
-                newArmyPlayer2.push(unit);
+                //newArmyPlayer2.push(unit);
+                model.armiesPlayer2[i].push(unit);
             }
         };
 
         // Adds the game object data to the unit and splits the reinforcements into players.
-        var classifyReinforcement = function (unit) {
+        var classifyReinforcement = function (unit, i) {
             unit = populateUnitData(unit);
             if (unit["PlayerIndex"] === 1) {
-                newReinforcementsPlayer1.push(unit);
+                //newReinforcementsPlayer1.push(unit);
+                model.reinforcementsPlayer1[i].push(unit);
             }
             if (unit["PlayerIndex"] === 2) {
-                newReinforcementsPlayer2.push(unit);
+                //newReinforcementsPlayer2.push(unit);
+                model.reinforcementsPlayer2[i].push(unit);
             }
         };
 
@@ -538,7 +577,6 @@
 
         model.showCharts = function (battle) {
             battle.chart = !battle.chart;
-            //$scope.$digest();
         };
 
         // Removes a battle from the arrays, this allows the user to clean up undesired battles.
@@ -594,6 +632,29 @@
             }).then((clickedItem) => {
                 ///clickedItem && console.log(clickedItem.SquadId + "clicked!");
             })
+        };
+
+        // This is a callback function that executes whenever the battle component finishes rendering.
+        model.display = function () {
+            $timeout(function () {
+                model.disableSelecting = false;
+            }, 0);
+        };
+
+        model.switchSmall = function () {
+            if (model.small === true) {
+                model.disableSelecting = true;
+            }
+        };
+        model.switchMedium = function () {
+            if (model.medium === true) {
+                model.disableSelecting = true;
+            }
+        };
+        model.switchLarge = function () {
+            if (model.large === true) {
+                model.disableSelecting = true;
+            }
         };
     }
 }());
