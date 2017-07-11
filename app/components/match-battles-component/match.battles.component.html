@@ -55,7 +55,7 @@
                             <!-- Leader Tile -->
                             <md-grid-tile class="grid-tile" ng-style="{ 'background' : (model.battles[$index].winner === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                                 md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="3" md-rowspan-xs="1">
-                                <md-tooltip md-direction="top">The color of the background shows victory (green) or defeat (red)</md-tooltip>
+                                <md-tooltip md-direction="top">{{(model.battles[$index].winner === 1) ? 'VICTORY' : 'DEFEAT'}}</md-tooltip>
                                 <div class="leader-div">
                                     <img ng-src="{{::model.selected.leader1.mediaUrl}}" alt="{{::model.selected.leader1.name}}" class="leader" />
                                 </div>
@@ -169,7 +169,7 @@
                             <!-- Leader Tile -->
                             <md-grid-tile class="grid-tile" ng-style="{ 'background' : (model.battles[$index].winner === 2) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                                 md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="3" md-rowspan-xs="1">
-                                <md-tooltip md-direction="top">The color of the background shows victory (green) or defeat (red)</md-tooltip>
+                                <md-tooltip md-direction="top">{{(model.battles[$index].winner === 2) ? 'VICTORY' : 'DEFEAT'}}</md-tooltip>
                                 <div class="leader-div">
                                     <img ng-src="{{::model.selected.leader2.mediaUrl}}" alt="{{::model.selected.leader2.name}}" class="leader" />
                                 </div>

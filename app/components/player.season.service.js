@@ -43,19 +43,28 @@
 
         //---------------PLAYER SEASON----------------------//
         var getSeason = function () {
-            sleep(1000);
-            resourceSeasons.query()
-                .$promise.then(function (data) {
-                    createSeason(data);
-                    if (typeof (Storage) !== "undefined") {
-                        // Code for localStorage/sessionStorage.
-                        localStorage.setItem("season", LZString.compressToUTF16(JSON.stringify(season)));
-                    }
-                    else {
-                        //console.log("No storage found...");
-                    }
-                    getCSRDesignations();
-                });
+            if (!localStorage.getItem("season")) {
+                sleep(1000);
+                resourceSeasons.query()
+                    .$promise.then(function (data) {
+                        createSeason(data);
+                        if (typeof (Storage) !== "undefined") {
+                            // Code for localStorage/sessionStorage.
+                            localStorage.setItem("season", LZString.compressToUTF16(JSON.stringify(season)));
+                        }
+                        else {
+                            //console.log("No storage found...");
+                        }
+                        getCSRDesignations();
+                    })
+                    .catch(function (error) {
+                        alert("Could not contact the HALO API Season services.")
+                        console.log(error);
+                    });
+            }
+            else {
+                season = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("season")));
+            }
         };
 
         function sleep(delay) {
@@ -84,7 +93,6 @@
 
         var designations = [];
         var getCSRDesignations = function () {
-
             if (!localStorage.getItem("designations")) {
                 resourceCSRDesignations.query()
                     .$promise.then(function (data) {
@@ -98,6 +106,10 @@
                         else {
                             //console.log("No storage found...");
                         }
+                    })
+                    .catch(function (error) {
+                        alert("Could not contact the HALO API Designation services.")
+                        console.log(error);
                     });
             }
             else {
@@ -107,7 +119,6 @@
         };
 
         var createDesignations = function (data) {
-
             var contentItemDesignations = data["ContentItems"];
 
             for (var i = 0; i < contentItemDesignations.length; i++) {
@@ -154,6 +165,10 @@
                             //console.log("No storage found...");
                         }
                         return getPlayerSeason(player);
+                    })
+                    .catch(function (error) {
+                        alert("Could not contact the HALO API Season services.")
+                        console.log(error);
                     });
             }
             else {
@@ -168,6 +183,7 @@
         };
 
         var createPlayerSeason = function (playerSeasonData) {
+            getCSRDesignations();
             var playlistData = (playerSeasonData["RankedPlaylistStats"]).find(function (playlist) {
                 return playlist.PlaylistId === "532bfd6c-3db4-45b7-a010-11460b862be6";
             });
@@ -207,8 +223,7 @@
 
         // Searches the game maps array for a specific map to get the map's metadata.
         function searchPlayerSeason(player) {
-            var pss = getPlayerSeasonStats(player);
-            return pss;
+            return getPlayerSeasonStats(player);
         };
 
         // Requests the Halo API for the season data to store it in cache. 

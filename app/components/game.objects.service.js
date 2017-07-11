@@ -43,8 +43,20 @@
                                         } else {
                                             //console.log("No storage found...");
                                         }
+                                    })
+                                    .catch(function (error) {
+                                        alert("Could not contact the HALO API Game Objects Metadata services.")
+                                        console.log(error);
                                     });
+                            })
+                            .catch(function (error) {
+                                alert("Could not contact the HALO API Game Objects Metadata services.")
+                                console.log(error);
                             });
+                    })
+                    .catch(function (error) {
+                        alert("Could not contact the HALO API Game Objects Metadata services.")
+                        console.log(error);
                     });
             }
             else {

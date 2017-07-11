@@ -32,6 +32,10 @@
                         } else {
                             //console.log("No storage found...");
                         }
+                    })
+                    .catch(function (error) {
+                        alert("Could not contact the HALO API Leader Metadata services.")
+                        console.log(error);
                     });
             }
             else {

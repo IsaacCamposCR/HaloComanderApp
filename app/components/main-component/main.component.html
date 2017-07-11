@@ -1,4 +1,5 @@
 <div layout="row">
+    <div ng-init="model.init()"></div>
     <div layout="vertical">
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
             <match-history-component selected="model.selected" disable-paging="model.disablePaging" disable-selecting="model.disableSelecting"
@@ -19,11 +20,11 @@
                         </md-button>
                     </md-fab-trigger>
                     <md-fab-actions>
-                        <md-button class="md-fab md-raised md-mini" ng-click="model.showInstructions($event)">
+                        <md-button class="md-fab md-raised md-mini" ng-click="model.showInstructions($event)" aria-label="Instructions">
                             <ng-md-icon icon="gamepad"></ng-md-icon>
                             <md-tooltip md-direction="left">Instructions</md-tooltip>
                         </md-button>
-                        <md-button class="md-fab md-raised md-mini" ng-click="model.showAbout($event)">
+                        <md-button class="md-fab md-raised md-mini" ng-click="model.showAbout($event)" aria-label="About">
                             <ng-md-icon icon="more_horiz"></ng-md-icon>
                             <md-tooltip md-direction="left">About</md-tooltip>
                         </md-button>
@@ -35,7 +36,7 @@
         <md-content flex id="content">
             <div ng-show="model.selected">
                 <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
-                    <md-tab label="Statistics">
+                    <md-tab label="Summary">
                         <div>
                             <match-statistics-component selected="model.selected" disable-selecting="model.disableSelecting" />
                         </div>

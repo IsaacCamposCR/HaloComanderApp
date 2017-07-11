@@ -102,6 +102,10 @@
                     model.matchResult.outcome2 = outcome2;
                     model.matchResult.units2 = units2;
                     getPlayerSeasons();
+                })
+                .catch(function (error) {
+                    alert("Could not contact the HALO API Match Result services.")
+                    console.log(error);
                 });
         };
 
@@ -109,10 +113,18 @@
             playerSeasonService.find(model.selected.player1).$promise
                 .then(function (playerSeasonData) {
                     model.matchResult.season1 = playerSeasonService.create(playerSeasonData);
+                })
+                .catch(function (error) {
+                    alert("Could not contact the HALO API Player Season services.")
+                    console.log(error);
                 });
             playerSeasonService.find(model.selected.player2).$promise
                 .then(function (playerSeasonData) {
                     model.matchResult.season2 = playerSeasonService.create(playerSeasonData);
+                })
+                .catch(function (error) {
+                    alert("Could not contact the HALO API Player Season services.")
+                    console.log(error);
                 });
 
         };

@@ -77,6 +77,10 @@
                         else {
                             getPlayerMatchHistoryBackwards();
                         }
+                    })
+                    .catch(function (error) {
+                        alert("Could not contact the HALO API Maps Metadata services.")
+                        console.log(error);
                     });
             }
             else {
@@ -157,6 +161,10 @@
                         model.disablePaging = false;
                         model.disableSelecting = false;
                     }
+                })
+                .catch(function (error) {
+                    alert("Could not contact the HALO API Match History services.")
+                    console.log(error);
                 });
         };
 
@@ -180,6 +188,10 @@
                         model.pageFinish = model.pageFinish;
                         model.start = model.pageFinish;
                     }
+                })
+                .catch(function (error) {
+                    alert("Could not contact the HALO API Match History services.")
+                    console.log(error);
                 });
         };
 

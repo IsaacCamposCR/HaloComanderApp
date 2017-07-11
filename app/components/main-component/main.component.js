@@ -33,6 +33,14 @@
             }
         };
 
+        model.init = function () {
+            if (needsCacheRefreshing() === true) {
+                gameLeadersService.store();
+                gameObjectsService.store();
+                playerSeasonService.store();
+            }
+        };
+
         var needsCacheRefreshing = function () {
             if (!localStorage.getItem("lastRefresh")) {
                 if (typeof (Storage) !== "undefined") {
@@ -68,7 +76,7 @@
 
             $mdDialog.show({
                 controller: DialogController,
-                template: "<md-dialog><tutorial-component style='margin:3%'></tutorial-component></md-dialog>",
+                template: "<md-dialog style='background: #E0E0E0;'><md-toolbar><div class='md-toolbar-tools'><h2>Instructions unclear...</h2><span flex></span><md-button class='md-icon-button' ng-click='cancel()' aria-label='Close'><ng-md-icon icon='close'></ng-md-icon></md-button></div></md-toolbar><md-dialog-content><div class='md-dialog-content'><tutorial-component></tutorial-component></div></md-dialog-content></md-dialog>",
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
@@ -81,7 +89,7 @@
 
             $mdDialog.show({
                 controller: DialogController,
-                template: "<md-dialog><welcome-component style='margin:3%;margin-bottom:1%'></welcome-component><about-component style='margin:3%;margin-top:1%'></about-component></md-dialog>",
+                template: "<md-dialog style='background: #E0E0E0;'><md-toolbar><div class='md-toolbar-tools'><h2>Welcome!</h2><span flex></span><md-button class='md-icon-button' ng-click='cancel()' aria-label='Close'><ng-md-icon icon='close'></ng-md-icon></md-button></div></md-toolbar><md-dialog-content><div class='md-dialog-content'><welcome-component style='margin:3%;margin-bottom:1%'></welcome-component><about-component style='margin:3%;margin-top:1%'></about-component></div></md-dialog-content></md-dialog>",
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,

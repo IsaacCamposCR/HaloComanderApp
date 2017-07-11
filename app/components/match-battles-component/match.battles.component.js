@@ -118,6 +118,10 @@
                         model.disablePaging = false;
                     }
                     sleep(1000);
+                })
+                .catch(function (error) {
+                    alert("Could not contact the HALO API Match Events services.")
+                    console.log(error);
                 });
 
             // Takes the application relevant data from the Events API.
