@@ -12,15 +12,84 @@
     });
 
     module.config(function ($mdThemingProvider) {
+        $mdThemingProvider.definePalette('amazingPaletteName', {
+            '50': 'e5e5e5',
+            '100': 'bebebe',
+            '200': '939393',
+            '300': '686868',
+            '400': '474747',
+            '500': '272727',
+            '600': '232323',
+            '700': '1d1d1d',
+            '800': '171717',
+            '900': '0e0e0e',
+            'A100': 'eb6969',
+            'A200': 'e53c3c',
+            'A400': 'ee0000',
+            'A700': 'd40000',
+            'contrastDefaultColor': 'light',
+            'contrastDarkColors': [
+                '50',
+                '100',
+                '200',
+                'A100'
+            ],
+            'contrastLightColors': [
+                '300',
+                '400',
+                '500',
+                '600',
+                '700',
+                '800',
+                '900',
+                'A200',
+                'A400',
+                'A700'
+            ]
+        });
+
         $mdThemingProvider.theme('default')
-            .primaryPalette("deep-purple")
-            .accentPalette("orange")
-            .warnPalette("deep-orange");
-        $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
+            .primaryPalette('amazingPaletteName')
+            .accentPalette("amazingPaletteName")
+            .warnPalette("amazingPaletteName");
     });
+
 
     function mainController($mdSidenav, $mdDialog, $mdMedia, gameLeadersService, gameObjectsService, playerSeasonService) {
         var model = this;
+
+        model.example = [
+            {
+                PopulationCost: 5,
+                type: 'UNIT',
+                SquadId: '',
+                affinities: {
+                    air: 'Poor',
+                    vehicle: 'Good',
+                    infantry: 'Neutral'
+                }
+            },
+            {
+                PopulationCost: 4,
+                type: 'UNIT',
+                SquadId: '',
+                affinities: {
+                    air: 'NotApplicable',
+                    vehicle: 'NotApplicable',
+                    infantry: 'NotApplicable'
+                }
+            },
+            {
+                PopulationCost: 5,
+                type: 'UNIT',
+                SquadId: '',
+                affinities: {
+                    air: 'NotApplicable',
+                    vehicle: 'Good',
+                    infantry: 'Neutral'
+                }
+            }
+        ];
 
         model.$onInit = function () {
             model.tutorial = false;

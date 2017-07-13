@@ -1,7 +1,6 @@
 html, body {
     font-family: "Roboto", sans-serif;
     font-size: 14px;
-    height:100%;
     margin:0px;
     padding:0px;
     background: #E0E0E0;
@@ -35,10 +34,7 @@ md-sidenav md-list {
 }
 
 ng-md-icon {
-    fill: currentColor;
     vertical-align: middle;
-    display: inline-block;
-    line-height: 1;
 }
 
 md-content {
@@ -191,4 +187,55 @@ span.name {
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     margin: 0 !important;
     background: inherit;
+}
+
+.main-background{    
+    position:relative;
+    background:url('http://www.allthingsxbox.net/wp-content/uploads/2017/02/Halo-Wars-2-review.jpeg');
+    background-size: cover;
+    width:100%; min-height: auto; overflow:hidden;
+    margin:0%;
+}
+
+.main-background:after{
+    border-radius: 1%;
+    content:'';
+    background:white;
+    position:absolute;
+    top:0;
+    left:0;
+    opacity:0.5;
+    width:50%; height:75%;
+    margin: 5% 25% 12.5% 12.5%;
+}
+
+.main-frame{
+    color:white;
+    position:relative;
+    z-index:1;    
+    width:45%;
+    margin: 7% 23% 25% 15%;
+}
+
+.main-mobile-background {
+    position:relative;
+    overflow:hidden;
+    height:100%
+}
+
+.main-mobile-background-img {
+    zoom:3;
+    transform: translateZ(0);
+    -webkit-transform: scale(3);
+    -moz-transform:scale(3);
+    height: auto;
+    width: 100%;
+    top: 30%;
+    left: 25%;
+    position: absolute;
+}
+
+.main-toolbar {
+    background-color: black;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(50,50,50,.5) 5px, rgba(50,50,50,.5) 10px);
 }

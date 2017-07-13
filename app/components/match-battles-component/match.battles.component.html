@@ -214,13 +214,11 @@
                             <!-- Army Units Tile -->
                             <md-grid-tile class="grid-tile" ng-style="{background: unit.background}" ng-repeat="unit in model.analizedArmiesPlayer2[$index] | orderBy: 'name' | limitTo:model.analizedArmiesPlayer2[$index].length track by unit.InstanceId"
                                 md-rowspan="{{::unit.span}}" md-colspan="{{::unit.span}}" md-colspan-sm="{{::unit.span}}" md-colspan-xs="{{::unit.span}}">
-                                <div>
-                                    <md-tooltip md-direction="top">{{::unit.name}} {{::(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
-                                    <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{::unit.mediaUrl}}" alt="{{::unit.SquadId}}"
-                                        class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
-                                    />
-                                    <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
-                                </div>
+                                <md-tooltip md-direction="top">{{::unit.name}} {{::(unit.killed) ? 'KILLED' : ''}}</md-tooltip>
+                                <img ng-if="unit.mediaUrl" ng-click="model.selectUnit($event, unit)" ng-src="{{::unit.mediaUrl}}" alt="{{::unit.SquadId}}"
+                                    class="unit-icon" ng-style="{ '-webkit-filter' : (unit.killed) ? 'sepia(100%)' : 'sepia(0%)' }"
+                                />
+                                <ng-md-icon ng-click="model.selectUnit($event, unit)" ng-if="!unit.mediaUrl" icon="sentiment_very_dissatisfied" style="margin-bottom:25px;height:35px;width:35px"></ng-md-icon>
                             </md-grid-tile>
 
                         </md-grid-list>

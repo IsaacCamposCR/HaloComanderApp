@@ -2,7 +2,7 @@
     <md-grid-list md-cols="6" md-cols-sm="6" md-cols-md="12" md-cols-gt-md="12" md-row-height-gt-md="1:1" md-row-height="1:1"
         md-gutter="5px" md-gutter-gt-sm="3px">
 
-        <md-grid-tile style="background: white;" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="4">
+        <md-grid-tile class="grid-tile" style="background: white;" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="4">
 
             <div class="resource-text">
                 <img style="margin:-6%" ng-src="{{Item.unit.mediaUrl}}" alt="{{unit.SquadId}}" width="125" height="125" />
@@ -19,7 +19,7 @@
             </div>
         </md-grid-tile>
 
-        <md-grid-tile style="background: #F44336;" ng-repeat="participant in Item.unit.Killers" md-rowspan="1" md-colspan="1" md-colspan-sm="1"
+        <md-grid-tile class="grid-tile" style="background: #F44336;" ng-repeat="participant in Item.unit.Killers" md-rowspan="1" md-colspan="1" md-colspan-sm="1"
             md-colspan-xs="1">
             <div>
                 <img ng-src="{{participant.mediaUrl}}" alt="{{participant.name}}" class="unit-icon" />
