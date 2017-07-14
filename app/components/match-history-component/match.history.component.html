@@ -19,10 +19,13 @@
                         </md-input-container>
 
                         <div class="md-actions">
-                            <md-button ng-disabled="!model.gamertagForm.$valid" class="md-accent md-raised date-row" type="submit" class="date-row"
-                                aria-label="GO">
+                            <md-button ng-disabled="!model.gamertagForm.$valid" class="md-accent md-raised date-row" type="submit" class="date-row" aria-label="GO">
                                 <ng-md-icon icon="search"></ng-md-icon>
                             </md-button>
+
+                            <div layout="row" layout-sm="column" layout-align="center center" aria-label="wait" style="height:70px;" ng-show="model.disableSelecting">
+                                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                            </div>
                         </div>
                     </div>
                 </div>

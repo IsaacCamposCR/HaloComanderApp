@@ -117,7 +117,7 @@
                         model.disableSelecting = false;
                         model.disablePaging = false;
                     }
-                    sleep(1000);
+                    //sleep(1000);
                 })
                 .catch(function (error) {
                     alert("Could not contact the HALO API Match Events services.")

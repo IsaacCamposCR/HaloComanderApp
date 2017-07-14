@@ -1,9 +1,8 @@
 <div>
     <p class="md-body-2 justify">
-        The Halo Wars 2 Commander App is your personal Halo Wars 2 companion and provides you with the best detailed information
-        on your games for you to improve your skils. Get crucial insights on every match and find out where you shine and
-        where you need to improve on. The app is currently in BETA phase and supports only Halo Wars 2 on the 1v1 Ranked
-        Playlist. More gamemodes can be considered for the future such as Blitz and Skirmish.
+        The Halo Wars 2 Battle Tracker App is your personal Halo Wars 2 companion and provides you with detailed information on your
+        games for you to improve your skils. Get crucial insights on every match and find out where you shine and where you
+        need to improve on.
     </p>
     <p class="md-body-2">
         <div flex>
@@ -13,38 +12,38 @@
                         <img ng-src="/lib/tutorial/sof.jpg" class="md-avatar" alt="-" />
                         <div class="md-list-item-text" layout="column">
                             <h3 class="wrap">Paginated List of all your 1v1 matches.</h3>
-                            <h4 class="wrap">Type in your gamertag to see all your 1v1 matches.</h4>
-                            <p class="wrap">You can also take a look at other people's games!</p>
+                            <div flex>
+                                <md-button style="background:white;color:#03a9f4;" layout="row">
+                                    <div flex="30">
+                                        <img src="https://content.halocdn.com/media/Default/games/halo-wars-2/maps/map-frontier-4116c5c6e92e41e1907e3b793252d4b1.jpg"
+                                            alt="" class="avatar" />
+                                    </div>
+                                    <div flex>
+                                        <p class="list-details"><b>VICTORY on VAULT</b></p>
+                                        <p class="list-details">LEADER: THE ARBITER</p>
+                                        <p class="list-details">JUL 13, 2017 5:35:14 PM</p>
+                                    </div>
+                                </md-button>
+                            </div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line">
                         <img ng-src="/lib/tutorial/sof.jpg" class="md-avatar" alt="-" />
                         <div class="md-list-item-text" layout="column">
-                            <h3 class="wrap">
-                                Summary of each match.
-                            </h3>
-                            <h4 class="wrap">Data includes map, leaders, victors, total units built/lost/destroyed by unit type.</h4>
-                            <p class="wrap">You can see which of your units never survive or which units you had trouble getting rid of!
-                            </p>
-                        </div>
-                    </md-list-item>
-                    <md-divider></md-divider>
-                    <md-list-item class="md-3-line">
-                        <img ng-src="/lib/tutorial/sof.jpg" class="md-avatar" alt="-" />
-                        <div class="md-list-item-text" layout="column">
-                            <h3 class="wrap">Detailed performance of each match in the form of Battles.</h3>
-                            <h4 class="wrap">Battles can be classified by small, medium or large.</h4>
-                            <p class="wrap">Battles contain beautiful charts to display your army composition as well as your army's strengths
-                                and weaknesses.</p>
-                        </div>
-                    </md-list-item>
-                    <md-divider></md-divider>
-                    <md-list-item class="md-3-line">
-                        <img ng-src="/lib/tutorial/sof.jpg" class="md-avatar" alt="-" />
-                        <div class="md-list-item-text" layout="column">
-                            <h3 class="wrap">Filter out battles by size using the controls at the top of the Battles tab.</h3>
-                            <h4 class="wrap">You can also remove specific battles by clicking the Remove button on its card.</h4>
+                            <h3 class="wrap">Detailed performance on each Battle.</h3>
+                            <div style="width:60%;padding:2%">
+                                <md-grid-list md-cols="4" md-cols-xs="6" md-cols-sm="8" md-row-height="1:1" md-gutter-gt-sm="3px">
+                                    <md-grid-tile class="grid-tile" style="background: rgb(200,200,200)" md-colspan="2" md-rowspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                                        <md-tooltip md-direction="right">INSIGHT CHARTS</md-tooltip>
+                                        <battle-chart-component style="top:0;left:0;" type="true" army="model.example"></battle-chart-component>
+                                    </md-grid-tile>
+
+                                    <md-grid-tile class="grid-tile" style="background: rgb(100,100,100)" md-colspan="2" md-rowspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                                        <battle-chart-component type="false" army="model.example"></battle-chart-component>
+                                    </md-grid-tile>
+                                </md-grid-list>
+                            </div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
@@ -52,27 +51,67 @@
                         <img ng-src="/lib/tutorial/sof.jpg" class="md-avatar" alt="-" />
                         <div class="md-list-item-text" layout="column">
                             <h3 class="wrap">Each Battle contains detailed information on costs, units and kills.</h3>
-                            <h4 class="wrap">Battles show your current Battle as well as reinforcements (units built in during the duration
-                                of a battle).</h4>
-                            <p class="wrap">
-                                You can see which player won each battle and see how much resources your army cost as well as how much resources you lost.
-                            </p>
+                            <div style="width:60%;padding:2%">
+                                <md-grid-list md-cols="4" md-cols-xs="6" md-cols-sm="8" md-row-height="1:1" md-gutter-gt-sm="3px">
+
+                                    <md-grid-tile class="grid-tile" style="background:#b2ff59" md-rowspan="1" md-colspan="4" md-colspan-sm="2" md-colspan-xs="3"
+                                        md-rowspan-xs="1">
+                                        <md-tooltip md-direction="right">LEADER AND PLAYER INFO</md-tooltip>
+                                        <div class="leader-div">
+                                            <img ng-src="https://content.halocdn.com/media/Default/games/halo-wars-2/leaders/arbiter-ripa-moramee-cropped-ed512f910d0b4f9d9563c94bda2f9b70.png"
+                                                alt="" class="leader" />
+                                        </div>
+                                        <md-grid-tile-footer class="leader-tile-footer">
+                                            <h3 style="color:white;padding-left:4%;width:100%">AwesomePlayer</h3>
+                                        </md-grid-tile-footer>
+                                    </md-grid-tile>
+
+                                    <md-grid-tile class="grid-tile" style="background: white;" md-rowspan="2" md-colspan="4" md-colspan-sm="3" md-colspan-xs="3">
+                                        <md-tooltip md-direction="right">ARMY RESOURCE COST</md-tooltip>
+                                        <div class="resource-text">
+                                            <h3>ARMY</h3>
+                                            <h3>18 UNITS</h3>
+                                        </div>
+                                        <div class="resource-vertical-divider">
+                                            <div class="resource-data">
+                                                <ng-md-icon icon="layers"></ng-md-icon> 2735/750
+                                                <br/>
+                                                <ng-md-icon icon="flash_on"></ng-md-icon> 480/40
+                                                <br/>
+                                                <ng-md-icon icon="group"></ng-md-icon> 42/13
+                                            </div>
+                                        </div>
+                                    </md-grid-tile>
+                                </md-grid-list>
+                            </div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line">
                         <img ng-src="/lib/tutorial/sof.jpg" class="md-avatar" alt="-" />
                         <div class="md-list-item-text" layout="column">
-                            <h3 class="wrap">Check detailed information on each unit.</h3>
-                            <h4 class="wrap">You can see individual costs, as well as indicators for Living and Dead units.</h4>
-                            <p class="wrap">By clicking a specific unit of interest you can see which units killed it.</p>
-                        </div>
-                    </md-list-item>
-                    <md-divider></md-divider>
-                    <md-list-item class="md-3-line">
-                        <img ng-src="/lib/tutorial/sof.jpg" class="md-avatar" alt="-" />
-                        <div class="md-list-item-text" layout="column">
-                            <h3 class="wrap">Multi-platform support (PC, Xbox).</h3>
+                            <h3 class="wrap">Check detailed information on units.</h3>
+                            <div style="width:60%;padding:2%">
+                                <md-grid-list md-cols="3" md-cols-xs="6" md-cols-sm="8" md-row-height="1:1" md-gutter-gt-sm="3px">
+                                    <md-grid-tile class="grid-tile" style="background:rgb(50,50,75)" md-rowspan="2" md-colspan="2">
+                                        <md-tooltip md-direction="right">SUPER UNITS</md-tooltip>
+                                        <img src="https://content.halocdn.com/media/Default/games/halo-wars-2/unit-icons/build/cov_veh_scarab_01_icon-b5ad53ae5ac846a2ac0dde74edcb5227.png"
+                                            alt="" class="unit-icon" />
+                                    </md-grid-tile>
+
+                                    <md-grid-tile class="grid-tile" style="background:#80d8ff" md-rowspan="1" md-colspan="1">
+                                        <md-tooltip md-direction="right">BLUE PLAYER UNITS</md-tooltip>
+                                        <img src="https://content.halocdn.com/media/Default/games/halo-wars-2/unit-icons/build/cov_air_shroud_01_icon-f3b2deb2677a423dbb66a0881a93c0e2.png"
+                                            alt="" class="unit-icon" />
+                                    </md-grid-tile>
+
+                                    <md-grid-tile class="grid-tile" style="background:#ff8a80" md-rowspan="1" md-colspan="1">
+                                        <md-tooltip md-direction="right">RED PLAYER UNITS</md-tooltip>
+                                        <img src="https://content.halocdn.com/media/Default/games/halo-wars-2/unit-icons/build/unsc_veh_scorpion_01_icon-d6badab7f8a941188f8153d24df1102d.png"
+                                            alt="" class="unit-icon" />
+                                    </md-grid-tile>
+                                </md-grid-list>
+                            </div>
                         </div>
                     </md-list-item>
                 </md-list>

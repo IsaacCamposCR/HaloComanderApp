@@ -12,7 +12,7 @@
                 <md-button hide-gt-md class="md-icon-button" ng-click="model.toggleSideNav()" aria-label="Menu">
                     <ng-md-icon icon="menu"></ng-md-icon>
                 </md-button>
-                <img src="/lib/logoblack.png" alt="" style="height:45px;width:auto;filter: invert(100%);">
+                <img src="/lib/logoblack.png" alt="" style="height:40px;width:auto;filter: invert(100%);">
                 <h1 flex md-truncate>HW2C</h1>
                 <!-- Desktop Buttons -->
                 <md-button class="md-icon-button" aria-label="Favorite" ng-click="model.showInstructions($event)" hide-xs hide-sm>
@@ -44,7 +44,7 @@
             </div>
         </md-toolbar>
 
-        <div flex id="content" layout-fill style="padding:0% !important">
+        <md-content flex id="content" layout-fill style="padding:0% !important">
             <div ng-show="model.selected" layout-padding>
                 <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
                     <md-tab label="Summary">
@@ -64,18 +64,29 @@
             <div ng-if="!model.selected" hide-sm hide-xs>
                 <div class="main-background">
                     <div class="main-frame">
+                        <div style="text-align:center">
+                            <img src="/lib/logoblack.png" alt="" style="height:75px;width:auto;filter: invert(100%);">
+                            <h1 style="color:white;font:bold">BATTLE TRACKER</h1>
+                            <h3 style="color:white;font:caption">Halo Wars 2 stat tracker on the Go</h3>
+                        </div>
                         <welcome-component></welcome-component>
                     </div>
                 </div>
-                <about-component></about-component>
             </div>
 
             <div ng-if="!model.selected" class="main-mobile-background" hide-gt-sm>
                 <img class="main-mobile-background-img" src="http://www.allthingsxbox.net/wp-content/uploads/2017/02/Halo-Wars-2-review.jpeg"
                     alt="">
 
-                <div style="padding: 3% 0% 0% 3%;width:60%">
-                    <md-grid-list md-cols="3" md-cols-xs="3" md-cols-sm="5" md-row-height="1:1" md-gutter-gt-sm="3px">
+                <div style="border: 3px solid white;border-radius:20px;position:relative;margin: 5%;text-align:center;height:40%">
+                    <img src="/lib/logoblack.png" alt="" style="height:75px;width:auto;filter: invert(100%);">
+                    <h1 style="color:white;font:bold">BATTLE TRACKER</h1>
+                    <h3 style="color:white;font:caption">Halo Wars 2 stat tracker on the Go</h3>
+                </div>
+
+                <div style="padding: 0% 3% 0% 3%;width:100%">
+                    <md-grid-list md-cols="6" md-cols-xs="6" md-cols-sm="8" md-row-height="1:1" md-gutter-gt-sm="3px">
+
                         <md-grid-tile class="grid-tile" style="background:#b2ff59" md-colspan-sm="2" md-colspan-xs="3" md-rowspan-xs="1">
                             <md-tooltip md-direction="right">LEADER AND PLAYER INFO</md-tooltip>
                             <div class="leader-div">
@@ -85,23 +96,6 @@
                             <md-grid-tile-footer class="leader-tile-footer">
                                 <h3>xXAwesomePlayerXx</h3>
                             </md-grid-tile-footer>
-                        </md-grid-tile>
-
-                        <md-grid-tile class="grid-tile" style="background: white;" md-colspan-sm="3" md-colspan-xs="3">
-                            <md-tooltip md-direction="right">ARMY STATS</md-tooltip>
-                            <div class="resource-text">
-                                <h3>ARMY</h3>
-                                <h3>11 UNITS</h3>
-                            </div>
-                            <div class="resource-vertical-divider">
-                                <div class="resource-data">
-                                    <ng-md-icon icon="layers"></ng-md-icon> 2300/735
-                                    <br/>
-                                    <ng-md-icon icon="flash_on"></ng-md-icon> 335/45
-                                    <br/>
-                                    <ng-md-icon icon="group"></ng-md-icon> 27/9
-                                </div>
-                            </div>
                         </md-grid-tile>
 
                         <md-grid-tile class="grid-tile" style="background:#FFC107" md-rowspan="1" md-colspan="1">
@@ -132,9 +126,13 @@
                             <img src="https://content.halocdn.com/media/Default/games/halo-wars-2/unit-icons/build/unsc_veh_scorpion_01_icon-d6badab7f8a941188f8153d24df1102d.png"
                                 alt="" class="unit-icon" />
                         </md-grid-tile>
+
+                        <md-grid-tile class="grid-tile" style="background: rgb(100,100,100)" md-rowspan="2" md-colspan-sm="2" md-colspan-xs="2">
+                            <battle-chart-component type="false" army="model.example"></battle-chart-component>
+                        </md-grid-tile>
                     </md-grid-list>
                 </div>
             </div>
-        </div>
+        </md-content>
     </div>
 </div>

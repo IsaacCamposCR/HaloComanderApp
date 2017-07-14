@@ -40,6 +40,7 @@
         model.affinityLabels = ["AIR", "INF", "VEH", "SUP"];
 
         model.affinityOptions = {
+            maintainAspectRatio: true,
             responsive: false,
             animation: false,
             scale: {
@@ -57,6 +58,7 @@
         };
 
         model.categoryOptions = {
+            maintainAspectRatio: true,
             animation: false,
             responsive: false,
             showTooltips: false,
