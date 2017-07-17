@@ -8,6 +8,7 @@ var cors = require('express-cors');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(rootPath + "/app"));
+app.use(express.static(rootPath + "/build"));
 
 app.use(cors({
     allowedOrigins: [

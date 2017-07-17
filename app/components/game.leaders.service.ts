@@ -4,50 +4,54 @@
 
     var module = angular.module("haloCommander");
 
-    module.factory("gameLeadersService", function ($resource) {
+    module.service("gameLeadersService", class GameLeadersService {
 
-        var resourceLeaders = $resource("https://www.haloapi.com/metadata/hw2/leaders",
-            {},
-            {
-                query: {
-                    method: "GET",
-                    headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
-                    isArray: false
-                }
-            });
+        resourceLeaders: any;
+
+        constructor($resource) {
+            this.resourceLeaders = $resource("https://www.haloapi.com/metadata/hw2/leaders",
+                {},
+                {
+                    query: {
+                        method: "GET",
+                        headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
+                        isArray: false
+                    }
+                });;
+        }
 
         //---------------GAME LEADERS----------------------//
-        var gameLeaders = [];
-        var getLeaders = function () {
+        gameLeaders: Array<any> = [];
+        getLeaders() {
             if (!localStorage.getItem("gameLeaders")) {
                 //console.log("No stored leaders found. Requesting...");
-                resourceLeaders.query()
-                    .$promise.then(function (leaders) {
+                this.resourceLeaders.query()
+                    .$promise.then((leaders) => {
                         //console.log("Req API");
-                        createGameLeaders(leaders);
+                        this.createGameLeaders(leaders);
                         if (typeof (Storage) !== "undefined") {
                             // Code for localStorage/sessionStorage.
-                            localStorage.setItem("gameLeaders", LZString.compressToUTF16(JSON.stringify(gameLeaders)));
+                            localStorage.setItem("gameLeaders", LZString.compressToUTF16(JSON.stringify(this.gameLeaders)));
                             //console.log("stored", gameLeaders);
                         } else {
                             //console.log("No storage found...");
                         }
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         alert("Could not contact the HALO API Leader Metadata services.")
                         console.log(error);
                     });
             }
             else {
-                gameLeaders = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameLeaders")));
+                this.gameLeaders = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameLeaders")));
                 //console.log("Stored leaders found", gameLeaders);
             }
         };
 
-        var createGameLeaders = function (leaders) {
+        createGameLeaders(leaders) {
             var contentItems = leaders["ContentItems"];
 
-            contentItems.forEach(function (gameLeader) {
+            contentItems.forEach((gameLeader) => {
                 var view = gameLeader["View"];
                 var hw2Leader = view["HW2Leader"];
                 var id = hw2Leader["Id"];
@@ -60,7 +64,7 @@
                 var media = viewImage ? viewImage["Media"] : null;
                 var mediaUrl = media ? media["MediaUrl"] : null;
 
-                gameLeaders.push({
+                this.gameLeaders.push({
                     name: name,
                     id: id,
                     mediaUrl: mediaUrl
@@ -69,26 +73,21 @@
         }
 
         // Searches the game maps array for a specific map to get the map's metadata.
-        function searchGameLeader(id) {
-            storeGameLeaders();
-            for (var i = 0; i < gameLeaders.length; i++) {
-                if (gameLeaders[i].id === id) {
-                    return gameLeaders[i];
+        find(id) {
+            this.store();
+            for (var i = 0; i < this.gameLeaders.length; i++) {
+                if (this.gameLeaders[i].id === id) {
+                    return this.gameLeaders[i];
                 }
             }
-        };
+        }
 
         // Requests the Halo API for the leader data to store it in cache.
-        function storeGameLeaders() {
-            if (!gameLeaders || gameLeaders.length === 0) {
-                getLeaders();
+        store() {
+            if (!this.gameLeaders || this.gameLeaders.length === 0) {
+                this.getLeaders();
             }
         };
-
-        return {
-            find: searchGameLeader,
-            store: storeGameLeaders
-        }
     });
 
 }());

@@ -4,9 +4,13 @@
 
     var module = angular.module("haloCommander");
 
-    module.factory("unitTypeService", function () {
+    module.service("unitTypeService", class UnitTypeService {
 
-        const heroUnits = [
+        constructor() {
+
+        }
+
+        const heroUnits: Array<string> = [
             "unsc_inf_omegateam_leon_01",
             "unsc_inf_omegateam_august_01",
             "unsc_inf_omegateam_robert_01",
@@ -24,17 +28,17 @@
             "unsc_inf_spartan_mpalice_01"
         ];
 
-        const ultimateUnits = [
+        const ultimateUnits: Array<string> = [
             "cov_inf_mpdecimus_01",
             "for_air_retriever_base"
         ];
 
-        const superUnits = [
+        const superUnits: Array<string> = [
             "cov_veh_scarab_01",
             "unsc_air_destroyer_01"
         ];
 
-        const unitCategories = [
+        const unitCategories: Array<any> = [
             {
                 id: 335010,
                 name: "VEHICLE"
@@ -50,31 +54,25 @@
         ]
 
         // Returns the unit type, if it is a hero unit, ultimate unit or super unit.
-        function searchUnitType(name) {
-            if (heroUnits.includes(name)) {
+        find(name) {
+            if (this.heroUnits.includes(name)) {
                 return "HERO";
             }
-            if (ultimateUnits.includes(name)) {
+            if (this.ultimateUnits.includes(name)) {
                 return "ULTIMATE";
             }
-            if (superUnits.includes(name)) {
+            if (this.superUnits.includes(name)) {
                 return "SUPER";
             }
             return "UNIT";
         };
 
         // Returns the unit category, if it is a vehicle, air or infantry unit.
-        function searchUnitCategory(id) {
-            var unitCategory = unitCategories.find(function (category) {
+        category(id) {
+            var unitCategory = this.unitCategories.find((category) => {
                 return category.id === id;
             });
             return (unitCategory != null) ? unitCategory.name : "UNKNOWN";
         };
-
-        return {
-            find: searchUnitType,
-            category: searchUnitCategory
-        }
     });
-
 }());
