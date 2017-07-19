@@ -7,44 +7,45 @@
         </md-sidenav>
     </div>
     <div flex id="wrapper" layout="column">
-        <md-toolbar class="md-hue-2 main-toolbar">
-            <div class="md-toolbar-tools">
-                <md-button hide-gt-md class="md-icon-button" ng-click="model.toggleSideNav()" aria-label="Menu">
-                    <ng-md-icon icon="menu"></ng-md-icon>
-                </md-button>
-                <img src="/lib/logoblack.png" alt="" style="height:40px;width:auto;filter: invert(100%);">
-                <h1 flex md-truncate>HW2C</h1>
-                <!-- Desktop Buttons -->
-                <md-button class="md-icon-button" aria-label="Favorite" ng-click="model.showInstructions($event)" hide-xs hide-sm>
-                    <ng-md-icon icon="gamepad"></ng-md-icon>
-                    <md-tooltip md-direction="bottom">Instructions</md-tooltip>
-                </md-button>
-                <md-button class="md-icon-button" aria-label="More" ng-click="model.showAbout($event)" hide-xs hide-sm>
-                    <ng-md-icon icon="help"></ng-md-icon>
-                    <md-tooltip md-direction="bottom">About</md-tooltip>
-                </md-button>
-                <!-- Mobile Buttons -->
-                <md-fab-speed-dial md-direction="down" class="md-scale md-fab-top-right" hide-gt-sm>
-                    <md-fab-trigger>
-                        <md-button class="md-fab" aria-label="More">
-                            <ng-md-icon icon="build"></ng-md-icon>
-                        </md-button>
-                    </md-fab-trigger>
-                    <md-fab-actions>
-                        <md-button class="md-fab md-raised md-mini" ng-click="model.showInstructions($event)" aria-label="Instructions">
-                            <ng-md-icon icon="gamepad"></ng-md-icon>
-                            <md-tooltip md-direction="left">Instructions</md-tooltip>
-                        </md-button>
-                        <md-button class="md-fab md-raised md-mini" ng-click="model.showAbout($event)" aria-label="About">
-                            <ng-md-icon icon="help"></ng-md-icon>
-                            <md-tooltip md-direction="left">About</md-tooltip>
-                        </md-button>
-                    </md-fab-actions>
-                </md-fab-speed-dial>
-            </div>
-        </md-toolbar>
+
 
         <md-content flex id="content" layout-fill style="padding:0% !important">
+            <md-toolbar class="md-hue-2 main-toolbar">
+                <div class="md-toolbar-tools">
+                    <md-button hide-gt-md class="md-icon-button" ng-click="model.toggleSideNav()" aria-label="Menu">
+                        <ng-md-icon icon="menu"></ng-md-icon>
+                    </md-button>
+                    <img src="/lib/logoblack.png" alt="" style="height:40px;width:auto;filter: invert(100%);">
+                    <h1 flex md-truncate>HW2C</h1>
+                    <!-- Desktop Buttons -->
+                    <md-button class="md-icon-button" aria-label="Favorite" ng-click="model.showInstructions($event)" hide-xs hide-sm>
+                        <ng-md-icon icon="gamepad"></ng-md-icon>
+                        <md-tooltip md-direction="bottom">Instructions</md-tooltip>
+                    </md-button>
+                    <md-button class="md-icon-button" aria-label="More" ng-click="model.showAbout($event)" hide-xs hide-sm>
+                        <ng-md-icon icon="help"></ng-md-icon>
+                        <md-tooltip md-direction="bottom">About</md-tooltip>
+                    </md-button>
+                    <!-- Mobile Buttons -->
+                    <md-fab-speed-dial md-direction="down" class="md-scale md-fab-top-right" hide-gt-sm>
+                        <md-fab-trigger>
+                            <md-button class="md-fab" aria-label="More">
+                                <ng-md-icon icon="build"></ng-md-icon>
+                            </md-button>
+                        </md-fab-trigger>
+                        <md-fab-actions>
+                            <md-button class="md-fab md-raised md-mini" ng-click="model.showInstructions($event)" aria-label="Instructions">
+                                <ng-md-icon icon="gamepad"></ng-md-icon>
+                                <md-tooltip md-direction="left">Instructions</md-tooltip>
+                            </md-button>
+                            <md-button class="md-fab md-raised md-mini" ng-click="model.showAbout($event)" aria-label="About">
+                                <ng-md-icon icon="help"></ng-md-icon>
+                                <md-tooltip md-direction="left">About</md-tooltip>
+                            </md-button>
+                        </md-fab-actions>
+                    </md-fab-speed-dial>
+                </div>
+            </md-toolbar>
             <div ng-show="model.selected" layout-padding>
                 <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
                     <md-tab label="Summary">

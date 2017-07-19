@@ -4,77 +4,81 @@
 
     var module = angular.module("haloCommander");
 
-    module.factory("gameObjectsService", function ($resource) {
+    module.service("gameObjectsService", class GameObjectsService {
 
-        var resourceGameObjects = $resource("https://www.haloapi.com/metadata/hw2/game-objects",
-            {
-                startAt: "@startAt"
-            },
-            {
-                query: {
-                    method: "GET",
-                    headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
-                    isArray: false
-                }
-            });
+        resourceGameObjects: any;
+
+        constructor($resource) {
+            this.resourceGameObjects = $resource("https://www.haloapi.com/metadata/hw2/game-objects",
+                {
+                    startAt: "@startAt"
+                },
+                {
+                    query: {
+                        method: "GET",
+                        headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
+                        isArray: false
+                    }
+                });
+        }
 
         //---------------GAME OBJECTS----------------------//
-        var gameObjects = [];
-        var getGameObjects = function () {
+        gameObjects: Array<any> = [];
+        private getGameObjects() {
 
             if (!localStorage.getItem("gameObjects")) {
                 //console.log("No stored objects found. Requesting...");
-                resourceGameObjects.query({ startAt: "0" })
-                    .$promise.then(function (objects) {
+                this.resourceGameObjects.query({ startAt: "0" })
+                    .$promise.then((objects) => {
                         //console.log("Req API");
-                        createGameObjects(objects);
-                        resourceGameObjects.query({ startAt: "100" })
-                            .$promise.then(function (objects) {
+                        this.createGameObjects(objects);
+                        this.resourceGameObjects.query({ startAt: "100" })
+                            .$promise.then((objects) => {
                                 //console.log("Req API");
-                                createGameObjects(objects);
-                                resourceGameObjects.query({ startAt: "200" })
-                                    .$promise.then(function (objects) {
+                                this.createGameObjects(objects);
+                                this.resourceGameObjects.query({ startAt: "200" })
+                                    .$promise.then((objects) => {
                                         //console.log("Req API");
-                                        createGameObjects(objects);
+                                        this.createGameObjects(objects);
                                         if (typeof (Storage) !== "undefined") {
                                             // Code for localStorage/sessionStorage.
-                                            localStorage.setItem("gameObjects", LZString.compressToUTF16(JSON.stringify(gameObjects)));
+                                            localStorage.setItem("gameObjects", LZString.compressToUTF16(JSON.stringify(this.gameObjects)));
                                             //console.log("stored");
                                         } else {
                                             //console.log("No storage found...");
                                         }
                                     })
-                                    .catch(function (error) {
+                                    .catch((error) => {
                                         alert("Could not contact the HALO API Game Objects Metadata services.")
                                         console.log(error);
                                     });
                             })
-                            .catch(function (error) {
+                            .catch((error) => {
                                 alert("Could not contact the HALO API Game Objects Metadata services.")
                                 console.log(error);
                             });
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         alert("Could not contact the HALO API Game Objects Metadata services.")
                         console.log(error);
                     });
             }
             else {
-                gameObjects = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameObjects")));
+                this.gameObjects = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameObjects")));
                 //console.log("Stored objects found");
             }
         };
 
-        function sleep(delay) {
+        private sleep(delay) {
             var start = new Date().getTime();
             while (new Date().getTime() < start + delay);
         }
 
         // Takes the application relevant data from the Game Objects API.
-        var createGameObjects = function (objects) {
+        private createGameObjects(objects) {
             var contentItems = objects["ContentItems"];
 
-            contentItems.forEach(function (gameObject) {
+            contentItems.forEach((gameObject) => {
 
                 var view = gameObject["View"];
                 var name = view["Title"];
@@ -86,7 +90,7 @@
                 var media = viewImage ? viewImage["Media"] : null;
                 var mediaUrl = media ? media["MediaUrl"] : null;
 
-                gameObjects.push({
+                this.gameObjects.push({
                     name: name,
                     id: id,
                     category: (categories.length > 0) ? (categories[0])["Id"] : 0,
@@ -102,8 +106,8 @@
         };
 
         // Searches the game object array for a specific unit to get the unit's metadata.
-        function searchGameObject(id) {
-            storeGameObjects();
+        find(id) {
+            this.store();
 
             if (id.includes("cov_bldg_heavy")) {
                 id = id.replace("heavy", "light");
@@ -115,25 +119,19 @@
                 id = "neutralfor_sentineltier2_generic";
             }
 
-            for (var i = 0; i < gameObjects.length; i++) {
-                if (gameObjects[i].id.toLowerCase() === id.toLowerCase()) {
-                    return gameObjects[i];
+            for (var i = 0; i < this.gameObjects.length; i++) {
+                if (this.gameObjects[i].id.toLowerCase() === id.toLowerCase()) {
+                    return this.gameObjects[i];
                 }
             }
             return null;
         };
 
         // Requests the Halo API for the game object data to store it in cache.
-        function storeGameObjects() {
-            if (!gameObjects || gameObjects.length === 0) {
-                getGameObjects();
+        store() {
+            if (!this.gameObjects || this.gameObjects.length === 0) {
+                this.getGameObjects();
             }
         };
-
-        return {
-            find: searchGameObject,
-            store: storeGameObjects
-        }
     });
-
-}());
+})();
