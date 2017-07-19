@@ -6,13 +6,10 @@
     module.component("aboutComponent", {
         templateUrl: "/components/welcome-component/about.component.html",
         controllerAs: "model",
-        controller: [aboutController]
+        controller: class AboutCtrl {
+            constructor() {
+
+            }
+        }
     });
-
-    function aboutController() {
-        var model = this;
-
-        model.$onInit = function () {
-        };
-    };
 })();
