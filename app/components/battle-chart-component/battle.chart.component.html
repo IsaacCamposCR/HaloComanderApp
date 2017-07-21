@@ -1,12 +1,12 @@
 <div>
     <div>
-        <canvas ng-if="model.type" height="110" width="110" id="radar" class="chart chart-radar" chart-colors="model.colors" chart-data="model.affinityData"
-            chart-options="model.affinityOptions" chart-labels="model.affinityLabels">
+        <canvas ng-if="::model.type" height="110" width="110" id="radar" class="chart chart-radar" chart-colors="::model.colors"
+            chart-data="::model.affinityData" chart-options="::model.affinityOptions" chart-labels="::model.affinityLabels">
         </canvas>
     </div>
     <div>
-        <canvas ng-if="!model.type" height="100" width="100" id="pie" class="chart chart-pie" chart-colors="model.colors" chart-data="model.categoryData"
-            chart-labels="model.labels" chart-options="model.categoryOptions" chart-dataset-override="model.override">
+        <canvas ng-if="::!model.type" height="100" width="100" id="pie" class="chart chart-pie" chart-colors="::model.colors" chart-data="::model.categoryData"
+            chart-labels="::model.labels" chart-options="::model.categoryOptions" chart-dataset-override="::model.override">
         </canvas>
     </div>
 </div>

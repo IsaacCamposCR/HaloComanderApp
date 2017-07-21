@@ -15,7 +15,7 @@
             "unsc_inf_omegateam_august_01",
             "unsc_inf_omegateam_robert_01",
             "unsc_inf_omegateam_jerome_01",
-            "unsc_inf_johnsonhero_01",
+            "unsc_inf_johnson_hero_01",
             "unsc_inf_spartan_mpjerome_01",
             "unsc_inf_spartan_mpdoug_01",
             "cov_inf_atrioxchosen_01",
