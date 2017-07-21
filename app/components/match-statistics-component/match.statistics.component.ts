@@ -48,10 +48,12 @@
             matchResult: any;
             playerSeasons: any;
             getMatchResults() {
+                this.determinateValue = 0;
                 this.matchResult = null;
 
                 this.resourceMatchResult.query({ matchId: this.selected.matchId })
                     .$promise.then((objects) => {
+                        this.determinateValue = 20;
                         //console.log("Req API");
                         this.matchResult = {};
                         this.playerSeasons = {};
@@ -81,6 +83,7 @@
                                 });
                             }
                         });
+                        this.determinateValue = 30;
 
                         Object.keys(unitStats2).map((e) => {
                             let gameObject: any = this.gameObjectsService.find(e);
@@ -94,6 +97,7 @@
                                 });
                             }
                         });
+                        this.determinateValue = 40;
 
                         this.matchResult.gameMode = gameMode;
                         let isoDuration: any = this.parseISO(duration);
@@ -101,11 +105,13 @@
                         this.matchResult.player1 = player1;
                         this.selected.player1 = player1;
                         this.selected.leader1 = this.gameLeadersService.find(leader1);
+                        this.determinateValue = 50;
                         this.matchResult.outcome1 = outcome1;
                         this.matchResult.units1 = units1;
                         this.matchResult.player2 = player2;
                         this.selected.player2 = player2;
                         this.selected.leader2 = this.gameLeadersService.find(leader2);
+                        this.determinateValue = 60;
                         this.matchResult.outcome2 = outcome2;
                         this.matchResult.units2 = units2;
                         this.getPlayerSeasons();
@@ -120,6 +126,7 @@
                 this.playerSeasonService.find(this.selected.player1).$promise
                     .then((playerSeasonData) => {
                         this.matchResult.season1 = this.playerSeasonService.create(playerSeasonData);
+                        this.determinateValue += 20;
                     })
                     .catch((error) => {
                         alert("Could not contact the HALO API Player Season services.")
@@ -128,12 +135,12 @@
                 this.playerSeasonService.find(this.selected.player2).$promise
                     .then((playerSeasonData) => {
                         this.matchResult.season2 = this.playerSeasonService.create(playerSeasonData);
+                        this.determinateValue += 20;
                     })
                     .catch((error) => {
                         alert("Could not contact the HALO API Player Season services.")
                         console.log(error);
                     });
-
             }
 
             numbers: string = '\\d+(?:[\\.,]\\d{0,3})?';

@@ -7,8 +7,6 @@
         </md-sidenav>
     </div>
     <div flex id="wrapper" layout="column">
-
-
         <md-content flex id="content" layout-fill style="padding:0% !important">
             <md-toolbar class="md-hue-2 main-toolbar">
                 <div class="md-toolbar-tools">
@@ -119,7 +117,7 @@
 
                         <md-grid-tile class="grid-tile" style="background: rgb(200,200,200)" md-rowspan="2" md-colspan-sm="2" md-colspan-xs="2">
                             <md-tooltip md-direction="right">INSIGHT CHARTS</md-tooltip>
-                            <battle-chart-component style="top:0;left:0;" type="true" army="model.example"></battle-chart-component>
+                            <battle-chart-component style="top:0;left:0;" type="true" army="::model.example"></battle-chart-component>
                         </md-grid-tile>
 
                         <md-grid-tile class="grid-tile" style="background:#ff8a80" md-rowspan="1" md-colspan="1">
@@ -129,7 +127,7 @@
                         </md-grid-tile>
 
                         <md-grid-tile class="grid-tile" style="background: rgb(100,100,100)" md-rowspan="2" md-colspan-sm="2" md-colspan-xs="2">
-                            <battle-chart-component type="false" army="model.example"></battle-chart-component>
+                            <battle-chart-component type="false" army="::model.example"></battle-chart-component>
                         </md-grid-tile>
                     </md-grid-list>
                 </div>

@@ -138,6 +138,11 @@
                         this.player1TemporaryArmy = null;
                         this.player2TemporaryArmy = null;
                         this.trainEvents = null;
+                        this.fanalizedArmiesPlayer1 = this.analizedArmiesPlayer1;
+                        this.freinforcementsPlayer1 = this.reinforcementsPlayer1;
+                        this.fanalizedArmiesPlayer2 = this.analizedArmiesPlayer2;
+                        this.freinforcementsPlayer2 = this.reinforcementsPlayer2;
+                        this.fbattles = this.battles;
                     })
                     .catch((error) => {
                         alert("Could not contact the HALO API Match Events services.")
