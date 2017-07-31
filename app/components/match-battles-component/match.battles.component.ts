@@ -113,39 +113,47 @@
                             this.createPlayerEvents(event);
                         });
 
-                        this.processBattles();
-                        this.processArmies();
-                        this.battleAnalytics();
-                        this.settleLastBattle();
-                        this.getTotalArmyCost();
-                        this.battles[0].chart = true;
-                        if (this.disablePaging === true) {
-                            this.disableSelecting = true;
+                        if (this.trainEvents.length > 0 && this.deathEvents.length > 0) {
+                            this.processBattles();
+                            this.processArmies();
+                            this.battleAnalytics();
+                            this.settleLastBattle();
+                            this.getTotalArmyCost();
+                            this.battles[0].chart = true;
+                            if (this.disablePaging === true) {
+                                this.disableSelecting = true;
+                            }
+                            else {
+                                this.disableSelecting = false;
+                                this.disablePaging = false;
+                            }
+
+                            // Emptying unused arrays.
+                            this.armiesPlayer1 = null;
+                            this.armiesPlayer2 = null;
+                            this.deathEvents = null;
+                            this.newArmyPlayer1 = null;
+                            this.newArmyPlayer2 = null;
+                            this.newReinforcementsPlayer1 = null;
+                            this.newReinforcementsPlayer2 = null;
+                            this.player1TemporaryArmy = null;
+                            this.player2TemporaryArmy = null;
+                            this.trainEvents = null;
+                            // this.fanalizedArmiesPlayer1 = this.analizedArmiesPlayer1;
+                            // this.freinforcementsPlayer1 = this.reinforcementsPlayer1;
+                            // this.fanalizedArmiesPlayer2 = this.analizedArmiesPlayer2;
+                            // this.freinforcementsPlayer2 = this.reinforcementsPlayer2;
+                            // this.fbattles = this.battles;
                         }
                         else {
+                            alert("There was no action in this match, did you or your enemy resigned at the beginning of the match?");
+                            this.selected = null;
                             this.disableSelecting = false;
                             this.disablePaging = false;
                         }
-
-                        // Emptying unused arrays.
-                        this.armiesPlayer1 = null;
-                        this.armiesPlayer2 = null;
-                        this.deathEvents = null;
-                        this.newArmyPlayer1 = null;
-                        this.newArmyPlayer2 = null;
-                        this.newReinforcementsPlayer1 = null;
-                        this.newReinforcementsPlayer2 = null;
-                        this.player1TemporaryArmy = null;
-                        this.player2TemporaryArmy = null;
-                        this.trainEvents = null;
-                        this.fanalizedArmiesPlayer1 = this.analizedArmiesPlayer1;
-                        this.freinforcementsPlayer1 = this.reinforcementsPlayer1;
-                        this.fanalizedArmiesPlayer2 = this.analizedArmiesPlayer2;
-                        this.freinforcementsPlayer2 = this.reinforcementsPlayer2;
-                        this.fbattles = this.battles;
                     })
                     .catch((error) => {
-                        alert("Could not contact the HALO API Match Events services.")
+                        alert("Could not contact the HALO API Match Events services.");
                         console.log(error);
                     });
             }
@@ -632,19 +640,19 @@
 
             switchSmall() {
                 if (this.small === true) {
-                    this.disableSelecting = true;
+                    //this.disableSelecting = true;
                 }
             }
 
             switchMedium() {
                 if (this.medium === true) {
-                    this.disableSelecting = true;
+                    //this.disableSelecting = true;
                 }
             }
 
             switchLarge() {
                 if (this.large === true) {
-                    this.disableSelecting = true;
+                    //this.disableSelecting = true;
                 }
             };
         }
