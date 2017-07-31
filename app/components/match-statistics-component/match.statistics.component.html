@@ -1,5 +1,5 @@
 <md-content>
-    <md-progress-linear ng-show="model.disableSelecting" md-mode="determinate" value="{{::model.determinateValue}}"></md-progress-linear>
+    <md-progress-linear ng-show="model.disableSelecting" md-mode="determinate" value="{{model.determinateValue}}"></md-progress-linear>
     <br>
     <div flex ng-cloak ng-show="!model.disableSelecting">
         <div>
@@ -8,32 +8,32 @@
 
                 <md-grid-tile class="grid-tile" md-rowspan="1" md-colspan-gt-md="9" md-colspan="7" md-colspan-sm="5" md-colspan-xs="3">
                     <div class="leader-div" flex>
-                        <img src="{{::model.selected.mapMediaUrl}}" alt="{{::model.selected.map}}" class="map">
+                        <img src="{{model.selected.mapMediaUrl}}" alt="{{model.selected.map}}" class="map">
                     </div>
                     <md-grid-tile-footer style="padding-bottom: 10px;height:100%" class="leader-tile-footer">
-                        <h3>{{::model.selected.map}}</h3>
-                        <h3>{{::model.selected.date | date:'medium'}}</h3>
-                        <h3>DURATION: {{::model.matchResult.duration}}</h3>
+                        <h3>{{model.selected.map}}</h3>
+                        <h3>{{model.selected.date | date:'medium'}}</h3>
+                        <h3>DURATION: {{model.matchResult.duration}}</h3>
                     </md-grid-tile-footer>
                 </md-grid-tile>
 
-                <md-grid-tile class="grid-tile" ng-style="::{ 'background' : (model.matchResult.outcome1 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
+                <md-grid-tile class="grid-tile" ng-style="{ 'background' : (model.matchResult.outcome1 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                     md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                     <div class="leader-div">
-                        <img ng-src="{{::model.selected.leader1.mediaUrl}}" alt="{{::model.selected.leader1.name}}" class="leader" />
+                        <img ng-src="{{model.selected.leader1.mediaUrl}}" alt="{{model.selected.leader1.name}}" class="leader" />
                     </div>
 
                     <md-grid-tile-footer class="leader-tile-footer">
-                        <h3>{{::model.matchResult.player1}}</h3>
-                        <h3> {{::model.matchResult.outcome1 === 1 ? 'VICTORY' : 'DEFEAT'}}</h3>
+                        <h3>{{model.matchResult.player1}}</h3>
+                        <h3> {{model.matchResult.outcome1 === 1 ? 'VICTORY' : 'DEFEAT'}}</h3>
                     </md-grid-tile-footer>
                     <div>
-                        <md-tooltip md-direction="top">{{::model.matchResult.season1.rank}} | CSR: {{::model.matchResult.season1.raw}}</md-tooltip>
-                        <img ng-src="{{::model.matchResult.season1.rankIcon}}" class="rank" />
+                        <md-tooltip md-direction="top">{{model.matchResult.season1.rank}} | CSR: {{model.matchResult.season1.raw}}</md-tooltip>
+                        <img ng-src="{{model.matchResult.season1.rankIcon}}" class="rank" />
                     </div>
                 </md-grid-tile>
 
-                <md-grid-tile class="grid-tile" ng-if="::unit.TotalBuilt" style="background: #ff8a80;" ng-repeat="unit in ::model.matchResult.units1 | orderBy: '-TotalBuilt' track by $index"
+                <md-grid-tile class="grid-tile" ng-if="::unit.TotalBuilt" style="background: #ff8a80;" ng-repeat="unit in model.matchResult.units1 | orderBy: '-TotalBuilt' track by $index"
                     md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
                     <div class="md-media-sm card-media" style="text-align:right">
                         <md-tooltip md-direction="top">{{::unit.name}}</md-tooltip>
@@ -54,23 +54,23 @@
         <div>
             <md-grid-list md-cols="3" md-cols-sm="5" md-cols-md="7" md-cols-gt-md="9" md-row-height-gt-md="1:1" md-row-height="1:1" md-gutter="8px"
                 md-gutter-gt-sm="4px">
-                <md-grid-tile class="grid-tile" ng-style="::{ 'background' : (model.matchResult.outcome2 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
+                <md-grid-tile class="grid-tile" ng-style="{ 'background' : (model.matchResult.outcome2 === 1) ? 'rgb(178, 255, 89)' : 'rgb(255, 23, 68)' }"
                     md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="2">
                     <div class="leader-div">
-                        <img ng-src="{{::model.selected.leader2.mediaUrl}}" alt="{{::model.selected.leader2.name}}" class="leader" />
+                        <img ng-src="{{model.selected.leader2.mediaUrl}}" alt="{{model.selected.leader2.name}}" class="leader" />
                     </div>
 
                     <md-grid-tile-footer class="leader-tile-footer">
-                        <h3>{{::model.matchResult.player2}}</h3>
-                        <h3> {{::model.matchResult.outcome2 === 1 ? 'VICTORY' : 'DEFEAT'}}</h3>
+                        <h3>{{model.matchResult.player2}}</h3>
+                        <h3> {{model.matchResult.outcome2 === 1 ? 'VICTORY' : 'DEFEAT'}}</h3>
                     </md-grid-tile-footer>
                     <div>
-                        <md-tooltip md-direction="top">{{::model.matchResult.season2.rank}} | CSR: {{::model.matchResult.season2.raw}}</md-tooltip>
-                        <img ng-src="{{::model.matchResult.season2.rankIcon}}" class="rank" />
+                        <md-tooltip md-direction="top">{{model.matchResult.season2.rank}} | CSR: {{model.matchResult.season2.raw}}</md-tooltip>
+                        <img ng-src="{{model.matchResult.season2.rankIcon}}" class="rank" />
                     </div>
                 </md-grid-tile>
 
-                <md-grid-tile class="grid-tile" ng-if="::unit.TotalBuilt" style="background: #80d8ff;" ng-repeat="unit in ::model.matchResult.units2 | orderBy: '-TotalBuilt' track by $index"
+                <md-grid-tile class="grid-tile" ng-if="::unit.TotalBuilt" style="background: #80d8ff;" ng-repeat="unit in model.matchResult.units2 | orderBy: '-TotalBuilt' track by $index"
                     md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
                     <div class="md-media-sm card-media" style="text-align:right">
                         <md-tooltip md-direction="top">{{::unit.name}}</md-tooltip>

@@ -284,14 +284,16 @@
 
             // Selects a match from the Side Nav and closes it.
             selectMatch(match) {
-                this.disableSelecting = true;
-                this.selected = match;
+                if (!(match === this.selected)) {
+                    this.disableSelecting = true;
+                    this.selected = match;
 
-                let sidenav: any = this.$mdSidenav("left");
-                if (sidenav.isOpen()) {
-                    sidenav.close();
+                    let sidenav: any = this.$mdSidenav("left");
+                    if (sidenav.isOpen()) {
+                        sidenav.close();
+                    }
+                    this.tabIndex = 0;
                 }
-                this.tabIndex = 0;
             }
 
             changeGamertag = function () {

@@ -99,7 +99,8 @@
 
         designations: Array<any> = [];
         private getCSRDesignations() {
-            if (!localStorage.getItem("designations")) {
+            if (!localStorage.getItem("designations")) {                
+                this.sleep(1000);
                 this.resourceCSRDesignations.query()
                     .$promise.then((data) => {
 
@@ -159,6 +160,7 @@
 
         private getPlayerSeasonStats(player) {
             if (!localStorage.getItem("season")) {
+                this.sleep(1000);
                 this.resourceSeasons.query()
                     .$promise.then((data) => {
                         this.createSeason(data);
@@ -190,10 +192,11 @@
 
         create(playerSeasonData) {
             this.getCSRDesignations();
+            console.log(playerSeasonData);
             let playlistData: any = (playerSeasonData["RankedPlaylistStats"]).find((playlist) => {
-                return playlist.PlaylistId === "532bfd6c-3db4-45b7-a010-11460b862be6";
+                return playlist.PlaylistId === "f98a4189-b766-41fa-afe3-4ff385304ee4";
             });
-
+            console.log(playlistData);
             let highestCsr: any = playlistData["HighestCsr"];
 
             let playerSeasonStats: any = {};

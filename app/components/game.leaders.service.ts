@@ -55,6 +55,9 @@
                 var view = gameLeader["View"];
                 var hw2Leader = view["HW2Leader"];
                 var id = hw2Leader["Id"];
+                // Temporary Fix for Serina.
+                // https://www.halowaypoint.com/en-us/forums/01b3ca58f06c4bd4ad074d8794d2cf86/topics/serina-missing-the-id-data-on-the-game-leaders-api/89e030d9-93a3-44be-b116-a0b6029a58b5/posts
+                id = (id.length === 0) ? 13 : id;
                 var displayInfo = hw2Leader["DisplayInfo"];
                 var viewDisplayInfo = displayInfo["View"];
                 var hw2LeaderDisplayInfo = viewDisplayInfo["HW2LeaderDisplayInfo"];
