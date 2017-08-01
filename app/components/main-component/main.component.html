@@ -7,7 +7,7 @@
         </md-sidenav>
     </div>
     <div flex id="wrapper" layout="column">
-        <md-content flex id="content" layout-fill style="padding:0% !important">
+        <md-content flex id="content" layout-fill style="padding:0% !important;overflow:initial!important">
             <md-toolbar class="md-hue-2 main-toolbar">
                 <div class="md-toolbar-tools">
                     <md-button hide-gt-md class="md-icon-button" ng-click="model.toggleSideNav()" aria-label="Menu">
@@ -60,7 +60,7 @@
                 </md-tabs>
             </div>
 
-            <div ng-if="!model.selected" hide-sm hide-xs>
+            <div ng-show="!model.selected" hide-sm hide-xs>
                 <div class="main-background">
                     <div class="main-frame">
                         <div style="text-align:center">
@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <div ng-if="!model.selected" class="main-mobile-background" hide-gt-sm>
+            <div ng-show="!model.selected" class="main-mobile-background" hide-gt-sm>
                 <img class="main-mobile-background-img" src="http://www.allthingsxbox.net/wp-content/uploads/2017/02/Halo-Wars-2-review.jpeg"
                     alt="">
 
