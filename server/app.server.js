@@ -30,8 +30,8 @@ var options = {
     cert: fs.readFileSync(rootPath + '/ssl/cert.pem'),
 };
 
-var server = https.createServer(options, app).listen(port, function () {
-    console.log("Express server listening on port " + port);
+var server = https.createServer(options, app).listen(8080, function () {
+    console.log("Express server listening on port " + 8080);
 });
 
 
