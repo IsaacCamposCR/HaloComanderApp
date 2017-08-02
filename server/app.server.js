@@ -20,5 +20,20 @@ app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");
 });
 
-app.listen(8080);
+var fs = require('fs'),
+    http = require('http'),
+    https = require('https'),
+    express = require('express');
+
+var options = {
+    key: fs.readFileSync(rootPath + '/ssl/privkey.pem'),
+    cert: fs.readFileSync(rootPath + '/ssl/cert.pem'),
+};
+
+var server = https.createServer(options, app).listen(port, function () {
+    console.log("Express server listening on port " + port);
+});
+
+
+//app.listen(8080);
 console.log("Listening on port 8080...");
