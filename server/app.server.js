@@ -27,7 +27,7 @@ var fs = require('fs'),
 
 var options = {
     key: fs.readFileSync(rootPath + '/ssl/privkey.pem'),
-    cert: fs.readFileSync(rootPath + '/ssl/cert.pem'),
+    cert: fs.readFileSync(rootPath + '/ssl/fullchain.pem'),
 };
 
 var server = https.createServer(options, app).listen(8080, function () {
