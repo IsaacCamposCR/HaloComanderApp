@@ -69,21 +69,28 @@
                     this.playerSeasonService = playerSeasonService;
 
                     // $onInit
+                    /*
                     if (this.needsCacheRefreshing() === true) {
                         this.gameLeadersService.store();
                         this.gameObjectsService.store();
                         this.playerSeasonService.store();
                     }
+                    */
+                    //this.playerSeasonService.isNewSeason();
                 }
 
                 init() {
+                    /*
                     if (this.needsCacheRefreshing() === true) {
                         this.gameLeadersService.store();
                         this.gameObjectsService.store();
                         this.playerSeasonService.store();
                     }
+                    */
+                    this.playerSeasonService.isNewSeason();
                 };
 
+                /*
                 needsCacheRefreshing() {
                     if (!localStorage.getItem("lastRefresh")) {
                         if (typeof (Storage) !== "undefined") {
@@ -107,6 +114,7 @@
                         }
                     }
                 };
+                */
 
                 toggleSideNav() {
                     this.$mdSidenav("left").toggle();
@@ -118,23 +126,23 @@
                     this.$mdDialog.show({
                         controller: ["$scope", "$mdDialog", DialogController],
                         template: `
-                    <md-dialog style='background: #E0E0E0;'>
-                        <md-toolbar>
-                            <div class='md-toolbar-tools'>
-                                <h2>Instructions unclear...</h2>
-                                <span flex></span>
-                                <md-button class='md-icon-button' ng-click='cancel()' aria-label='Close'>
-                                    <ng-md-icon icon='close'></ng-md-icon>
-                                </md-button>
-                            </div>
-                        </md-toolbar>
-                        <md-dialog-content>
-                            <div class='md-dialog-content'>
-                                <tutorial-component></tutorial-component>
-                            </div>
-                        </md-dialog-content>
-                    </md-dialog>
-                `,
+                        <md-dialog style='background: #E0E0E0;'>
+                            <md-toolbar>
+                                <div class='md-toolbar-tools'>
+                                    <h2>Instructions unclear...</h2>
+                                    <span flex></span>
+                                    <md-button class='md-icon-button' ng-click='cancel()' aria-label='Close'>
+                                        <ng-md-icon icon='close'></ng-md-icon>
+                                    </md-button>
+                                </div>
+                            </md-toolbar>
+                            <md-dialog-content>
+                                <div class='md-dialog-content'>
+                                    <tutorial-component></tutorial-component>
+                                </div>
+                            </md-dialog-content>
+                        </md-dialog>
+                        `,
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,
@@ -148,24 +156,24 @@
                     this.$mdDialog.show({
                         controller: ["$scope", "$mdDialog", DialogController],
                         template: `
-                    <md-dialog style='background: #E0E0E0;'>
-                        <md-toolbar>
-                            <div class='md-toolbar-tools'>
-                                <h2>Welcome!</h2>
-                                <span flex></span>
-                                <md-button class='md-icon-button' ng-click='cancel()' aria-label='Close'>
-                                    <ng-md-icon icon='close'></ng-md-icon>
-                                </md-button>
-                            </div>
-                        </md-toolbar>
-                        <md-dialog-content>
-                            <div class='md-dialog-content'>
-                                <welcome-component style='margin:3%;margin-bottom:1%'></welcome-component>
-                                <about-component style='margin:3%;margin-top:1%'></about-component>
-                            </div>
-                        </md-dialog-content>
-                    </md-dialog>
-                `,
+                        <md-dialog style='background: #E0E0E0;'>
+                            <md-toolbar>
+                                <div class='md-toolbar-tools'>
+                                    <h2>Welcome!</h2>
+                                    <span flex></span>
+                                    <md-button class='md-icon-button' ng-click='cancel()' aria-label='Close'>
+                                        <ng-md-icon icon='close'></ng-md-icon>
+                                    </md-button>
+                                </div>
+                            </md-toolbar>
+                            <md-dialog-content>
+                                <div class='md-dialog-content'>
+                                    <welcome-component style='margin:3%;margin-bottom:1%'></welcome-component>
+                                    <about-component style='margin:3%;margin-top:1%'></about-component>
+                                </div>
+                            </md-dialog-content>
+                        </md-dialog>
+                        `,
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true,

@@ -4,14 +4,19 @@
 
     var module = angular.module("haloCommander");
 
-    module.service("playerSeasonService", ["$resource",
+    module.service("playerSeasonService", ["$resource", "gameLeadersService", "gameObjectsService",
         class PlayerSeasonService {
 
             resourcePlayers: any;
             resourceSeasons: any;
             resourceCSRDesignations: any;
+            gameLeadersService: any;
+            gameObjectsService: any;
 
-            constructor($resource) {
+            constructor($resource, gameLeadersService, gameObjectsService) {
+                this.gameLeadersService = gameLeadersService;
+                this.gameObjectsService = gameObjectsService;
+
                 this.resourcePlayers = $resource("https://www.haloapi.com/stats/hw2/players/:player/stats/seasons/:seasonId",
                     {
                         player: "@player",
@@ -239,5 +244,41 @@
             store() {
                 this.getSeason();
             };
+
+            // Checks if the Season object has changed, if it has then the cache must be refreshed.
+            isNewSeason() {
+                //console.log("Is new season?");
+                if (!localStorage.getItem("season")) {
+                    //console.log("No season stored...");
+                    this.refreshCache();
+                }
+                else {
+                    // There's a Season object, it needs to checked.
+                    this.sleep(1000);
+                    this.resourceSeasons.query()
+                        .$promise.then((data) => {
+                            //console.log("Season stored, checking current one");
+                            let currentSeason: any = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("season")));
+                            this.createSeason(data);
+                            //console.log(this.season.id, currentSeason.id);
+                            if (this.season.id != currentSeason.id) {
+                                //console.log("New season! storing...");
+                                this.refreshCache();
+                            }
+                        });
+                }
+            }
+
+            private refreshCache() {
+                // Refresh Cache
+                localStorage.removeItem("season");
+                localStorage.removeItem("gameLeaders");
+                localStorage.removeItem("gameObjects");
+                localStorage.removeItem("gameMaps");
+                localStorage.removeItem("designations");
+                this.gameLeadersService.store();
+                this.gameObjectsService.store();
+                this.store();
+            }
         }]);
 }());

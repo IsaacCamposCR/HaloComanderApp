@@ -146,10 +146,14 @@
                 }
 
                 //---------------PLAYER MATCH HISTORY----------------------//
+                // Attempts is used to stop the app from endlessly trying to query all the games in a player's history. 
+                // Querying 10 attempts equals 500 games. Games older than 500 games will not be retrieved.
+                attempts: number = 0;
                 getPlayerMatchHistoryBackwards() {
                     this.sleep(1000);
                     let playerMatchHistory: any = this.resourcePlayerMatchHistory.query({ player: this.gamertag, count: 50, start: Number(this.start) })
                         .$promise.then((matchHistory) => {
+                            this.attempts++;
                             //console.log("Req API");
                             let results: Array<any> = matchHistory["Results"];
                             if (results.length > 0) {
@@ -165,7 +169,7 @@
                                     }
                                 }
                                 this.start = this.start;
-                                if (this.count > 0) {
+                                if (this.count > 0 && this.attempts <= 10) {
                                     this.getPlayerMatchHistoryBackwards();
                                 }
                                 else {
