@@ -1,11 +1,12 @@
 var express = require("express");
 var app = express();
 var path = require("path");
-var rootPath = path.normalize(__dirname + "/../");
 
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+var rootPath = path.normalize(__dirname + "/../");
 app.use(express.static(rootPath + "/app"));
 app.use(express.static(rootPath + "/build"));
 
@@ -30,5 +31,15 @@ app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");
 });
 
-//http.createServer(app).listen(80);
-https.createServer(options, app).listen(443);
+https.createServer(options, app).listen(443, () => {
+    console.log("Server running on port 443");
+});
+
+var httpw = express();
+
+httpw.get('*', function (req, res) {
+    res.redirect('https://' + req.get('host'));
+})
+httpw.listen(80, function () {
+    console.log('Redirect server is running on port 80');
+});
