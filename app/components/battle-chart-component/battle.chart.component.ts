@@ -198,21 +198,24 @@
                     let air: number = 0;
                     let vehicle: number = 0;
                     let infantry: number = 0;
+                    let pop: number = 0;
 
                     this.army.forEach((unit) => {
+                        pop = unit.PopulationCost;
                         if (unit.type === "HERO") {
-                            infantry = infantry + 12;
+                            //infantry = infantry + 12;
+                            pop = 12;
                         }
 
                         switch (this.unitTypeService.category(unit.category)) {
                             case "AIR":
-                                air = air + unit.PopulationCost;
+                                air = air + pop;
                                 break;
                             case "VEHICLE":
-                                vehicle = vehicle + unit.PopulationCost;
+                                vehicle = vehicle + pop;
                                 break;
                             case "INFANTRY":
-                                infantry = infantry + unit.PopulationCost;
+                                infantry = infantry + pop;
                                 break;
                         }
                     });

@@ -98,7 +98,7 @@
                                 }
                             })
                             .catch((error) => {
-                                alert("Could not contact the HALO API Maps Metadata services.")
+                                alert("Could not contact the HALO API Maps Metadata services.");
                                 console.log(error);
                             });
                     }
@@ -180,13 +180,19 @@
                                 }
                             }
                             else {
+                                alert("This player has no Ranked 1v1 matches played!");
                                 this.disablePaging = false;
                                 this.disableSelecting = false;
                             }
                         })
                         .catch((error) => {
-                            alert("Could not contact the HALO API Match History services.")
-                            console.log(error);
+                            if (error.status === 404) {
+                                alert("The gamertag you entered does not exist!");
+                            }
+                            else {
+                                alert("Could not contact the HALO API Match History services.");
+                                console.log(error);
+                            }
                         });
                 }
 
@@ -196,6 +202,9 @@
                         .$promise.then((matchHistory) => {
                             //console.log("Req API");
                             let results: Array<any> = matchHistory["Results"];
+                            if (results.length === 0) {
+                                alert("This player has no Ranked 1v1 matches played!");
+                            }
                             this.pageStart = this.start;
                             results.forEach((match) => {
                                 this.createMatchHistory(match);
@@ -212,8 +221,13 @@
                             }
                         })
                         .catch((error) => {
-                            alert("Could not contact the HALO API Match History services.")
-                            console.log(error);
+                            if (error.status === 404) {
+                                alert("The gamertag you entered does not exist!");
+                            }
+                            else {
+                                alert("Could not contact the HALO API Match History services.");
+                                console.log(error);
+                            }
                         });
                 }
 

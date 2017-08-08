@@ -25,7 +25,8 @@
             "cov_inf_arbiter_01",
             "unsc_veh_forgehog_01",
             "unsc_inf_flamecyclops_01",
-            "unsc_inf_spartan_mpalice_01"
+            "unsc_inf_spartan_mpalice_01",
+            "unsc_veh_serina_hero_01"
         ];
 
         const ultimateUnits: Array<string> = [
