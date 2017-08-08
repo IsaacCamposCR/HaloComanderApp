@@ -193,6 +193,8 @@
                                 alert("Could not contact the HALO API Match History services.");
                                 console.log(error);
                             }
+                            this.disablePaging = false;
+                            this.disableSelecting = false;
                         });
                 }
 
