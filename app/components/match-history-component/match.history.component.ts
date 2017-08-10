@@ -58,7 +58,7 @@
                         {
                             query: {
                                 method: "GET",
-                                headers: { "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
+                                headers: { "Ocp-Apim-Subscription-Key": "2f9542f34a49497a984e0e70b58eb37d" },
                                 isArray: false
                             }
                         });
@@ -69,7 +69,7 @@
                 // Querying 10 attempts equals 500 games. Games older than 500 games will not be retrieved.
                 attempts: number = 0;
                 getPlayerMatchHistoryBackwards() {
-                    this.sleep(1000);
+                    //this.sleep(1000);
                     let playerMatchHistory: any = this.resourcePlayerMatchHistory.query({ player: this.gamertag, count: 50, start: Number(this.start) })
                         .$promise.then((matchHistory) => {
                             this.attempts++;
@@ -118,7 +118,7 @@
                 }
 
                 getPlayerMatchHistoryForwards() {
-                    this.sleep(1000);
+                    //this.sleep(1000);
                     let playerMatchHistory: any = this.resourcePlayerMatchHistory.query({ player: this.gamertag, count: Number(this.count), start: Number(this.start) })
                         .$promise.then((matchHistory) => {
                             //console.log("Req API");

@@ -25,7 +25,7 @@
                     {
                         query: {
                             method: "GET",
-                            headers: { "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
+                            headers: { "Ocp-Apim-Subscription-Key": "2f9542f34a49497a984e0e70b58eb37d" },
                             isArray: false
                         }
                     });
@@ -36,7 +36,7 @@
                     {
                         query: {
                             method: "GET",
-                            headers: { "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
+                            headers: { "Ocp-Apim-Subscription-Key": "2f9542f34a49497a984e0e70b58eb37d" },
                             isArray: false
                         }
                     });
@@ -47,7 +47,7 @@
                     {
                         query: {
                             method: "GET",
-                            headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
+                            headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "2f9542f34a49497a984e0e70b58eb37d" },
                             isArray: false
                         }
                     });
@@ -56,7 +56,7 @@
             //---------------PLAYER SEASON----------------------//
             private getSeason() {
                 if (!localStorage.getItem("season")) {
-                    this.sleep(1000);
+                    //this.sleep(1000);
                     this.resourceSeasons.query()
                         .$promise.then((data) => {
                             this.createSeason(data);
@@ -106,7 +106,7 @@
             designations: Array<any> = [];
             private getCSRDesignations() {
                 if (!localStorage.getItem("designations")) {
-                    this.sleep(1000);
+                    //this.sleep(1000);
                     this.resourceCSRDesignations.query()
                         .$promise.then((data) => {
 
@@ -166,7 +166,7 @@
 
             private getPlayerSeasonStats(player) {
                 if (!localStorage.getItem("season")) {
-                    this.sleep(1000);
+                    //this.sleep(1000);
                     this.resourceSeasons.query()
                         .$promise.then((data) => {
                             this.createSeason(data);
@@ -254,7 +254,7 @@
                 }
                 else {
                     // There's a Season object, it needs to checked.
-                    this.sleep(1000);
+                    //this.sleep(1000);
                     this.resourceSeasons.query()
                         .$promise.then((data) => {
                             //console.log("Season stored, checking current one");

@@ -17,7 +17,7 @@
                     {
                         query: {
                             method: "GET",
-                            headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
+                            headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "2f9542f34a49497a984e0e70b58eb37d" },
                             isArray: false
                         }
                     });
