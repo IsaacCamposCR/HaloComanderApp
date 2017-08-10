@@ -19,7 +19,8 @@
                         </md-input-container>
 
                         <div class="md-actions">
-                            <md-button ng-disabled="!model.gamertagForm.$valid || model.disableSelecting" class="md-accent md-raised date-row" type="submit" class="date-row" aria-label="GO">
+                            <md-button ng-disabled="!model.gamertagForm.$valid || model.disableSelecting" class="md-accent md-raised date-row" type="submit"
+                                class="date-row" aria-label="GO">
                                 <ng-md-icon icon="search"></ng-md-icon>
                             </md-button>
 
@@ -55,16 +56,16 @@
                             </div>
                             <div flex>
                                 <p class="list-details"><b>{{::match.result}} on {{::match.map}}</b></p>
-                <p class="list-details">LEADER: {{::match.leader}}</p>
-                <p class="list-details">{{::match.date | date:'medium'}}</p>
+                                <p class="list-details">LEADER: {{::match.leader}}</p>
+                                <p class="list-details">{{::match.date | date:'medium'}}</p>
+                            </div>
+                        </md-button>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
             </div>
-            </md-button>
-</div>
-</md-list-item>
-<md-divider></md-divider>
-</div>
-</md-list>
-</md-content>
+        </md-list>
+    </md-content>
 </div>
 <!--
 <md-button class="md-fab md-fab-bottom-right" ng-click="model.addUser($event)">

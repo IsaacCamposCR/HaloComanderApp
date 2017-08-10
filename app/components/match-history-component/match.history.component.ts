@@ -11,7 +11,7 @@
             disablePaging: "=",
             disableSelecting: "="
         },
-        controller: ["$resource", "$mdSidenav", "$mdMedia", "$mdDialog", "gameLeadersService",
+        controller: ["$resource", "$mdSidenav", "$mdMedia", "$mdDialog", "gameLeadersService", "gameMapsService",
             class MatchHistoryController {
 
                 $resource: any;
@@ -19,6 +19,7 @@
                 $mdMedia: any;
                 $mdDialog: any;
 
+                gameMapsService: any;
                 gameLeadersService: any;
 
                 resourcePlayerMatchHistory: any;
@@ -39,12 +40,13 @@
                 gamertag: string = "";
                 playerRecentMatches: Array<any> = [];
 
-                constructor($resource, $mdSidenav, $mdMedia, $mdDialog, gameLeadersService) {
+                constructor($resource, $mdSidenav, $mdMedia, $mdDialog, gameLeadersService, gameMapsService) {
                     this.$resource = $resource;
                     this.$mdSidenav = $mdSidenav;
                     this.$mdMedia = $mdMedia;
                     this.$mdDialog = $mdDialog;
                     this.gameLeadersService = gameLeadersService;
+                    this.gameMapsService = gameMapsService;
 
                     this.resourcePlayerMatchHistory = $resource("https://www.haloapi.com/stats/hw2/players/:player/matches",
                         {
@@ -60,89 +62,6 @@
                                 isArray: false
                             }
                         });
-
-                    this.resourceMaps = $resource("https://www.haloapi.com/metadata/hw2/maps",
-                        {},
-                        {
-                            query: {
-                                method: "GET",
-                                headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "ee5d843652484f409f5b60356142838c" },
-                                isArray: false
-                            }
-                        });
-                }
-
-                //---------------GAME MAPS----------------------//
-                maps: Array<any>;
-                getMaps() {
-                    this.maps = [];
-                    if (!localStorage.getItem("gameMaps")) {
-                        //console.log("No stored maps found. Requesting...");
-                        this.resourceMaps.query()
-                            .$promise.then((maps) => {
-                                //console.log("Req API");
-                                this.createGameMaps(maps);
-                                if (typeof (Storage) !== "undefined") {
-                                    // Code for localStorage/sessionStorage.
-                                    localStorage.setItem("gameMaps", LZString.compressToUTF16(JSON.stringify(this.maps)));
-                                    //console.log("stored");
-                                } else {
-                                    //console.log("No storage found...");
-                                }
-                                //getPlayerMatchHistory(); 
-                                if (this.forwardPaging === true) {
-                                    this.getPlayerMatchHistoryForwards();
-                                }
-                                else {
-                                    this.getPlayerMatchHistoryBackwards();
-                                }
-                            })
-                            .catch((error) => {
-                                alert("Could not contact the HALO API Maps Metadata services.");
-                                console.log(error);
-                            });
-                    }
-                    else {
-                        this.maps = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameMaps")));
-                        //console.log("Stored maps found");
-                        if (this.forwardPaging === true) {
-                            this.getPlayerMatchHistoryForwards();
-                        }
-                        else {
-                            this.getPlayerMatchHistoryBackwards();
-                        }
-                    }
-                }
-
-                // Takes the application relevant data from the Maps API.
-                createGameMaps(maps) {
-                    let contentItems: Array<any> = maps["ContentItems"];
-
-                    contentItems.forEach((gameMap) => {
-                        let view: any = gameMap["View"];
-                        let name: string = view["Title"];
-                        let hw2Map: any = view["HW2Map"];
-                        let id: string = hw2Map["ID"];
-                        let image: any = hw2Map["Image"];
-                        let viewImage: any = image["View"];
-                        let media: any = viewImage ? viewImage["Media"] : null;
-                        let mediaUrl: string = media ? media["MediaUrl"] : null;
-
-                        this.maps.push({
-                            name: name,
-                            id: id,
-                            mediaUrl: mediaUrl
-                        });
-                    });
-                }
-
-                // Searches the game maps array for a specific map to get the map's metadata.
-                searchGameMap(id) {
-                    for (var i = 0; i < this.maps.length; i++) {
-                        if (this.maps[i].id.toLowerCase() === id.toLowerCase()) {
-                            return this.maps[i];
-                        }
-                    }
                 }
 
                 //---------------PLAYER MATCH HISTORY----------------------//
@@ -241,7 +160,7 @@
                         let matchStartDate: any = item["MatchStartDate"];
                         let date: string = matchStartDate["ISO8601Date"];
 
-                        let gameMap: any = this.searchGameMap(item["MapId"]);
+                        let gameMap: any = this.gameMapsService.find(item["MapId"]);//this.searchGameMap(item["MapId"]);
                         let gameLeader: any = this.gameLeadersService.find(item["LeaderId"]);
 
                         let recentMatch: any = {
@@ -284,7 +203,7 @@
                         this.page++;
                         this.playerRecentMatches = [];
                         this.count = 10;
-                        this.getMaps();
+                        this.getPlayerMatchHistoryBackwards();
                     }
                 }
 
@@ -299,7 +218,7 @@
                         this.page--;
                         this.playerRecentMatches = [];
                         this.count = 10;
-                        this.getMaps();
+                        this.getPlayerMatchHistoryForwards();
                     }
                 }
 
@@ -327,7 +246,7 @@
                     this.start = 0;
                     this.pageStart = 0;
                     this.match = null;
-                    this.getMaps();
+                    this.getPlayerMatchHistoryBackwards();
                 }
             }]
     });

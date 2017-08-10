@@ -8,6 +8,7 @@
         // Creates all the component routes.
         $routeConfig: [
             { path: "/main", component: "mainComponent", name: "Main" },
+            { path: "/match/:id", component: "mainComponent", name: "Match" },
             { path: "/**", redirectTo: ["Main"] }
         ]
     });

@@ -8,9 +8,10 @@
         controllerAs: "model",
         bindings: {
             selected: "<",
-            disableSelecting: "<"
+            disableSelecting: "<",
+            shareMatch: "="
         },
-        controller: ["$resource", "gameObjectsService", "gameLeadersService", "playerSeasonService",
+        controller: ["$resource", "gameObjectsService", "gameLeadersService", "playerSeasonService", "gameMapsService",
 
             class MatchStatisticsCtrl {
 
@@ -18,11 +19,13 @@
                 gameObjectsService: any;
                 gameLeadersService: any;
                 playerSeasonService: any;
+                gameMapsService: any;
 
-                constructor($resource, gameObjectsService, gameLeadersService, playerSeasonService) {
+                constructor($resource, gameObjectsService, gameLeadersService, playerSeasonService, gameMapsService) {
                     this.gameObjectsService = gameObjectsService;
                     this.gameLeadersService = gameLeadersService;
                     this.playerSeasonService = playerSeasonService;
+                    this.gameMapsService = gameMapsService;
 
                     this.resourceMatchResult = $resource("https://www.haloapi.com/stats/hw2/matches/:matchId",
                         {
@@ -47,6 +50,7 @@
                     }
                 }
 
+                shareMatch: string;
                 matchResult: any;
                 playerSeasons: any;
                 getMatchResults() {
@@ -55,6 +59,7 @@
 
                     this.resourceMatchResult.query({ matchId: this.selected.matchId })
                         .$promise.then((objects) => {
+
                             this.determinateValue = 20;
                             //console.log("Req API");
                             this.matchResult = {};
@@ -62,6 +67,8 @@
 
                             let gameMode: any = objects["GameMode"];
                             let duration: any = objects["MatchDuration"];
+                            let gameMap: any = this.gameMapsService.find(objects["MapId"]);
+                            let date: any = (objects["MatchStartDate"])["ISO8601Date"];
                             let player1: string = (((objects["Players"])["1"])["HumanPlayerId"])["Gamertag"];
                             let outcome1: any = ((objects["Players"])["1"])["PlayerMatchOutcome"];
                             let leader1: string = ((objects["Players"])["1"])["LeaderId"];
@@ -103,6 +110,7 @@
 
                             this.matchResult.gameMode = gameMode;
                             let isoDuration: any = this.parseISO(duration);
+                            this.matchResult.date = date;
                             this.matchResult.duration = ((isoDuration.hours < 10) ? "0" + isoDuration.hours : isoDuration.hours) + ":" + ((isoDuration.minutes < 10) ? "0" + isoDuration.minutes : isoDuration.minutes) + ":" + ((isoDuration.seconds < 10) ? "0" + Math.trunc(isoDuration.seconds) : Math.trunc(isoDuration.seconds));
                             this.matchResult.player1 = player1;
                             this.selected.player1 = player1;
@@ -116,6 +124,11 @@
                             this.determinateValue = 60;
                             this.matchResult.outcome2 = outcome2;
                             this.matchResult.units2 = units2;
+                            this.selected.map = gameMap.name;
+                            this.selected.mapMediaUrl = gameMap.mediaUrl;
+                            this.shareMatch = { waypoint: "", tracker: "" };
+                            this.shareMatch.waypoint = `https://www.halowaypoint.com/en-us/games/halo-wars-2/matches/${this.selected.matchId}/players/${this.selected.player1}?gameHistoryMatchIndex=0&gameHistoryGameModeFilter=All`;
+                            this.shareMatch.tracker = `https://www.commanderapp.net/match/${this.selected.matchId}`;
                             this.getPlayerSeasons();
                         })
                         .catch((error) => {

@@ -16,6 +16,10 @@
                     <img src="/lib/logoblack.png" alt="" style="height:40px;width:auto;filter: invert(100%);">
                     <h1 flex md-truncate>Battle Tracker</h1>
                     <!-- Desktop Buttons -->
+                    <md-button ng-if="model.shareMatch.waypoint.length" class="md-icon-button" aria-label="Share" ng-click="model.showShare($event)" hide-xs hide-sm>
+                        <ng-md-icon icon="share"></ng-md-icon>
+                        <md-tooltip md-direction="bottom">Share Links</md-tooltip>
+                    </md-button>
                     <md-button class="md-icon-button" aria-label="Favorite" ng-click="model.showInstructions($event)" hide-xs hide-sm>
                         <ng-md-icon icon="gamepad"></ng-md-icon>
                         <md-tooltip md-direction="bottom">Instructions</md-tooltip>
@@ -32,6 +36,10 @@
                             </md-button>
                         </md-fab-trigger>
                         <md-fab-actions>
+                            <md-button ng-if="model.shareMatch.waypoint.length" class="md-fab md-raised md-mini" ng-click="model.showShare($event)" aria-label="Instructions">
+                                <ng-md-icon icon="share"></ng-md-icon>
+                                <md-tooltip md-direction="left">Share Links</md-tooltip>
+                            </md-button>
                             <md-button class="md-fab md-raised md-mini" ng-click="model.showInstructions($event)" aria-label="Instructions">
                                 <ng-md-icon icon="gamepad"></ng-md-icon>
                                 <md-tooltip md-direction="left">Instructions</md-tooltip>
@@ -48,7 +56,7 @@
                 <md-tabs md-dynamic-height="" md-stretch-tabs="always" md-selected="model.tabIndex">
                     <md-tab label="Summary">
                         <div>
-                            <match-statistics-component selected="model.selected" disable-selecting="model.disableSelecting" />
+                            <match-statistics-component selected="model.selected" disable-selecting="model.disableSelecting" share-match="model.shareMatch" />
                         </div>
                     </md-tab>
                     <md-tab label="Battles">

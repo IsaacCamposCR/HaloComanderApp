@@ -20,6 +20,7 @@ module.exports = function (grunt) {
                     './build/components/halo-app.component.js',
                     './build/components/player.season.service.js',
                     './build/components/unit.type.service.js',
+                    './build/components/game.maps.service.js',
                     './build/components/game.objects.service.js',
                     './build/components/game.leaders.service.js',
                     './build/components/battle-chart-component/*.js',
