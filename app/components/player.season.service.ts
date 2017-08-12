@@ -4,7 +4,7 @@
 
     var module = angular.module("haloCommander");
 
-    module.service("playerSeasonService", ["$resource", "gameLeadersService", "gameObjectsService",
+    module.service("playerSeasonService", ["$resource", "gameLeadersService", "gameObjectsService", "leaderPowersService", "gameMapsService",
         class PlayerSeasonService {
 
             resourcePlayers: any;
@@ -12,10 +12,14 @@
             resourceCSRDesignations: any;
             gameLeadersService: any;
             gameObjectsService: any;
+            leaderPowersService: any;
+            gameMapsService: any;
 
-            constructor($resource, gameLeadersService, gameObjectsService) {
+            constructor($resource, gameLeadersService, gameObjectsService, leaderPowersService, gameMapsService) {
                 this.gameLeadersService = gameLeadersService;
                 this.gameObjectsService = gameObjectsService;
+                this.leaderPowersService = leaderPowersService;
+                this.gameMapsService = gameMapsService;
 
                 this.resourcePlayers = $resource("https://www.haloapi.com/stats/hw2/players/:player/stats/seasons/:seasonId",
                     {
@@ -276,8 +280,11 @@
                 localStorage.removeItem("gameObjects");
                 localStorage.removeItem("gameMaps");
                 localStorage.removeItem("designations");
+                localStorage.removeItem("leaderPowers");
                 this.gameLeadersService.store();
                 this.gameObjectsService.store();
+                this.leaderPowersService.store();
+                this.gameMapsService.store();
                 this.store();
             }
         }]);

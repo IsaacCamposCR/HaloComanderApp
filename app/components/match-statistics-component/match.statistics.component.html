@@ -35,8 +35,9 @@
 
                 <md-grid-tile class="grid-tile" ng-if="::unit.TotalBuilt" style="background: #ff8a80;" ng-repeat="unit in model.matchResult.units1 | orderBy: '-TotalBuilt' track by $index"
                     md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
-                    <div class="md-media-sm card-media" style="text-align:right">
-                        <md-tooltip md-direction="top">{{::unit.name}}</md-tooltip>
+                    <md-tooltip md-direction="top">{{::unit.name}}</md-tooltip>
+                    <ng-md-icon ng-if="!unit.mediaUrl" size="30" icon="blur_off"></ng-md-icon>
+                    <div ng-if="unit.mediaUrl" class="md-media-sm card-media" style="text-align:right">
                         <img ng-src="{{::unit.mediaUrl}}" alt="{{::unit.name}}" width="75" height="75" class="avatar" style="background:white" />
                     </div>
                     <md-grid-tile-footer style="background:inherit;">
@@ -72,8 +73,9 @@
 
                 <md-grid-tile class="grid-tile" ng-if="::unit.TotalBuilt" style="background: #80d8ff;" ng-repeat="unit in model.matchResult.units2 | orderBy: '-TotalBuilt' track by $index"
                     md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
-                    <div class="md-media-sm card-media" style="text-align:right">
-                        <md-tooltip md-direction="top">{{::unit.name}}</md-tooltip>
+                    <md-tooltip md-direction="top">{{::unit.name}}</md-tooltip>
+                    <ng-md-icon ng-if="!unit.mediaUrl" size="30" icon="blur_off"></ng-md-icon>
+                    <div ng-if="unit.mediaUrl" class="md-media-sm card-media" style="text-align:right">
                         <img ng-src="{{::unit.mediaUrl}}" alt="{{::unit.name}}" width="75" height="75" class="avatar" style="background:white" />
                     </div>
                     <md-grid-tile-footer style="background:inherit;">

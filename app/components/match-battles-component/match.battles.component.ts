@@ -12,12 +12,13 @@
             disablePaging: "<",
             disableSelecting: "="
         },
-        controller: ["$resource", "$mdToast", "$mdBottomSheet", "$timeout", "gameObjectsService", "unitTypeService",
+        controller: ["$resource", "$mdToast", "$mdBottomSheet", "$timeout", "gameObjectsService", "unitTypeService", "leaderPowersService",
 
             class MatchBattlesCtrl {
                 $mdToast: any;
                 $mdBottomSheet: any;
                 $timeout: any;
+                leaderPowersService: any;
                 gameObjectsService: any;
                 unitTypeService: any;
 
@@ -47,10 +48,11 @@
                 hasLarge: boolean = false;
 
                 resourceMatchEvents: any;
-                constructor($resource, $mdToast, $mdBottomSheet, $timeout, gameObjectsService, unitTypeService) {
+                constructor($resource, $mdToast, $mdBottomSheet, $timeout, gameObjectsService, unitTypeService, leaderPowersService) {
                     this.$mdToast = $mdToast;
                     this.$mdBottomSheet = $mdBottomSheet;
                     this.$timeout = $timeout;
+                    this.leaderPowersService = leaderPowersService;
                     this.gameObjectsService = gameObjectsService;
                     this.unitTypeService = unitTypeService;
 
@@ -411,18 +413,37 @@
                     kill.Killers = [];
                     let Participants: Array<any> = kill["Participants"];
 
-                    Object.keys(Participants).map((e) => {
-                        let participant: any = (Participants[e])["ObjectParticipants"];
-                        Object.keys(participant).map((a) => {
-                            let gameObject: any = this.gameObjectsService.find(a);
-                            unit.Killers.push({
-                                mediaUrl: (gameObject) ? gameObject.mediaUrl : "",
-                                name: (gameObject) ? gameObject.name : a
-                            });
-                            kill.Killers.push({
-                                mediaUrl: (gameObject) ? gameObject.mediaUrl : "",
-                                name: (gameObject) ? gameObject.name : a
-                            });
+                    Object.keys(Participants).map((index) => {
+                        let participant: any = (Participants[index])["ObjectParticipants"];
+                        Object.keys(participant).map((squadId) => {
+                            let gameObject: any = this.gameObjectsService.find(squadId);
+                            if (gameObject === null) {
+                                gameObject = this.leaderPowersService.find(squadId);
+                                if (gameObject != null) {
+                                    gameObject.type = "lp";
+                                }
+                            }
+                            else {
+                                gameObject.type = "go";
+                            }
+
+                            let part: any = {};
+                            if (gameObject != null) {
+                                part = {
+                                    mediaUrl: gameObject.mediaUrl,
+                                    name: gameObject.name,
+                                    type: gameObject.type
+                                };
+                            }
+                            else {
+                                part = {
+                                    mediaUrl: "",
+                                    name: squadId,
+                                    type: null
+                                };
+                            }
+                            unit.Killers.push(part);
+                            kill.Killers.push(part);
                         });
                     });
                 }

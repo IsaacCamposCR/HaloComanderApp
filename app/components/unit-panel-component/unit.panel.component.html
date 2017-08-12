@@ -3,13 +3,13 @@
         md-gutter="5px" md-gutter-gt-sm="3px">
 
         <md-grid-tile class="grid-tile" style="background: white;" md-rowspan="2" md-colspan="2" md-colspan-sm="2" md-colspan-xs="4">
-
             <div class="resource-text">
-                <img style="margin:-6%" ng-src="{{Item.unit.mediaUrl}}" alt="{{unit.SquadId}}" width="125" height="125" />
+                <img ng-src="{{Item.unit.mediaUrl}}" alt="{{unit.SquadId}}" width="125" height="125" />
             </div>
             <div class="resource-vertical-divider">
                 <div class="resource-data">
-                    <md-tooltip md-direction="top">Resource Cost</md-tooltip>
+                    <h3>{{Item.unit.name}}</h3>
+                    <br/>
                     <ng-md-icon icon="layers"></ng-md-icon> {{Item.unit.SupplyCost}}
                     <br/>
                     <ng-md-icon icon="flash_on"></ng-md-icon> {{Item.unit.EnergyCost}}
@@ -19,10 +19,12 @@
             </div>
         </md-grid-tile>
 
-        <md-grid-tile class="grid-tile" style="background: #F44336;" ng-repeat="participant in Item.unit.Killers" md-rowspan="1" md-colspan="1" md-colspan-sm="1"
-            md-colspan-xs="1">
+        <md-grid-tile ng-if="participant.type" class="grid-tile" style="background: #F44336;" ng-repeat="participant in Item.unit.Killers" md-rowspan="1"
+            md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
             <div>
-                <img ng-src="{{participant.mediaUrl}}" alt="{{participant.name}}" class="unit-icon" />
+                <h3 ng-if="participant.type === 'lp'">{{participant.name}}</h3>
+                <img ng-src="{{participant.mediaUrl}}" alt="" class="unit-icon" />
+                <ng-md-icon ng-if="!participant.mediaUrl && participant.type === 'go'" size="30" icon="blur_off"></ng-md-icon>
             </div>
         </md-grid-tile>
 

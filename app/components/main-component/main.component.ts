@@ -72,7 +72,6 @@
 
                 $routerOnActivate = function (next) {
                     if (next.params) {
-                        console.log(next.params);
                         if (next.params.id) {
                             this.selected = { matchId: next.params.id };
                         }
