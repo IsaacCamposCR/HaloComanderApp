@@ -150,75 +150,75 @@ header h1 {
   -moz-animation: cd-pulse 2s infinite;
   animation: cd-pulse 2s infinite;
 }
-/*Gamertag*/
+/*Battle Index*/
 .cd-single-point:nth-of-type(1) {
-  top: 11.5%;
-  left: 19%;
+  top: 7%;
+  left: 14%;
 }
 /*Recent Matches*/
 .cd-single-point:nth-of-type(2) {
-  top: 25%;
-  left: 19%;
+  top: 28%;
+  left: 37%;
 }
-/*Page Controls*/
-.cd-single-point:nth-of-type(3) {
-  top: 23.5%;
-  left: 14.5%;
-}
-/*Selected Match*/
+/*Reinforcements Charts*/
 .cd-single-point:nth-of-type(4) {
-  top: 70%;
-  left: 17.5%;
+  top: 65%;
+  left: 76.3%;
 }
-/*Statistics*/
+/*Player 2*/
 .cd-single-point:nth-of-type(5) {
-  top: 7.5%;
-  left: 48%;
+  top: 28%;
+  left: 59%;
 }
-/*Battles*/
+/*Graphs*/
 .cd-single-point:nth-of-type(6) {
-  top: 7.5%;
-  left: 85%;
+  top: 7%;
+  left: 92%;
 }
 /*Filters*/
 .cd-single-point:nth-of-type(7) {
-  top: 16.5%;
-  left: 85%;
+  top: 28%;
+  left: 97.5%;
 }
 /*Battle Card*/
 .cd-single-point:nth-of-type(8) {
-  top: 35%;
-  left: 85%;
+  top: 37%;
+  left: 87%;
+}
+/*Player 1*/
+.cd-single-point:nth-of-type(3) {
+  top: 28%;
+  left: 9%;
 }
 /*Costs*/
 .cd-single-point:nth-of-type(9) {
-  top: 39%;
-  left: 35%;
+  top: 28%;
+  left: 26%;
 }
 /*Army*/
 .cd-single-point:nth-of-type(10) {
-  top: 49%;
-  left: 42%;
+  top: 44%;
+  left: 22%;
 }
 /*Reinforcements*/
 .cd-single-point:nth-of-type(11) {
-  top: 67%;
-  left: 80%;
+  top: 71%;
+  left: 22%;
 }
 /*Outcome*/
 .cd-single-point:nth-of-type(12) {
-  top: 80%;
-  left: 60%;
+  top: 90%;
+  left: 40%;
 }
 /*Remove*/
 .cd-single-point:nth-of-type(13) {
-  top: 93%;
-  left: 91%;
+  top: 7%;
+  left: 96%;
 }
 /*Unit Details*/
 .cd-single-point:nth-of-type(14) {
-  top: 44.5%;
-  left: 74.7%;
+  top: 58%;
+  left: 42%;
 }
 .cd-single-point.is-open > a {
   background-color: #475f74;
