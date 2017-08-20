@@ -17,7 +17,7 @@
                     {
                         query: {
                             method: "GET",
-                            headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "2f9542f34a49497a984e0e70b58eb37d" },
+                            headers: { "Accept-Language": "en", "Ocp-Apim-Subscription-Key": "2f9542f34a49497a984e0e70b58eb37d" },//"ee5d843652484f409f5b60356142838c" },
                             isArray: false
                         }
                     });
@@ -25,7 +25,7 @@
 
             //---------------GAME OBJECTS----------------------//
             gameObjects: Array<any> = [];
-            private getGameObjects() {
+            private getGameObjects1() {
 
                 if (!localStorage.getItem("gameObjects")) {
                     //console.log("No stored objects found. Requesting...");
@@ -69,6 +69,42 @@
                     //console.log("Stored objects found");
                 }
             };
+
+            startAt: number = 0;
+            private getGameObjects() {
+                if (!localStorage.getItem("gameObjects")) {
+                    //console.log("No stored objects found. Requesting...");
+                    this.resourceGameObjects.query({ startAt: this.startAt })
+                        .$promise.then((objects) => {
+                            //console.log("Req API");
+                            this.createGameObjects(objects);
+
+                            if (objects["ContentItems"].length < 100) {
+                                //console.log("Added all items...", this.gameObjects.length);
+                                if (typeof (Storage) !== "undefined") {
+                                    // Code for localStorage/sessionStorage.
+                                    localStorage.setItem("gameObjects", LZString.compressToUTF16(JSON.stringify(this.gameObjects)));
+                                    //console.log("stored");
+                                } else {
+                                    //console.log("No storage found...");
+                                }
+                            }
+                            else {
+                                //console.log("Adding 100 more items...", this.startAt);
+                                this.startAt = this.startAt + 100;
+                                this.getGameObjects();
+                            }
+                        })
+                        .catch((error) => {
+                            alert("Could not contact the HALO API Game Objects Metadata services.")
+                            console.log(error);
+                        });
+                }
+                else {
+                    this.gameObjects = JSON.parse(LZString.decompressFromUTF16(localStorage.getItem("gameObjects")));
+                    //console.log("Stored objects found");
+                }
+            }
 
             private sleep(delay) {
                 var start = new Date().getTime();

@@ -50,7 +50,7 @@
                     }
                 }
 
-                shareMatch: string;
+                shareMatch: any;
                 matchResult: any;
                 playerSeasons: any;
                 getMatchResults() {

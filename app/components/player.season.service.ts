@@ -21,10 +21,8 @@
                 this.leaderPowersService = leaderPowersService;
                 this.gameMapsService = gameMapsService;
 
-                this.resourcePlayers = $resource("https://www.haloapi.com/stats/hw2/players/:player/stats/seasons/:seasonId",
                     {
                         player: "@player",
-                        seasonId: "@seasonId"
                     },
                     {
                         query: {
@@ -197,12 +195,10 @@
             };
 
             private getPlayerSeason(player) {
-                return this.resourcePlayers.query({ player: player, seasonId: this.season.id });
             };
 
             create(playerSeasonData) {
                 this.getCSRDesignations();
-                let playlistData: any = (playerSeasonData["RankedPlaylistStats"]).find((playlist) => {
                     return playlist.PlaylistId === "f98a4189-b766-41fa-afe3-4ff385304ee4";
                 });
                 let highestCsr: any = playlistData["HighestCsr"];
@@ -254,7 +250,6 @@
                 //console.log("Is new season?");
                 if (!localStorage.getItem("season")) {
                     //console.log("No season stored...");
-                    this.refreshCache();
                 }
                 else {
                     // There's a Season object, it needs to checked.
@@ -267,20 +262,12 @@
                             //console.log(this.season.id, currentSeason.id);
                             if (this.season.id != currentSeason.id) {
                                 //console.log("New season! storing...");
-                                this.refreshCache();
                             }
                         });
                 }
             }
 
-            private refreshCache() {
                 // Refresh Cache
-                localStorage.removeItem("season");
-                localStorage.removeItem("gameLeaders");
-                localStorage.removeItem("gameObjects");
-                localStorage.removeItem("gameMaps");
-                localStorage.removeItem("designations");
-                localStorage.removeItem("leaderPowers");
                 this.gameLeadersService.store();
                 this.gameObjectsService.store();
                 this.leaderPowersService.store();

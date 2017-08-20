@@ -60,10 +60,18 @@
                     // Temporary Fix for Serina.
                     // https://www.halowaypoint.com/en-us/forums/01b3ca58f06c4bd4ad074d8794d2cf86/topics/serina-missing-the-id-data-on-the-game-leaders-api/89e030d9-93a3-44be-b116-a0b6029a58b5/posts
                     id = (id.length === 0) ? 13 : id;
+                    // Temporay Fix for YapYap, Metadata ID is wrong, but Stats one is correct.
+                    // https://www.halowaypoint.com/en-us/forums/01b3ca58f06c4bd4ad074d8794d2cf86/topics/yap-yap-leader-missing-a-lot-of-data/e7477f9e-1cae-4d18-91f7-fec813284b99/posts?page=1#post2
+                    id = (id === 15) ? 14 : id;
                     var displayInfo = hw2Leader["DisplayInfo"];
-                    var viewDisplayInfo = displayInfo["View"];
-                    var hw2LeaderDisplayInfo = viewDisplayInfo["HW2LeaderDisplayInfo"];
-                    var name = hw2LeaderDisplayInfo["Name"];
+                    var name = "UNAVAILABLE";
+                    if (displayInfo["View"]) {
+                        //var viewDisplayInfo = displayInfo["View"];
+                        //var name = "";
+                        //if (viewDisplayInfo.includes("HW2LeaderDisplayInfo")) {
+                        name = ((displayInfo["View"])["HW2LeaderDisplayInfo"])["Name"];
+                    }
+
                     var image = hw2Leader["Image"];
                     var viewImage = image["View"];
                     var media = viewImage ? viewImage["Media"] : null;

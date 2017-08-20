@@ -99,7 +99,12 @@
                                 }
                             }
                             else {
-                                alert("This player has no Ranked 1v1 matches played!");
+                                // This validation ensures the Warning is displayed ONLY if the query has no matches
+                                // And if the length of the total queried games is zero.
+                                // If there are games queried but less than 10, the app unlocks but no warning is shown.
+                                if (this.playerRecentMatches.length === 0) {
+                                    alert("This player has no Ranked 1v1 matches played!");
+                                }
                                 this.disablePaging = false;
                                 this.disableSelecting = false;
                             }
@@ -125,6 +130,8 @@
                             let results: Array<any> = matchHistory["Results"];
                             if (results.length === 0) {
                                 alert("This player has no Ranked 1v1 matches played!");
+                                this.disablePaging = false;
+                                this.disableSelecting = false;
                             }
                             this.pageStart = this.start;
                             results.forEach((match) => {
