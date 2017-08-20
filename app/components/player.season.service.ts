@@ -21,8 +21,9 @@
                 this.leaderPowersService = leaderPowersService;
                 this.gameMapsService = gameMapsService;
 
+                this.resourcePlayers = $resource("https://www.haloapi.com/stats/hw2/players/:player/stats",
                     {
-                        player: "@player",
+                        player: "@player"
                     },
                     {
                         query: {
@@ -195,10 +196,12 @@
             };
 
             private getPlayerSeason(player) {
+                return this.resourcePlayers.query({ player: player });
             };
 
             create(playerSeasonData) {
                 this.getCSRDesignations();
+                let playlistData: any = ((playerSeasonData["MatchmakingSummary"])["RankedPlaylistStats"]).find((playlist) => {
                     return playlist.PlaylistId === "f98a4189-b766-41fa-afe3-4ff385304ee4";
                 });
                 let highestCsr: any = playlistData["HighestCsr"];
@@ -250,6 +253,7 @@
                 //console.log("Is new season?");
                 if (!localStorage.getItem("season")) {
                     //console.log("No season stored...");
+                    this.refreshCache(true);
                 }
                 else {
                     // There's a Season object, it needs to checked.
@@ -262,10 +266,25 @@
                             //console.log(this.season.id, currentSeason.id);
                             if (this.season.id != currentSeason.id) {
                                 //console.log("New season! storing...");
+                                this.refreshCache(true);
+                            }
+                            else {
+                                this.refreshCache(false);
                             }
                         });
                 }
             }
+
+            private refreshCache(remove: boolean) {
+                // Delete Cache
+                if (remove === true) {
+                    localStorage.removeItem("season");
+                    localStorage.removeItem("gameLeaders");
+                    localStorage.removeItem("gameObjects");
+                    localStorage.removeItem("gameMaps");
+                    localStorage.removeItem("designations");
+                    localStorage.removeItem("leaderPowers");
+                }
 
                 // Refresh Cache
                 this.gameLeadersService.store();
