@@ -18,6 +18,7 @@ module.exports = function (grunt) {
                     // Application Code
                     './build/app.angular.js',
                     './build/components/halo-app.component.js',
+                    './build/components/workaround.service.js',
                     './build/components/player.season.service.js',
                     './build/components/unit.type.service.js',
                     './build/components/leader.powers.service.js',

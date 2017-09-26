@@ -26,7 +26,10 @@
             "unsc_veh_forgehog_01",
             "unsc_inf_flamecyclops_01",
             "unsc_inf_spartan_mpalice_01",
-            "unsc_veh_serina_hero_01"
+            "unsc_veh_serina_hero_01",
+            "cov_inf_mortarwarlord_01",
+            "cov_inf_corruptedwarlord_01"
+
         ];
 
         const ultimateUnits: Array<string> = [
@@ -36,7 +39,8 @@
 
         const superUnits: Array<string> = [
             "cov_veh_scarab_01",
-            "unsc_air_destroyer_01"
+            "unsc_air_destroyer_01",
+            "cov_veh_corruptedscarab_01"
         ];
 
         const unitCategories: Array<any> = [

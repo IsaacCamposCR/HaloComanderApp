@@ -4,13 +4,16 @@
 
     var module = angular.module("haloCommander");
 
-    module.service("gameLeadersService", ["$resource",
+    module.service("gameLeadersService", ["$resource", "workaroundService",
 
         class GameLeadersService {
 
+            workaroundService: any;
             resourceLeaders: any;
 
-            constructor($resource) {
+            constructor($resource, workaroundService) {
+                this.workaroundService = workaroundService;
+
                 this.resourceLeaders = $resource("https://www.haloapi.com/metadata/hw2/leaders",
                     {},
                     {
@@ -55,9 +58,12 @@
 
                 contentItems.forEach((gameLeader) => {
                     var view = gameLeader["View"];
+
+                    var tempLeader = this.workaroundService.isIdMissing(view);
+
                     var hw2Leader = view["HW2Leader"];
-                    var id = hw2Leader["Id"];
-                    var name = hw2Leader["Name"];
+                    var id = tempLeader.id; //hw2Leader["Id"];
+                    var name = tempLeader.name; //hw2Leader["Name"];
                     var image = hw2Leader["Image"];
                     var viewImage = image["View"];
                     var media = viewImage ? viewImage["Media"] : null;
